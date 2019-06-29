@@ -97,15 +97,15 @@ public class MarsRover {
 		if (!asList("N", "S", "E", "W").contains(heading + "")) {
 			throw new IllegalArgumentException("given heading('" + heading + "') is not one of N,S,E,W");
 		}
-	
+
 		if (x < 0 || x > 100) {
 			throw new IllegalArgumentException("X (" + x + ") must be between 0 and 100");
 		}
-	
+
 		if (y < 0 || y > 100) {
 			throw new IllegalArgumentException("Y (" + y + ") must be between 0 and 100");
 		}
-	
+
 		return new MarsRover(x, y, heading);
 	}
 
@@ -128,6 +128,9 @@ public class MarsRover {
 
 	public void turnLeft() {
 		switch (this.heading) {
+		case 'N':
+			this.heading = 'W';
+			break;
 		case 'W':
 			this.heading = 'S';
 			break;
@@ -136,9 +139,6 @@ public class MarsRover {
 			break;
 		case 'E':
 			this.heading = 'N';
-			break;
-		default:
-			this.heading = 'W';
 			break;
 		}
 	}
