@@ -27,14 +27,18 @@ public class MarsRover {
 	public void forward() {
 		switch (heading) {
 		case 'N':
-			if(this.y <100) {
+			if (this.y < 100) {
 				this.y++;
 			} else {
 				this.y = 0;
 			}
 			break;
 		case 'S':
-			this.y--;
+			if (this.y > 0) {
+				this.y--;
+			} else {
+				this.y = 100;
+			}
 			break;
 		case 'E':
 			this.x++;
