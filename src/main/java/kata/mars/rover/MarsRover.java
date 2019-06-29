@@ -117,6 +117,9 @@ public class MarsRover {
 		case 'S':
 			this.heading = 'W';
 			break;
+		case 'W':
+			this.heading = 'N';
+			break;
 		default:
 			this.heading = 'E';
 			break;
