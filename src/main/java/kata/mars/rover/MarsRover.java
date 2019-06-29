@@ -25,17 +25,14 @@ public class MarsRover {
 	}
 
 	public void forward() {
-		if('E' == heading) {
-			if(this.x == 0) {
-				this.x = 1;
-			} 
-			else if(this.x == 1) {
-				this.x = 2;
-			} 
-			else if(this.x == 2) {
-				this.x = 3;
-			} 
-			else {
+		if ('E' == heading) {
+			if (this.x == 0) {
+				this.x = 0 + 1;
+			} else if (this.x == 1) {
+				this.x = 1 + 1;
+			} else if (this.x == 2) {
+				this.x = 2 + 1;
+			} else {
 				this.x = 0;
 			}
 		} else {
