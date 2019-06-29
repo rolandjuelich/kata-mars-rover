@@ -1,9 +1,7 @@
 package kata.mars.rover;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.Arrays;
-import java.util.List;
 
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Named;
@@ -51,7 +49,7 @@ public class MarsRoverSteeringSteps {
 	}
 
 	public static MarsRover roverFor(int x, int y, char heading) {
-		if (isNotAllowed(heading)) {
+		if (!asList("N", "S", "E", "W").contains(heading + "")) {
 			throw new IllegalArgumentException("given heading('" + heading + "') is not one of N,S,E,W");
 		}
 
@@ -64,10 +62,6 @@ public class MarsRoverSteeringSteps {
 		}
 
 		return new MarsRover(x, y, heading);
-	}
-
-	private static boolean isNotAllowed(char heading) {
-		return !Arrays.asList("N", "S", "E", "W").contains(heading + "");
 	}
 
 	@Then("it rejects with message $message")
