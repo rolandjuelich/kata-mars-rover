@@ -21,6 +21,11 @@ public class MarsRoverSteeringSteps {
 	public void whenRoverMovesForward() {
 		rover.forward();
 	}
+	
+	@When("rover moves backward")
+	public void whenRoverMovesBackward() {
+		rover.backward();
+	}
 
 	@Then("rover is heading $heading at $x, $y")
 	public void thenRoverIsExpectedToBe(String heading, @Named("x") int x, @Named("y") int y) {

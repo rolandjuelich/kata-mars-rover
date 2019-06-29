@@ -7,6 +7,30 @@ I want to use a mars rover
 					 
 Scenario: the mars rover moves forward
 Given a rover heading <givenHeading> at <givenX>, <givenY>
+When rover moves backward
+Then rover is heading <expectedHeading> at <expectedX>, <expectedY>
+
+Examples:
+| givenHeading | givenX | givenY | expectedHeading | expectedX | expectedY |
+
+| S | 0| 0 | S | 0| 1 |
+| S | 9| 1 | S | 9| 2 |
+| S | 5| 2 | S | 5| 3 |
+
+| N | 0| 1 | N | 0| 0 |
+| N | 5| 2 | N | 5| 1 |
+| N | 8| 3 | N | 8| 2 |
+
+| W | 0| 0 | W | 1| 0 |
+| W | 1| 1 | W | 2| 1 |
+| W | 2| 5 | W | 3| 5 |
+
+| E | 1| 0 | E | 0| 0 |
+| E | 2| 5 | E | 1| 5 |
+| E | 3| 8 | E | 2| 8 |
+
+Scenario: the mars rover moves forward
+Given a rover heading <givenHeading> at <givenX>, <givenY>
 When rover moves forward
 Then rover is heading <expectedHeading> at <expectedX>, <expectedY>
 
