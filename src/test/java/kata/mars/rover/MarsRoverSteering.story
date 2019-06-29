@@ -31,6 +31,7 @@ Examples:
 | E | 1| 0 | E | 0| 0 |
 | E | 2| 5 | E | 1| 5 |
 | E | 3| 8 | E | 2| 8 |
+| E | 0| 0 | E | 100| 0 |
 
 Scenario: the mars rover moves forward
 Given a rover heading <givenHeading> at <givenX>, <givenY>
