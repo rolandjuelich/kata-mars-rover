@@ -51,22 +51,15 @@ public class MarsRoverSteeringSteps {
 	}
 
 	public static MarsRover roverFor(int x, int y, char heading) {
-		List<String> allowedHeadings = Arrays.asList("N","S","E","W");
-		String givenHeading = heading + "";
-		if (!allowedHeadings.contains(givenHeading)) {
-			throw new IllegalArgumentException("given heading('" + givenHeading + "') is not one of N,S,E,W");
-		}
-		if ('A' == heading) {
-			throw new IllegalArgumentException("given heading('" + givenHeading + "') is not one of N,S,E,W");
-		}
-		if ('B' == heading) {
-			throw new IllegalArgumentException("given heading('" + givenHeading + "') is not one of N,S,E,W");
-		}
-		if ('C' == heading) {
-			throw new IllegalArgumentException("given heading('" + givenHeading + "') is not one of N,S,E,W");
+		if (isNotAllowed(heading)) {
+			throw new IllegalArgumentException("given heading('" + heading + "') is not one of N,S,E,W");
 		}
 
 		return new MarsRover(x, y, heading);
+	}
+
+	private static boolean isNotAllowed(char heading) {
+		return !Arrays.asList("N","S","E","W").contains(heading + "");
 	}
 
 	@Then("it rejects with message $message")
