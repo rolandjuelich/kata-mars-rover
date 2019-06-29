@@ -57,6 +57,9 @@ public class MarsRoverSteeringSteps {
 		if ('A' == heading) {
 			throw new IllegalArgumentException("A is not in allowed headings N,S,E,W");
 		}
+		if ('B' == heading) {
+			throw new IllegalArgumentException("B is not in allowed headings N,S,E,W");
+		}
 
 		return new MarsRover(x, y, heading);
 	}

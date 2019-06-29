@@ -13,6 +13,7 @@ Then it rejects with message <message>
 Examples:
 | heading | x | y | message |
 | A | 0| 0 | A is not in allowed headings N,S,E,W |
+| B | 3| 4 | B is not in allowed headings N,S,E,W |
 
 					 
 Scenario: the mars rover moves backward
