@@ -60,7 +60,11 @@ public class MarsRover {
 	public void backward() {
 		switch (heading) {
 		case 'N':
-			this.y--;
+			if (this.y > 0) {
+				this.y--;
+			} else {
+				this.y = 100;
+			}
 			break;
 		case 'S':
 			if (this.y < 100) {
