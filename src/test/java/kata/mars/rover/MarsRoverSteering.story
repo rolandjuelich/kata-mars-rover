@@ -13,3 +13,4 @@ Then rover is heading <expectedHeading> at <expectedX>, <expectedY>
 Examples:
 | givenHeading | givenX | givenY | expectedHeading | expectedX | expectedY |
 | N | 0| 0 | N | 0| 1 |
+| N | 0| 1 | N | 0| 2 |

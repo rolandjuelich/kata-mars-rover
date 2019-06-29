@@ -19,14 +19,14 @@ public class MarsRoverSteeringSteps {
 
 	@When("rover moves forward")
 	public void whenRoverMovesForward() {
-		forward();
+		rover.forward();
 	}
 
 	@Then("rover is heading $heading at $x, $y")
 	public void thenRoverIsExpectedToBe(String heading, @Named("x") int x, @Named("y") int y) {
-		assertThat(heading()).isEqualTo(headingOf(heading));
-		assertThat(x()).isEqualTo(x);
-		assertThat(y()).isEqualTo(y);
+		assertThat(rover.heading()).describedAs("current heading").isEqualTo(headingOf(heading));
+		assertThat(rover.x()).describedAs("current X").isEqualTo(x);
+		assertThat(rover.y()).describedAs("current Y").isEqualTo(y);
 	}
 
 	private Character headingOf(final String value) {
@@ -34,21 +34,5 @@ public class MarsRoverSteeringSteps {
 			return null;
 		}
 		return value.toUpperCase().charAt(0);
-	}
-
-	private void forward() {
-		rover.forward();
-	}
-
-	private int y() {
-		return rover.y();
-	}
-
-	private int x() {
-		return rover.x();
-	}
-
-	private char heading() {
-		return rover.heading();
 	}
 }
