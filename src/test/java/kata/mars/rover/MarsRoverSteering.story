@@ -5,7 +5,7 @@ In order to explore mars safely
 As a scientist
 I want to use a mars rover 
 		
-Scenario: the mars rover turns right
+Scenario: rover turns right
 Given a rover heading <givenHeading> at <givenX>, <givenY>
 When rover turns right
 Then rover is heading <expectedHeading> at <expectedX>, <expectedY>
@@ -17,7 +17,7 @@ Examples:
 | S | 0 | 0 | W | 0 | 0 |
 | W | 0 | 0 | N | 0 | 0 |
 
-Scenario: the mars rover turns left
+Scenario: rover turns left
 Given a rover heading <givenHeading> at <givenX>, <givenY>
 When rover turns left
 Then rover is heading <expectedHeading> at <expectedX>, <expectedY>
@@ -31,7 +31,7 @@ Examples:
 
 		
 					 
-Scenario: the mars rover rejects invalid initialization parameters
+Scenario: rover rejects invalid initialization parameters
 Given rover to be initialized with heading <heading> at <x>, <y>
 When the rover is initialized 
 Then it rejects with message <message>
@@ -53,7 +53,7 @@ Examples:
 | W | 4 | 567 | Y (567) must be between 0 and 100 |
 
 					 
-Scenario: the mars rover moves backward
+Scenario: rover moves backward
 Given a rover heading <givenHeading> at <givenX>, <givenY>
 When rover moves backward
 Then rover is heading <expectedHeading> at <expectedX>, <expectedY>
@@ -81,7 +81,7 @@ Examples:
 | E | 3| 8 | E | 2| 8 |
 | E | 0| 0 | E | 100| 0 |
 
-Scenario: the mars rover moves forward
+Scenario: rover moves forward
 Given a rover heading <givenHeading> at <givenX>, <givenY>
 When rover moves forward
 Then rover is heading <expectedHeading> at <expectedX>, <expectedY>
