@@ -41,7 +41,11 @@ public class MarsRover {
 			}
 			break;
 		case 'E':
-			this.x++;
+			if(this.x < 100) {
+				this.x++;
+			} else {
+				this.x = 0;
+			}
 			break;
 		case 'W':
 			this.x--;
