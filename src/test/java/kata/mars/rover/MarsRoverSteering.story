@@ -26,6 +26,7 @@ Examples:
 | givenHeading | givenX | givenY | expectedHeading | expectedX | expectedY |
 | N | 0 | 0 | W | 0 | 0 |
 | W | 0 | 0 | S | 0 | 0 |
+| S | 0 | 0 | E | 0 | 0 |
 
 		
 					 

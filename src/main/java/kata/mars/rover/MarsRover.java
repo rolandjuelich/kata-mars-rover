@@ -129,7 +129,12 @@ public class MarsRover {
 	public void turnLeft() {
 		if('W' == this.heading) {
 			this.heading = 'S';
-		}else {
+		} 
+		else if('S' == this.heading) {
+			this.heading = 'E';
+		} 
+		
+		else {
 			
 			this.heading = 'W';
 		}
