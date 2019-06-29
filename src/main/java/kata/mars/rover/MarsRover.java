@@ -42,8 +42,21 @@ public class MarsRover {
 	}
 
 	public void backward() {
-		
-	}
+		switch (heading) {
+		case 'N':
+			this.y--;
+			break;
+		case 'S':
+			this.y++;
+			break;
+		case 'W':
+			this.x++;
+			break;
+		case 'E':
+			this.x--;
+			break;
+		}
 
+	}
 
 }
