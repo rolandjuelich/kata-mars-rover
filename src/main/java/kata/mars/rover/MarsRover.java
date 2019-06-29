@@ -27,15 +27,15 @@ public class MarsRover {
 	public void forward() {
 		
 		if (this.y == 0) {
-			this.y = 1;
+			this.y = 0 + 1;
 		} 
 		
 		else if (this.y == 1) {
-			this.y = 2;
+			this.y = 1 + 1;
 		} 
 		
 		else if (this.y == 2) {
-			this.y = 3;
+			this.y = 2 + 1;
 		}
 		
 		else {
