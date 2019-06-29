@@ -57,13 +57,16 @@ public class MarsRoverSteeringSteps {
 	public static MarsRover roverFor(int x, int y, char heading) {
 
 		if ('A' == heading) {
-			throw new IllegalArgumentException("given heading('" + "A" + "') is not one of N,S,E,W");
+			String givenHeading = "A";
+			throw new IllegalArgumentException("given heading('" + givenHeading + "') is not one of N,S,E,W");
 		}
 		if ('B' == heading) {
-			throw new IllegalArgumentException("given heading('" + "B" + "') is not one of N,S,E,W");
+			String givenHeading = "B";
+			throw new IllegalArgumentException("given heading('" + givenHeading + "') is not one of N,S,E,W");
 		}
 		if ('C' == heading) {
-			throw new IllegalArgumentException("given heading('" + "C" + "') is not one of N,S,E,W");
+			String givenHeading = "C";
+			throw new IllegalArgumentException("given heading('" + givenHeading + "') is not one of N,S,E,W");
 		}
 
 		return new MarsRover(x, y, heading);
