@@ -5,7 +5,7 @@ In order to explore mars safely
 As a scientist
 I want to use a mars rover 
 					 
-Scenario: the mars rover moves forward
+Scenario: the mars rover moves backward
 Given a rover heading <givenHeading> at <givenX>, <givenY>
 When rover moves backward
 Then rover is heading <expectedHeading> at <expectedX>, <expectedY>
