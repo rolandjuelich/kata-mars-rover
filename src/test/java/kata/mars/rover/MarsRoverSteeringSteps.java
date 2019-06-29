@@ -1,18 +1,14 @@
 package kata.mars.rover;
 
-import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.function.IntPredicate;
+import java.util.Arrays;
+import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Named;
-import org.jbehave.core.annotations.Pending;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import org.openqa.selenium.InvalidArgumentException;
 
 public class MarsRoverSteeringSteps {
 
@@ -55,8 +51,11 @@ public class MarsRoverSteeringSteps {
 	}
 
 	public static MarsRover roverFor(int x, int y, char heading) {
-
+		List<String> allowedHeadings = Arrays.asList("N","S","E","W");
 		String givenHeading = heading + "";
+		if (!allowedHeadings.contains(givenHeading)) {
+			throw new IllegalArgumentException("given heading('" + givenHeading + "') is not one of N,S,E,W");
+		}
 		if ('A' == heading) {
 			throw new IllegalArgumentException("given heading('" + givenHeading + "') is not one of N,S,E,W");
 		}
