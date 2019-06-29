@@ -32,6 +32,9 @@ public class MarsRover {
 			else if(this.x == 1) {
 				this.x = 2;
 			} 
+			else if(this.x == 2) {
+				this.x = 3;
+			} 
 			else {
 				this.x = 0;
 			}
