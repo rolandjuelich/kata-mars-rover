@@ -52,6 +52,11 @@ public class MarsRoverSteeringSteps {
 	public void whenRoverTurnsRight() {
 		rover.turnRight();
 	}
+	
+	@When("rover turns left")
+	public void whenRoverTurnsLeft() {
+		rover.turnLeft();
+	}
 
 
 	@Then("it rejects with message $message")

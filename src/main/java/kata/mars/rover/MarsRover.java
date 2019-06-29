@@ -126,4 +126,8 @@ public class MarsRover {
 		}
 	}
 
+	public void turnLeft() {
+		this.heading = 'W';
+	}
+
 }

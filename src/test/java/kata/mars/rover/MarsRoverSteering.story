@@ -17,6 +17,15 @@ Examples:
 | S | 0 | 0 | W | 0 | 0 |
 | W | 0 | 0 | N | 0 | 0 |
 
+Scenario: the mars rover turns left
+Given a rover heading <givenHeading> at <givenX>, <givenY>
+When rover turns left
+Then rover is heading <expectedHeading> at <expectedX>, <expectedY>
+
+Examples:
+| givenHeading | givenX | givenY | expectedHeading | expectedX | expectedY |
+| N | 0 | 0 | W | 0 | 0 |
+
 		
 					 
 Scenario: the mars rover rejects invalid initialization parameters
