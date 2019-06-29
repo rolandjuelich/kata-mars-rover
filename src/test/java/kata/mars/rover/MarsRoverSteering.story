@@ -5,6 +5,16 @@ In order to explore mars safely
 As a scientist
 I want to use a mars rover 
 					 
+Scenario: the mars rover rejects invalid initialization parameters
+Given rover to be initialized with heading <heading> at <x>, <y>
+When the rover is initialized 
+Then it rejects with message <message>
+
+Examples:
+| heading | x | y | message |
+| A | 0| 0 | A is not in allowed headings N,S,E,W |
+
+					 
 Scenario: the mars rover moves backward
 Given a rover heading <givenHeading> at <givenX>, <givenY>
 When rover moves backward
