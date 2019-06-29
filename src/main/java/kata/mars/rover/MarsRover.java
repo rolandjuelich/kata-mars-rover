@@ -35,6 +35,7 @@ public class MarsRover {
 			} else {
 				this.x = 0;
 			}
+			this.x++;
 		} else {
 			this.y++;
 		}
