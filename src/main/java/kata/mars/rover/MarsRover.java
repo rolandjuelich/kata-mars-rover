@@ -109,4 +109,8 @@ public class MarsRover {
 		return new MarsRover(x, y, heading);
 	}
 
+	public void turnRight() {
+		this.heading = 'E';
+	}
+
 }

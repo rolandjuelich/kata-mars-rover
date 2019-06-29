@@ -4,6 +4,17 @@ Narrative:
 In order to explore mars safely
 As a scientist
 I want to use a mars rover 
+		
+Scenario: the mars rover turns right
+Given a rover heading <givenHeading> at <givenX>, <givenY>
+When rover turns right
+Then rover is heading <expectedHeading> at <expectedX>, <expectedY>
+
+Examples:
+| givenHeading | givenX | givenY | expectedHeading | expectedX | expectedY |
+| N | 0 | 0 | E | 0 | 0 |
+
+		
 					 
 Scenario: the mars rover rejects invalid initialization parameters
 Given rover to be initialized with heading <heading> at <x>, <y>

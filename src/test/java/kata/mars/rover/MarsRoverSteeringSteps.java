@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Named;
+import org.jbehave.core.annotations.Pending;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
@@ -46,6 +47,12 @@ public class MarsRoverSteeringSteps {
 			initializationError = exception.getMessage();
 		}
 	}
+	
+	@When("rover turns right")
+	public void whenRoverTurnsRight() {
+		rover.turnRight();
+	}
+
 
 	@Then("it rejects with message $message")
 	public void thenItRejectsWithMessagemessage(final String expected) {
