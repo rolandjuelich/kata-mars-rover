@@ -30,6 +30,10 @@ public class MarsRover {
 			this.y = 2;
 			return;
 		}
+		if(this.y == 2) {
+			this.y = 3;
+			return;
+		}
 		this.y = 1;
 	}
 

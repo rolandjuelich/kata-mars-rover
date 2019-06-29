@@ -14,3 +14,4 @@ Examples:
 | givenHeading | givenX | givenY | expectedHeading | expectedX | expectedY |
 | N | 0| 0 | N | 0| 1 |
 | N | 0| 1 | N | 0| 2 |
+| N | 0| 2 | N | 0| 3 |
