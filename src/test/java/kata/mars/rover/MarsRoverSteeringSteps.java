@@ -1,6 +1,5 @@
 package kata.mars.rover;
 
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.jbehave.core.annotations.Given;
@@ -18,7 +17,7 @@ public class MarsRoverSteeringSteps {
 
 	@Given("a rover heading $heading at $x, $y")
 	public void givenRover(String heading, @Named("x") int x, @Named("y") int y) {
-		rover = new MarsRover(x, y, headingOf(heading));
+		rover = MarsRover.aRoverFor(x, y, headingOf(heading));
 	}
 
 	@Given("rover to be initialized with heading $heading at $x, $y")
@@ -42,26 +41,10 @@ public class MarsRoverSteeringSteps {
 	@When("the rover is initialized")
 	public void whenTheRoverIsInitialized() {
 		try {
-			roverFor(givenX, givenY, headingOf(givenHeading));
+			MarsRover.aRoverFor(givenX, givenY, headingOf(givenHeading));
 		} catch (IllegalArgumentException exception) {
 			initializationError = exception.getMessage();
 		}
-	}
-
-	public static MarsRover roverFor(int x, int y, char heading) {
-		if (!asList("N", "S", "E", "W").contains(heading + "")) {
-			throw new IllegalArgumentException("given heading('" + heading + "') is not one of N,S,E,W");
-		}
-
-		if (x < 0 || x > 100) {
-			throw new IllegalArgumentException("X (" + x + ") must be between 0 and 100");
-		}
-
-		if (y < 0 || y > 100) {
-			throw new IllegalArgumentException("Y (" + y + ") must be between 0 and 100");
-		}
-
-		return new MarsRover(x, y, heading);
 	}
 
 	@Then("it rejects with message $message")
