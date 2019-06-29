@@ -111,6 +111,9 @@ public class MarsRover {
 
 	public void turnRight() {
 		switch (this.heading) {
+		case 'N':
+			this.heading = 'E';
+			break;
 		case 'E':
 			this.heading = 'S';
 			break;
@@ -119,9 +122,6 @@ public class MarsRover {
 			break;
 		case 'W':
 			this.heading = 'N';
-			break;
-		default:
-			this.heading = 'E';
 			break;
 		}
 	}
