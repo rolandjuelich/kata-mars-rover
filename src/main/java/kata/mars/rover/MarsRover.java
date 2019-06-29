@@ -26,6 +26,9 @@ public class MarsRover {
 
 	public void forward() {
 		switch (heading) {
+		case 'N':
+			this.y++;
+			break;
 		case 'S':
 			this.y--;
 			break;
@@ -34,9 +37,6 @@ public class MarsRover {
 			break;
 		case 'W':
 			this.x--;
-			break;
-		case 'N':
-			this.y++;
 			break;
 		}
 	}
