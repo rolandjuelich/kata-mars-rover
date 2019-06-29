@@ -21,11 +21,11 @@ public class MarsRover {
 	}
 
 	public int y() {
-		return 1;
+		return this.y;
 	}
 
 	public void forward() {
-		
+		this.y = 1;
 	}
 
 }
