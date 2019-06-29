@@ -4,41 +4,32 @@ import org.jbehave.core.annotations.Pending;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
+
 public class MarsRoverSteeringSteps {
 	
-	@Given("a mars rover")
+
+	@Given("rover location is 0,0")
 	@Pending
-	public void givenAMarsRover() {
-	  // PENDING
+	public void givenRoverLocationIs00() {
 	}
 
-	@Given("its location is 0,0")
+	@Given("rover heading is north")
 	@Pending
-	public void givenItsLocationIs00() {
-	  // PENDING
+	public void givenRoverHeadingIsNorth() {
 	}
 
-	@Given("its heading is north")
+	@When("rover moves forward")
 	@Pending
-	public void givenItsHeadingIsNorth() {
-	  // PENDING
+	public void whenRoverMovesForward() {
 	}
 
-	@When("it moves forward")
+	@Then("rover is expected to be at 0,1")
 	@Pending
-	public void whenItMovesForward() {
-	  // PENDING
+	public void thenRoverIsExpectedToBeAt01() {
 	}
 
-	@Then("its expected to be at 0,1")
+	@Then("rover is expected to be heading north")
 	@Pending
-	public void thenItsExpectedToBeAt01() {
-	  // PENDING
-	}
-
-	@Then("its expected to be heading north")
-	@Pending
-	public void thenItsExpectedToBeHeadingNorth() {
-	  // PENDING
+	public void thenRoverIsExpectedToBeHeadingNorth() {
 	}
 }
