@@ -28,7 +28,12 @@ public class MarsRover {
 		if ('S' == heading) {
 			if(this.y == 2) {
 				this.y = 1;
-			} else {
+			} 
+			else if(this.y == 3) {
+				this.y = 2;
+			} 
+			
+			else {
 				this.y = 0;
 			}
 		} 
