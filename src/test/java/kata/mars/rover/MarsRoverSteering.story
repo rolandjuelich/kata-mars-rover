@@ -12,8 +12,9 @@ Then it rejects with message <message>
 
 Examples:
 | heading | x | y | message |
-| A | 0| 0 | A is not in allowed headings N,S,E,W |
-| B | 3| 4 | B is not in allowed headings N,S,E,W |
+| A | 0| 0 | given heading('A') is not one of N,S,E,W |
+| B | 3| 4 | given heading('B') is not one of N,S,E,W |
+| C | 9| 8 | given heading('C') is not one of N,S,E,W |
 
 					 
 Scenario: the mars rover moves backward

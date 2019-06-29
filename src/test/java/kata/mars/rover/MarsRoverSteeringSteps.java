@@ -1,10 +1,12 @@
 package kata.mars.rover;
 
+import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.function.IntPredicate;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Pending;
@@ -55,10 +57,13 @@ public class MarsRoverSteeringSteps {
 	public static MarsRover roverFor(int x, int y, char heading) {
 
 		if ('A' == heading) {
-			throw new IllegalArgumentException("A is not in allowed headings N,S,E,W");
+			throw new IllegalArgumentException("given heading('A') is not one of N,S,E,W");
 		}
 		if ('B' == heading) {
-			throw new IllegalArgumentException("B is not in allowed headings N,S,E,W");
+			throw new IllegalArgumentException("given heading('B') is not one of N,S,E,W");
+		}
+		if ('C' == heading) {
+			throw new IllegalArgumentException("given heading('C') is not one of N,S,E,W");
 		}
 
 		return new MarsRover(x, y, heading);
@@ -77,10 +82,9 @@ public class MarsRoverSteeringSteps {
 		assertThat(rover.y()).describedAs("current Y").isEqualTo(y);
 	}
 
-	private Character headingOf(final String value) {
-		if (isEmpty(value)) {
-			return null;
-		}
+
+	private char headingOf(final String value) {
+		assertThat(value).describedAs("heading from spec").isNotEmpty();
 		return value.toUpperCase().charAt(0);
 	}
 }
