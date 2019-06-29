@@ -24,17 +24,23 @@ public class MarsRover {
 		return this.heading;
 	}
 
-
 	public void forward() {
-		if(this.y == 1) {
+		
+		if (this.y == 0) {
+			this.y = 1;
+		} 
+		
+		else if (this.y == 1) {
 			this.y = 2;
-			return;
-		}
-		if(this.y == 2) {
+		} 
+		
+		else if (this.y == 2) {
 			this.y = 3;
-			return;
 		}
-		this.y = 1;
+		
+		else {
+			this.y = 0;
+		}
 	}
 
 }
