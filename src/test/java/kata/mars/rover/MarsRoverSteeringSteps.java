@@ -59,6 +59,10 @@ public class MarsRoverSteeringSteps {
 			throw new IllegalArgumentException("X (" + x + ") must be between 0 and 100");
 		}
 
+		if (y < 0 || y > 100) {
+			throw new IllegalArgumentException("Y (" + y + ") must be between 0 and 100");
+		}
+
 		return new MarsRover(x, y, heading);
 	}
 

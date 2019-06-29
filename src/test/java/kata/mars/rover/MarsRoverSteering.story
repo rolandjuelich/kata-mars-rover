@@ -21,6 +21,11 @@ Examples:
 | E | 101| 0 | X (101) must be between 0 and 100 |
 | W | 342| 3121 | X (342) must be between 0 and 100 |
 
+| N | 1 | -1 | Y (-1) must be between 0 and 100 |
+| S | 2 | -101 | Y (-101) must be between 0 and 100 |
+| E | 3 | 101 | Y (101) must be between 0 and 100 |
+| W | 4 | 567 | Y (567) must be between 0 and 100 |
+
 					 
 Scenario: the mars rover moves backward
 Given a rover heading <givenHeading> at <givenX>, <givenY>
