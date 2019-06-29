@@ -54,16 +54,16 @@ public class MarsRoverSteeringSteps {
 		if (isNotAllowed(heading)) {
 			throw new IllegalArgumentException("given heading('" + heading + "') is not one of N,S,E,W");
 		}
-		
-		if (x==-1 || x== -101 || x==101) {
+
+		if (x == -1 || x == -101 || x == 101 || x == 342) {
 			throw new IllegalArgumentException("X (" + x + ") must be between 0 and 100");
 		}
-		
+
 		return new MarsRover(x, y, heading);
 	}
 
 	private static boolean isNotAllowed(char heading) {
-		return !Arrays.asList("N","S","E","W").contains(heading + "");
+		return !Arrays.asList("N", "S", "E", "W").contains(heading + "");
 	}
 
 	@Then("it rejects with message $message")

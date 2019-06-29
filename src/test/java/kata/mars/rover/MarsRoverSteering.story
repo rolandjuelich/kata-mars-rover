@@ -15,9 +15,11 @@ Examples:
 | A | 0| 0 | given heading('A') is not one of N,S,E,W |
 | B | 3| 4 | given heading('B') is not one of N,S,E,W |
 | C | 9| 8 | given heading('C') is not one of N,S,E,W |
+
 | N | -1| 0 | X (-1) must be between 0 and 100 |
-| E | -101 | 101 | X (-101) must be between 0 and 100 |
-| N | 101| 0 | X (101) must be between 0 and 100 |
+| S | -101 | 101 | X (-101) must be between 0 and 100 |
+| E | 101| 0 | X (101) must be between 0 and 100 |
+| W | 342| 3121 | X (342) must be between 0 and 100 |
 
 					 
 Scenario: the mars rover moves backward
