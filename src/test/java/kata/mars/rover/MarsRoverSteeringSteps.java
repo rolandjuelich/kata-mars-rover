@@ -56,16 +56,14 @@ public class MarsRoverSteeringSteps {
 
 	public static MarsRover roverFor(int x, int y, char heading) {
 
+		String givenHeading = heading + "";
 		if ('A' == heading) {
-			String givenHeading = "A";
 			throw new IllegalArgumentException("given heading('" + givenHeading + "') is not one of N,S,E,W");
 		}
 		if ('B' == heading) {
-			String givenHeading = "B";
 			throw new IllegalArgumentException("given heading('" + givenHeading + "') is not one of N,S,E,W");
 		}
 		if ('C' == heading) {
-			String givenHeading = "C";
 			throw new IllegalArgumentException("given heading('" + givenHeading + "') is not one of N,S,E,W");
 		}
 
@@ -84,7 +82,6 @@ public class MarsRoverSteeringSteps {
 		assertThat(rover.x()).describedAs("current X").isEqualTo(x);
 		assertThat(rover.y()).describedAs("current Y").isEqualTo(y);
 	}
-
 
 	private char headingOf(final String value) {
 		assertThat(value).describedAs("heading from spec").isNotEmpty();
