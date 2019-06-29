@@ -55,7 +55,7 @@ public class MarsRoverSteeringSteps {
 			throw new IllegalArgumentException("given heading('" + heading + "') is not one of N,S,E,W");
 		}
 
-		if (x == -1 || x == -101 || x == 101 || x == 342) {
+		if (x < 0 || x > 100) {
 			throw new IllegalArgumentException("X (" + x + ") must be between 0 and 100");
 		}
 
