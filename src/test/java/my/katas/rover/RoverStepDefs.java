@@ -26,7 +26,7 @@ public class RoverStepDefs {
 
 	@When("executing command forward")
 	public void executing_command_forward() {
-		rover = new Rover(givenX,givenY, givenHeading);
+		rover = new Rover(givenX, givenY, givenHeading);
 	}
 
 	@Then("location should be {int}, {int}")
