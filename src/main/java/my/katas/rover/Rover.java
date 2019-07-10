@@ -13,27 +13,25 @@ public class Rover {
 	}
 
 	public int x() {
-		if(heading == 'N') {
-			x = 0 ;
-		}
-		if(heading == 'E') {
-			x = 1 ;
-		}
 		return x;
 	}
 
 	public int y() {
-		if(heading == 'N') {
-			y = 1;
-		}
-		if(heading == 'E') {
-			y = 0;
-		}
 		return y;
 	}
 
 	public char heading() {
 		return this.heading;
+	}
+
+	public void forward() {
+		if (heading == 'N') {
+			x = 0;
+			y = 1;
+		} else if (heading == 'E') {
+			x = 1;
+			y = 0;
+		}
 	}
 
 }
