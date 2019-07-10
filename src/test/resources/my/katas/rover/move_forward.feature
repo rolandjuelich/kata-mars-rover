@@ -10,3 +10,10 @@ Feature: rover moves forward
     When executing command forward
     Then location should be 0, 1
     And heading should be NORTH
+
+  Scenario: one step towards east
+    Given location is at 0, 0
+    And heading is EAST
+    When executing command forward
+    Then location should be 1, 0
+    And heading should be EAST

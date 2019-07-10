@@ -24,6 +24,16 @@ public class RoverStepDefs {
 		this.givenHeading = 'N';
 	}
 
+	@Given("heading is EAST")
+	public void heading_is_EAST() {
+		this.givenHeading = 'E';
+	}
+
+	@Then("heading should be EAST")
+	public void heading_should_be_EAST() {
+	    assertThat(rover.heading()).describedAs("expected heading").isEqualTo('E');
+	}
+	
 	@When("executing command forward")
 	public void executing_command_forward() {
 		rover = new Rover(givenX, givenY, givenHeading);
