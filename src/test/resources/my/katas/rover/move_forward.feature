@@ -1,19 +1,63 @@
-Feature: rover moves forward 
+Feature: rover moves forward
   
-	In order to explore mars
-	As a scientist
-	I want to use a rover to check the terrain 
+  In order to explore mars
+  As a scientist
+  I want to use a rover to check the terrain
 
-  Scenario: one step towards north
+  Scenario Outline: heading north
     Given location is at 0, 0
-    And heading is NORTH
-    When executing command forward
-    Then location should be 0, 1
-    And heading should be NORTH
+    And heading is "north"
+    When moving forward times <times>
+    Then location should be 0, <new_y>
+    And heading should be "north"
 
-  Scenario: one step towards east
+    Examples: 
+      | times | new_y |
+      |     0 |     0 |
+      |    42 |    42 |
+      |   100 |   100 |
+      |   101 |     0 |
+
+  Scenario Outline: heading east
     Given location is at 0, 0
-    And heading is EAST
-    When executing command forward
-    Then location should be 1, 0
-    And heading should be EAST
+    And heading is "east"
+    When moving forward times <times>
+    Then location should be <new_x>, 0
+    And heading should be "east"
+
+    Examples: 
+      | times | new_x |
+      |     0 |     0 |
+      |    42 |    42 |
+      |   100 |   100 |
+      |   101 |     0 |
+
+  Scenario Outline: heading south
+    Given location is at 0, 100
+    And heading is "south"
+    When moving forward times <times>
+    Then location should be 0, <new_y>
+    And heading should be "south"
+
+    Examples: 
+      | times | new_y |
+      |     0 |   100 |
+      |    42 |    58 |
+      |   100 |     0 |
+      |   101 |     1 |
+      |   142 |    42 |
+
+  Scenario Outline: heading west
+    Given location is at 100, 0
+    And heading is "west"
+    When moving forward times <times>
+    Then location should be <new_x>, 0
+    And heading should be "west"
+
+    Examples: 
+      | times | new_x |
+      |     0 |   100 |
+      |    42 |    58 |
+      |   100 |     0 |
+      |   101 |     1 |
+      |   142 |    42 |

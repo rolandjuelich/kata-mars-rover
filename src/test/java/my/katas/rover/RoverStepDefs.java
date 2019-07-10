@@ -15,40 +15,32 @@ public class RoverStepDefs {
 
 	@Given("location is at {int}, {int}")
 	public void location_is_at(final Integer x, final Integer y) {
-		this.givenX = x;
-		this.givenY = y;
+		givenX = x;
+		givenY = y;
 	}
 
-	@Given("heading is NORTH")
-	public void heading_is_NORTH() {
-		this.givenHeading = 'N';
+	@Given("heading is {string}")
+	public void heading_is_NORTH(final String given) {
+		givenHeading = given.toUpperCase().charAt(0);
 	}
 
-	@Given("heading is EAST")
-	public void heading_is_EAST() {
-		this.givenHeading = 'E';
-	}
-
-	@Then("heading should be EAST")
-	public void heading_should_be_EAST() {
-	    assertThat(rover.heading()).describedAs("expected heading").isEqualTo('E');
-	}
-	
-	@When("executing command forward")
-	public void executing_command_forward() {
+	@When("moving forward times {int}")
+	public void executing_command_forward_times(Integer times) {
 		rover = new Rover(givenX, givenY, givenHeading);
-		rover.forward();
+		for (int i = 0; i < times; i++) {
+			rover.forward();
+		}
 	}
 
 	@Then("location should be {int}, {int}")
 	public void location_should_be(final Integer expectedX, final Integer expectedY) {
-		assertThat(rover.x()).describedAs("expected x").isEqualTo(expectedX);
-		assertThat(rover.y()).describedAs("expected y").isEqualTo(expectedY);
+		assertThat(rover.x()).describedAs("current x").isEqualTo(expectedX);
+		assertThat(rover.y()).describedAs("current y").isEqualTo(expectedY);
 	}
 
-	@Then("heading should be NORTH")
-	public void heading_should_be_NORTH() {
-		assertThat(rover.heading()).describedAs("expected heading").isEqualTo('N');
+	@Then("heading should be {string}")
+	public void heading_should_be_east(final String expected) {
+		assertThat(rover.heading()).describedAs("current heading").isEqualTo(expected.toUpperCase().charAt(0));
 	}
 
 }
