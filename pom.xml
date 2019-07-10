@@ -63,15 +63,6 @@
 					<sourceJsonReportDirectory>${project.build.directory}/report/json</sourceJsonReportDirectory>
 					<generatedHtmlReportDirectory>${project.build.directory}/report/html</generatedHtmlReportDirectory>
 				</configuration>
-				<executions>
-					<execution>
-						<id>reports</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>reporting</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
