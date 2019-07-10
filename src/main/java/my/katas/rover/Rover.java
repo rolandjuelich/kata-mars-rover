@@ -2,8 +2,8 @@ package my.katas.rover;
 
 public class Rover {
 
-	private final int x;
-	private final int y;
+	private int x;
+	private int y;
 	private char heading;
 
 	public Rover(int x, int y, char heading) {
@@ -13,11 +13,23 @@ public class Rover {
 	}
 
 	public int x() {
-		return this.x;
+		if(heading == 'N') {
+			x = 0 ;
+		}
+		if(heading == 'E') {
+			x = 1 ;
+		}
+		return x;
 	}
 
 	public int y() {
-		return 1;
+		if(heading == 'N') {
+			y = 1;
+		}
+		if(heading == 'E') {
+			y = 0;
+		}
+		return y;
 	}
 
 	public char heading() {
