@@ -1,3 +1,4 @@
+@skip
 Feature: rover moves backward
   
   In order to explore mars

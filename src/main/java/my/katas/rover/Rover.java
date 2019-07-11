@@ -24,7 +24,15 @@ public class Rover {
 		return this.heading;
 	}
 
-	public void forward() {
+	public void moveForward() {
+	}
+
+	public void moveBackward() {
+		
+	}
+
+	public void turnRight() {
+		
 	}
 
 }
