@@ -16,7 +16,7 @@ Feature: rover moves forward
       |     0 |     0 |
       |    42 |    42 |
       |   100 |   100 |
-      |   101 |     0 |
+      |   142 |    42 |
 
   Scenario Outline: heading east
     Given location is at 0, 0
@@ -30,7 +30,7 @@ Feature: rover moves forward
       |     0 |     0 |
       |    42 |    42 |
       |   100 |   100 |
-      |   101 |     0 |
+      |   142 |    42 |
 
   Scenario Outline: heading south
     Given location is at 0, 100
@@ -44,7 +44,6 @@ Feature: rover moves forward
       |     0 |   100 |
       |    42 |    58 |
       |   100 |     0 |
-      |   101 |     1 |
       |   142 |    42 |
 
   Scenario Outline: heading west
@@ -59,5 +58,4 @@ Feature: rover moves forward
       |     0 |   100 |
       |    42 |    58 |
       |   100 |     0 |
-      |   101 |     1 |
       |   142 |    42 |
