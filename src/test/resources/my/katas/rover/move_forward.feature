@@ -13,7 +13,7 @@ Feature: rover moves forward
 
     Examples: 
       | times | new_y |
-      |     0 |     0 |
+      |     1 |     1 |
       |    42 |    42 |
       |   100 |   100 |
       |   142 |    42 |
@@ -27,7 +27,7 @@ Feature: rover moves forward
 
     Examples: 
       | times | new_x |
-      |     0 |     0 |
+      |     1 |     1 |
       |    42 |    42 |
       |   100 |   100 |
       |   142 |    42 |
@@ -41,7 +41,7 @@ Feature: rover moves forward
 
     Examples: 
       | times | new_y |
-      |     0 |   100 |
+      |     1 |    99 |
       |    42 |    58 |
       |   100 |     0 |
       |   142 |    42 |
@@ -55,7 +55,7 @@ Feature: rover moves forward
 
     Examples: 
       | times | new_x |
-      |     0 |   100 |
+      |     1 |    99 |
       |    42 |    58 |
       |   100 |     0 |
       |   142 |    42 |
