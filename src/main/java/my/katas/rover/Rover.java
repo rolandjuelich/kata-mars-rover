@@ -28,11 +28,12 @@ public class Rover {
 	}
 
 	public void moveBackward() {
-		
 	}
 
 	public void turnRight() {
-		
+	}
+
+	public void turnLeft() {
 	}
 
 }

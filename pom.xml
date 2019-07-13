@@ -13,6 +13,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<cucumber.version>4.5.3</cucumber.version>
+		<aspectj.version>1.8.10</aspectj.version>
 	</properties>
 
 	<dependencies>
@@ -52,6 +53,11 @@
 			<version>3.0.0</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>io.qameta.allure</groupId>
+			<artifactId>allure-cucumber4-jvm</artifactId>
+			<version>2.12.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -80,6 +86,35 @@
 				<version>3.0.0-M3</version>
 				<configuration>
 					<testFailureIgnore>true</testFailureIgnore>
+					<argLine>
+						<!-- following line must not be corrupted by formatting -->
+						-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar" -Dcucumber.options="--plugin io.qameta.allure.cucumber4jvm.AllureCucumber4Jvm"
+					</argLine>
+					<systemPropertyVariables>
+						<allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+					</systemPropertyVariables>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.aspectj</groupId>
+						<artifactId>aspectjweaver</artifactId>
+						<version>${aspectj.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>io.qameta.allure</groupId>
+				<artifactId>allure-maven</artifactId>
+				<configuration>
+					<properties>
+						<reportVersion>2.7.0</reportVersion>
+						<allureDownloadUrl>https://dl.bintray.com/qameta/generic/io/qameta/allure/allure/%s/allure-%s.zip</allureDownloadUrl>
+						<reportDirectory>allure-report</reportDirectory>
+						<!-- Allure >= 2.8.0: download from Maven Central -->
+						<!-- <allureDownloadUrl>http://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/%s/allure-commandline-%s.zip</allureDownloadUrl> -->
+						<!-- Custom URL -->
+						<!-- <allureDownloadUrl>https://example.com/allure/allure-2.0.1.zip</allureDownloadUrl> -->
+					</properties>
 				</configuration>
 			</plugin>
 		</plugins>

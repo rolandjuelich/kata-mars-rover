@@ -43,6 +43,11 @@ public class RoverStepDefs {
 		rover().turnRight();
 	}
 
+	@When("turning left")
+	public void turning_left() {
+		rover().turnLeft();
+	}
+	
 	@Then("location should be {int}, {int}")
 	public void location_should_be(final Integer expectedX, final Integer expectedY) {
 		assertThat(rover().x()).describedAs("current x").isEqualTo(expectedX);
