@@ -1,4 +1,4 @@
-	<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -13,7 +13,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<cucumber.version>4.5.3</cucumber.version>
-		<aspectj.version>1.8.10</aspectj.version>
 	</properties>
 
 	<dependencies>
@@ -53,23 +52,10 @@
 			<version>3.0.0</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>io.qameta.allure</groupId>
-			<artifactId>allure-cucumber4-jvm</artifactId>
-			<version>2.12.1</version>
-		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>com.trivago.rta</groupId>
-				<artifactId>cluecumber-report-plugin</artifactId>
-				<configuration>
-					<sourceJsonReportDirectory>${project.build.directory}/report/json</sourceJsonReportDirectory>
-					<generatedHtmlReportDirectory>${project.build.directory}/report/html</generatedHtmlReportDirectory>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -86,38 +72,82 @@
 				<version>3.0.0-M3</version>
 				<configuration>
 					<testFailureIgnore>true</testFailureIgnore>
-					<argLine>
-						<!-- following line must not be corrupted by formatting -->
-						-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar" -Dcucumber.options="--plugin io.qameta.allure.cucumber4jvm.AllureCucumber4Jvm"
-					</argLine>
-					<systemPropertyVariables>
-						<allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
-					</systemPropertyVariables>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.aspectj</groupId>
-						<artifactId>aspectjweaver</artifactId>
-						<version>${aspectj.version}</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-			<plugin>
-				<groupId>io.qameta.allure</groupId>
-				<artifactId>allure-maven</artifactId>
-				<configuration>
-					<properties>
-						<reportVersion>2.7.0</reportVersion>
-						<allureDownloadUrl>https://dl.bintray.com/qameta/generic/io/qameta/allure/allure/%s/allure-%s.zip</allureDownloadUrl>
-						<reportDirectory>allure-report</reportDirectory>
-						<!-- Allure >= 2.8.0: download from Maven Central -->
-<!-- 						<reportVersion>2.8.0</reportVersion> -->
-<!-- 						<allureDownloadUrl>http://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/%s/allure-commandline-%s.zip</allureDownloadUrl> -->
-						<!-- Custom URL -->
-<!-- 						<allureDownloadUrl>https://example.com/allure/allure-2.0.1.zip</allureDownloadUrl> -->
-					</properties>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>cluecumber</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.trivago.rta</groupId>
+						<artifactId>cluecumber-report-plugin</artifactId>
+						<configuration>
+							<sourceJsonReportDirectory>${project.build.directory}/report/json</sourceJsonReportDirectory>
+							<generatedHtmlReportDirectory>${project.build.directory}/report/html</generatedHtmlReportDirectory>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>allure</id>
+			<properties>
+				<aspectj.version>1.8.10</aspectj.version>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>io.qameta.allure</groupId>
+					<artifactId>allure-cucumber4-jvm</artifactId>
+					<version>2.12.1</version>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>3.0.0-M3</version>
+						<configuration>
+							<testFailureIgnore>true</testFailureIgnore>
+							<argLine>
+								<!-- following command must be a one liner (take care when formatting!) -->
+								-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar" -Dcucumber.options="--plugin io.qameta.allure.cucumber4jvm.AllureCucumber4Jvm"
+							</argLine>
+							<systemPropertyVariables>
+								<allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+							</systemPropertyVariables>
+						</configuration>
+						<dependencies>
+							<dependency>
+								<groupId>org.aspectj</groupId>
+								<artifactId>aspectjweaver</artifactId>
+								<version>${aspectj.version}</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+					<plugin>
+						<groupId>io.qameta.allure</groupId>
+						<artifactId>allure-maven</artifactId>
+						<configuration>
+							<properties>
+								<reportVersion>2.7.0</reportVersion>
+								<allureDownloadUrl>https://dl.bintray.com/qameta/generic/io/qameta/allure/allure/%s/allure-%s.zip</allureDownloadUrl>
+								<reportDirectory>allure-report</reportDirectory>
+								<!-- Allure >= 2.8.0: download from Maven Central -->
+								<!-- <reportVersion>2.8.0</reportVersion> -->
+								<!-- <allureDownloadUrl>http://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/%s/allure-commandline-%s.zip</allureDownloadUrl> -->
+								<!-- Custom URL -->
+								<!-- <allureDownloadUrl>https://example.com/allure/allure-2.0.1.zip</allureDownloadUrl> -->
+							</properties>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
 </project>
