@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+	<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -111,9 +111,10 @@
 						<allureDownloadUrl>https://dl.bintray.com/qameta/generic/io/qameta/allure/allure/%s/allure-%s.zip</allureDownloadUrl>
 						<reportDirectory>allure-report</reportDirectory>
 						<!-- Allure >= 2.8.0: download from Maven Central -->
-						<!-- <allureDownloadUrl>http://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/%s/allure-commandline-%s.zip</allureDownloadUrl> -->
+<!-- 						<reportVersion>2.8.0</reportVersion> -->
+<!-- 						<allureDownloadUrl>http://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/%s/allure-commandline-%s.zip</allureDownloadUrl> -->
 						<!-- Custom URL -->
-						<!-- <allureDownloadUrl>https://example.com/allure/allure-2.0.1.zip</allureDownloadUrl> -->
+<!-- 						<allureDownloadUrl>https://example.com/allure/allure-2.0.1.zip</allureDownloadUrl> -->
 					</properties>
 				</configuration>
 			</plugin>
