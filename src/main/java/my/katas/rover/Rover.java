@@ -31,16 +31,41 @@ public class Rover {
 	}
 
 	public void turnRight() {
-	switch (heading) {
-	case 'N':
-		heading = 'E';
-		break;
-	default:
-		break;
-	}
+		switch (heading) {
+		case 'N':
+			heading = 'E';
+			break;
+		case 'E':
+			heading = 'S';
+			break;
+		case 'S':
+			heading = 'W';
+			break;
+		case 'W':
+			heading = 'N';
+			break;
+		default:
+			break;
+		}
 	}
 
 	public void turnLeft() {
+		switch (heading) {
+		case 'N':
+			heading = 'W';
+			break;
+		case 'W':
+			heading = 'S';
+			break;
+		case 'S':
+			heading = 'E';
+			break;
+		case 'E':
+			heading = 'N';
+			break;
+		default:
+			break;
+		}
 	}
 
 }
