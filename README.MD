@@ -13,7 +13,16 @@ The rover receives a character array of commands.
 * Implement wrapping from one edge of the grid to another. (planets are spheres after all)
 * Implement obstacle detection before each move to a new square. If a given sequence of commands encounters an obstacle, the rover moves up to the last possible point, aborts the sequence and reports the obstacle.
 
-# Execute Specs
+# Execute Specs...
+## ... with cluecumber reporting
 ```
-./scripts/run-specs.sh
+./scripts/run-specs-cluecumber.sh
+```
+## ... with allure reporting
+```
+./scripts/run-specs-allure.sh
+```
+## ... with pure commandline results
+```
+./scripts/run-specs.sh 
 ```
