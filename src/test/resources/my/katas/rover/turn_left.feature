@@ -1,3 +1,4 @@
+@Ignore
 Feature: turn left
   
   In order to explore mars

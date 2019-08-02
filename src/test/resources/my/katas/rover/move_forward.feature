@@ -5,57 +5,72 @@ Feature: rover moves forward
   I want to use a rover to check the terrain
 
   Scenario Outline: heading north
-    Given location is at 0, 0
+    Given location is at 0, <given>
     And heading is "north"
     When moving forward times <times>
-    Then location should be 0, <new_y>
+    Then location should be 0, <expected>
     And heading should be "north"
 
     Examples: 
-      | times | new_y |
-      |     1 |     1 |
-      |    42 |    42 |
-      |   100 |   100 |
-      |   142 |    42 |
+      | given | times | expected |
+      |     0 |     0 |        0 |
+      |     0 |     1 |        1 |
+      |   100 |     1 |        0 |
+      |    42 |   100 |       41 |
+      |    42 |   201 |       42 |
+      |    42 |   302 |       43 |
 
   Scenario Outline: heading east
-    Given location is at 0, 0
+    Given location is at <given>, 0
     And heading is "east"
     When moving forward times <times>
-    Then location should be <new_x>, 0
+    Then location should be <expected>, 0
     And heading should be "east"
 
     Examples: 
-      | times | new_x |
-      |     1 |     1 |
-      |    42 |    42 |
-      |   100 |   100 |
-      |   142 |    42 |
+      | given | times | expected |
+      |     0 |     0 |        0 |
+      |     0 |     1 |        1 |
+      |    42 |     1 |       43 |
+      |   100 |     1 |        0 |
+      |    42 |   100 |       41 |
+      |    42 |   200 |       41 |
+      |    42 |   300 |       41 |
 
   Scenario Outline: heading south
-    Given location is at 0, 100
+    Given location is at 0, <given>
     And heading is "south"
     When moving forward times <times>
-    Then location should be 0, <new_y>
+    Then location should be 0, <expected>
     And heading should be "south"
 
     Examples: 
-      | times | new_y |
-      |     1 |    99 |
-      |    42 |    58 |
-      |   100 |     0 |
-      |   142 |    42 |
+      | given | times | expected |
+      |     0 |     0 |        0 |
+      |     0 |     1 |      100 |
+      |     0 |   100 |        0 |
+      |     0 |   201 |        1 |
+      |     0 |   302 |        2 |
+      |   100 |    99 |        1 |
+      |   100 |   100 |        0 |
+      |   100 |   201 |       99 |
+      |   100 |   302 |       98 |
 
   Scenario Outline: heading west
-    Given location is at 100, 0
+    Given location is at <given>, 0
     And heading is "west"
     When moving forward times <times>
-    Then location should be <new_x>, 0
+    Then location should be <expected>, 0
     And heading should be "west"
 
     Examples: 
-      | times | new_x |
-      |     1 |    99 |
-      |    42 |    58 |
-      |   100 |     0 |
-      |   142 |    42 |
+      | given | times | expected |
+      |     0 |     0 |        0 |
+      |     0 |     1 |      100 |
+      |     0 |   100 |        0 |
+      |     0 |   201 |        1 |
+      |     0 |   302 |        2 |
+      |   100 |    99 |        1 |
+      |   100 |   100 |        0 |
+      |   100 |   201 |       99 |
+      |   100 |   302 |       98 |
