@@ -1,5 +1,7 @@
 package my.katas.rover;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import cucumber.api.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -7,44 +9,51 @@ import io.cucumber.java.en.When;
 
 public class RoverStepDefs {
 
+	private Integer x;
+	private Integer y;
+	private Character heading;
+	private Rover rover;
+
 	@Given("location is at {int}, {int}")
 	public void location_is_at(final Integer x, final Integer y) {
-		throw new PendingException();
+		this.x = x;
+		this.y = y;
 	}
 
 	@Given("heading is {string}")
 	public void heading_is(final String given) {
-		throw new PendingException();
+		this.heading = given.toUpperCase().charAt(0);
 	}
 
-	@When("moving forward times {int}")
-	public void executing_command_forward_times(Integer times) {
-		throw new PendingException();
+	@When("moving forward {int} times")
+	public void moving_forward(final Integer times) {
+		rover = new Rover(x, y, heading).moveForward(times);
 	}
 
-	@When("moving backward times {int}")
-	public void moving_backward_times(Integer times) {
-		throw new PendingException();
+	@When("moving backward {int} times")
+	public void moving_backward(final Integer times) {
+		rover = new Rover(x, y, heading).moveBackward(times);
 	}
 
 	@When("turning right")
 	public void turning_right() {
-		throw new PendingException();
+		rover = new Rover(x, y, heading).turnRight();
 	}
 
 	@When("turning left")
 	public void turning_left() {
-		throw new PendingException();
+		rover = new Rover(x, y, heading).turnLeft();
 	}
 
 	@Then("location should be {int}, {int}")
 	public void location_should_be(final Integer expectedX, final Integer expectedY) {
-		throw new PendingException();
+		assertThat(rover.x()).isEqualTo(expectedX);
+		assertThat(rover.y()).isEqualTo(expectedY);
 	}
 
 	@Then("heading should be {string}")
 	public void heading_should_be(final String expected) {
-		throw new PendingException();
+		assertThat(rover.heading()).isEqualTo(expected);
 	}
 
 }

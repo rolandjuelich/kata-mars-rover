@@ -1,11 +1,10 @@
-@Ignore
-Feature: turn left
+Feature: Turning
   
   In order to explore mars
   As a scientist
   I want to use a rover to check the terrain
 
-  Scenario Outline: rover is turning left
+  Scenario Outline: rover turns to the left
     Given heading is "<given>"
     When turning left
     Then heading should be "<expected>"

@@ -1,62 +1,79 @@
-@Ignore
-Feature: rover moves backward
+Feature: Moving
   
   In order to explore mars
   As a scientist
   I want to use a rover to check the terrain
 
-  Scenario Outline: heading north
-    Given location is at 0, 100
+  Scenario Outline: rover moves backward heading north
+    Given location is at 0, <given>
     And heading is "north"
-    When moving backward times <times>
-    Then location should be 0, <new_y>
+    When moving backward <times> times
+    Then location should be 0, <expected>
     And heading should be "north"
 
     Examples: 
-      | times | new_y |
-      |     1 |    99 |
-      |    42 |    58 |
-      |   100 |     0 |
-      |   142 |    42 |
+      | given | times | expected |
+      |     0 |     0 |        0 |
+      |     0 |     1 |       99 |
+      |     0 |   100 |        0 |
+      |     0 |   201 |       99 |
+      |     0 |   302 |       98 |
+      |    99 |    99 |        0 |
+      |    99 |   100 |       99 |
+      |    99 |   201 |       98 |
+      |    99 |   302 |       97 |
 
-  Scenario Outline: heading east
-    Given location is at 100, 0
+  Scenario Outline: rover moves backward heading east
+    Given location is at <given>, 0
     And heading is "east"
-    When moving backward times <times>
-    Then location should be <new_x>, 0
+    When moving backward <times> times
+    Then location should be <expected>, 0
     And heading should be "east"
 
     Examples: 
-      | times | new_x |
-      |     1 |    99 |
-      |    42 |    58 |
-      |   100 |     0 |
-      |   142 |    42 |
+      | given | times | expected |
+      |     0 |     0 |        0 |
+      |     0 |     1 |       99 |
+      |     0 |   100 |        0 |
+      |     0 |   201 |       99 |
+      |     0 |   302 |       98 |
+      |    99 |    99 |        0 |
+      |    99 |   100 |       99 |
+      |    99 |   201 |       98 |
+      |    99 |   302 |       97 |
 
-  Scenario Outline: heading south
-    Given location is at 0, 0
+  Scenario Outline: rover moves backward heading south
+    Given location is at 0, <given>
     And heading is "south"
-    When moving backward times <times>
-    Then location should be 0, <new_y>
+    When moving backward <times> times
+    Then location should be 0, <expected>
     And heading should be "south"
 
     Examples: 
-      | times | new_y |
-      |     1 |     1 |
-      |    42 |    42 |
-      |   100 |   100 |
-      |   142 |    42 |
+      | given | times | expected |
+      |     0 |     0 |        0 |
+      |     0 |     1 |        1 |
+      |     0 |     2 |        2 |
+      |     0 |     1 |        1 |
+      |    99 |     1 |        0 |
+      |    99 |   100 |       99 |
+      |    99 |   201 |        0 |
+      |    99 |   302 |        1 |
 
-  Scenario Outline: heading west
-    Given location is at 0, 0
+  Scenario Outline: rover moves backward heading west
+    Given location is at <given>, 0
     And heading is "west"
-    When moving backward times <times>
-    Then location should be <new_x>, 0
+    When moving backward <times> times
+    Then location should be <expected>, 0
     And heading should be "west"
 
     Examples: 
-      | times | new_x |
-      |     1 |     1 |
-      |    42 |    42 |
-      |   100 |   100 |
-      |   142 |    42 |
+      | given | times | expected |
+      |     0 |     0 |        0 |
+      |     0 |     1 |        1 |
+      |     0 |     2 |        2 |
+      |     0 |     1 |        1 |
+      |    99 |     1 |        0 |
+      |    99 |   100 |       99 |
+      |    99 |   201 |        0 |
+      |    99 |   302 |        1 |
