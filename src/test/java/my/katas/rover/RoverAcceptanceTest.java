@@ -7,5 +7,5 @@ import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(plugin = { "pretty", "summary", "json:target/report/json/cucumber.json" })
-public class RoverTest {
+public class RoverAcceptanceTest {
 }

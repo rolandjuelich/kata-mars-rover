@@ -1,1 +1,1 @@
-exclude my.katas.rover.RoverTest
+exclude my.katas.rover.*AcceptanceTest
