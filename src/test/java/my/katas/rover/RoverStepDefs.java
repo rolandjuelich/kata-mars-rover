@@ -2,7 +2,6 @@ package my.katas.rover;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import cucumber.api.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -12,7 +11,7 @@ public class RoverStepDefs {
 	private Integer x;
 	private Integer y;
 	private Character heading;
-	private Rover rover;
+	private Locatable rover;
 
 	@Given("location is at {int}, {int}")
 	public void location_is_at(final Integer x, final Integer y) {
@@ -53,7 +52,7 @@ public class RoverStepDefs {
 
 	@Then("heading should be {string}")
 	public void heading_should_be(final String expected) {
-		assertThat(rover.heading()).isEqualTo(expected);
+		assertThat(rover.heading().toLowerCase()).isEqualTo(expected);
 	}
 
 }
