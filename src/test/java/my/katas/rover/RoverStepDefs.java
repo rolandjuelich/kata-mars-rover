@@ -8,51 +8,52 @@ import io.cucumber.java.en.When;
 
 public class RoverStepDefs {
 
-	private Integer x;
-	private Integer y;
-	private Character heading;
-	private Locatable rover;
+	private Rover rover;
 
-	@Given("location is at {int}, {int}")
-	public void location_is_at(final Integer x, final Integer y) {
-		this.x = x;
-		this.y = y;
+	@Given("rover is heading {string}")
+	public void rover_is_heading(final String heading) {
+		this.rover = new Rover(0, 0, heading.toUpperCase().charAt(0));
 	}
 
-	@Given("heading is {string}")
-	public void heading_is(final String given) {
-		this.heading = given.toUpperCase().charAt(0);
+	@Given("rover is heading {string} at {int}, {int}")
+	public void rover_is_heading_at(final String heading, final Integer x, final Integer y) {
+		this.rover = new Rover(x, y, heading.toUpperCase().charAt(0));
 	}
 
-	@When("moving forward {int} times")
-	public void moving_forward(final Integer times) {
-		rover = new Rover(x, y, heading).moveForward(times);
+	@When("rover moves forward {int} times")
+	public void rover_moves_forward_times(final Integer times) {
+		for (int i = 0; i < times; i++) {
+			rover.moveForward();
+		}
 	}
 
-	@When("moving backward {int} times")
-	public void moving_backward(final Integer times) {
-		rover = new Rover(x, y, heading).moveBackward(times);
+	@When("rover moves backward {int} times")
+	public void rover_moves_backward_times(final Integer times) {
+		for (int i = 0; i < times; i++) {
+			rover.moveBackward();
+		}
 	}
 
-	@When("turning right")
-	public void turning_right() {
-		rover = new Rover(x, y, heading).turnRight();
+	@When("rover turns right")
+	public void rover_turns_right() {
+		rover.turnRight();
 	}
 
-	@When("turning left")
-	public void turning_left() {
-		rover = new Rover(x, y, heading).turnLeft();
+	@When("rover turns left")
+	public void rover_turns_left() {
+		rover.turnLeft();
 	}
 
-	@Then("location should be {int}, {int}")
-	public void location_should_be(final Integer expectedX, final Integer expectedY) {
-		assertThat(rover.x()).isEqualTo(expectedX);
-		assertThat(rover.y()).isEqualTo(expectedY);
-	}
-
-	@Then("heading should be {string}")
-	public void heading_should_be(final String expected) {
+	@Then("rover should be heading {string}")
+	public void rover_should_be_heading(final String expected) {
 		assertThat(rover.heading().toLowerCase()).isEqualTo(expected);
+	}
+
+	@Then("rover should be heading {string} at {int}, {int}")
+	public void rover_should_be_heading_at(final String heading, final Integer x, final Integer y) {
+		assertThat(rover.x()).describedAs("expected x").isEqualTo(x);
+		assertThat(rover.y()).describedAs("expected y").isEqualTo(y);
+		assertThat(rover.heading().toLowerCase()).describedAs("expected heading").isEqualTo(heading.toLowerCase());
 	}
 
 }

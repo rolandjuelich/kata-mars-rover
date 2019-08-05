@@ -11,25 +11,21 @@ public class RoverNorth implements Moveable, Turnable {
 	}
 
 	@Override
-	public Moveable moveForward(final Integer times) {
-		for (int i = 0; i < times; i++) {
-			if (y >= 99) {
-				y = 0;
-			} else {
-				y++;
-			}
+	public Moveable moveForward() {
+		if (y >= 99) {
+			y = 0;
+		} else {
+			y++;
 		}
 		return this;
 	}
 
 	@Override
-	public Moveable moveBackward(final Integer times) {
-		for (int i = 0; i < times; i++) {
-			if (y <= 0) {
-				y = 99;
-			} else {
-				y--;
-			}
+	public Moveable moveBackward() {
+		if (y <= 0) {
+			y = 99;
+		} else {
+			y--;
 		}
 		return this;
 	}

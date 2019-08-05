@@ -6,6 +6,7 @@ import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(tags = "not @Ignore", plugin = { "pretty", "summary", "json:target/report/json/cucumber.json" })
+@CucumberOptions(strict = true, tags = "not @Ignore", plugin = { "pretty", "summary",
+		"json:target/report/json/cucumber.json" })
 public class RoverAcceptanceTest {
 }

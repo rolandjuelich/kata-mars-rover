@@ -5,11 +5,9 @@ Feature: Moving
   I want to use a rover to check the terrain
 
   Scenario Outline: rover moves forward heading north
-    Given location is at 0, <given>
-    And heading is "north"
-    When moving forward <times> times
-    Then location should be 0, <expected>
-    And heading should be "north"
+    Given rover is heading "north" at 0, <given>
+    When rover moves forward <times> times
+    Then rover should be heading "north" at 0, <expected>
 
     Examples: 
       | given | times | expected |
@@ -23,11 +21,9 @@ Feature: Moving
       |    99 |   302 |        1 |
 
   Scenario Outline: rover moves forward heading east
-    Given location is at <given>, 0
-    And heading is "east"
-    When moving forward <times> times
-    Then location should be <expected>, 0
-    And heading should be "east"
+    Given rover is heading "east" at <given>, 0
+    When rover moves forward <times> times
+    Then rover should be heading "east" at <expected>, 0
 
     Examples: 
       | given | times | expected |
@@ -41,11 +37,9 @@ Feature: Moving
       |    99 |   302 |        1 |
 
   Scenario Outline: rover moves forward heading south
-    Given location is at 0, <given>
-    And heading is "south"
-    When moving forward <times> times
-    Then location should be 0, <expected>
-    And heading should be "south"
+    Given rover is heading "south" at 0, <given>
+    When rover moves forward <times> times
+    Then rover should be heading "south" at 0, <expected>
 
     Examples: 
       | given | times | expected |
@@ -60,11 +54,9 @@ Feature: Moving
       |    99 |   302 |       97 |
 
   Scenario Outline: rover moves forward heading west
-    Given location is at <given>, 0
-    And heading is "west"
-    When moving forward <times> times
-    Then location should be <expected>, 0
-    And heading should be "west"
+    Given rover is heading "west" at <given>, 0
+    When rover moves forward <times> times
+    Then rover should be heading "west" at <expected>, 0
 
     Examples: 
       | given | times | expected |

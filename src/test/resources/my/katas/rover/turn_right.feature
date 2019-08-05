@@ -5,9 +5,9 @@ Feature: Turning
   I want to use a rover to check the terrain
 
   Scenario Outline: rover turns to the right
-    Given heading is "<given>"
-    When turning right
-    Then heading should be "<expected>"
+    Given rover is heading "<given>"
+    When rover turns right
+    Then rover should be heading "<expected>"
 
     Examples: 
       | given | expected |

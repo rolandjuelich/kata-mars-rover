@@ -11,25 +11,21 @@ public class RoverWest implements Locatable, Moveable, Turnable {
 	}
 
 	@Override
-	public Moveable moveForward(final Integer times) {
-		for (int i = 0; i < times; i++) {
-			if (x <= 0) {
-				x = 99;
-			} else {
-				x--;
-			}
+	public Moveable moveForward() {
+		if (x <= 0) {
+			x = 99;
+		} else {
+			x--;
 		}
 		return this;
 	}
 
 	@Override
-	public Moveable moveBackward(final Integer times) {
-		for (int i = 0; i < times; i++) {
-			if (x >= 99) {
-				x = 0;
-			} else {
-				x++;
-			}
+	public Moveable moveBackward() {
+		if (x >= 99) {
+			x = 0;
+		} else {
+			x++;
 		}
 		return this;
 	}

@@ -9,14 +9,14 @@ public class Rover implements Turnable, Moveable, Locatable {
 	}
 
 	@Override
-	public Rover moveForward(final Integer times) {
-		state = ((Moveable) state).moveForward(times);
+	public Rover moveForward() {
+		state = ((Moveable) state).moveForward();
 		return this;
 	}
 
 	@Override
-	public Rover moveBackward(final Integer times) {
-		state = ((Moveable) state).moveBackward(times);
+	public Rover moveBackward() {
+		state = ((Moveable) state).moveBackward();
 		return this;
 	}
 
