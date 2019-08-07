@@ -2,58 +2,97 @@ package my.katas.rover;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import my.katas.rover.command.Initialize;
+import my.katas.rover.command.MoveBackward;
+import my.katas.rover.command.MoveForward;
+import my.katas.rover.command.TurnLeft;
+import my.katas.rover.command.TurnRight;
 
 public class RoverStepDefs {
 
-	private Rover rover;
+	private Application app;
+
+	private int currentX;
+	private int currentY;
+	private char currentHeading;
+
+	@Before
+	public void beforeSceanrio() {
+		app = new Application();
+		app.register(new RoverStateChangedListener() {
+
+			@Override
+			public void notifyThat(final RoverStateChanged event) {
+				currentX = event.getX();
+				currentY = event.getY();
+				currentHeading = event.getHeading();
+			}
+		});
+	}
 
 	@Given("rover is heading {string}")
 	public void rover_is_heading(final String heading) {
-		this.rover = new Rover(0, 0, heading.toUpperCase().charAt(0));
+		app.execute(new Initialize(0, 0, heading.toUpperCase().charAt(0)));
 	}
 
 	@Given("rover is heading {string} at {int}, {int}")
 	public void rover_is_heading_at(final String heading, final Integer x, final Integer y) {
-		this.rover = new Rover(x, y, heading.toUpperCase().charAt(0));
+		app.execute(new Initialize(x, y, heading.toUpperCase().charAt(0)));
 	}
 
 	@When("rover moves forward {int} times")
 	public void rover_moves_forward_times(final Integer times) {
 		for (int i = 0; i < times; i++) {
-			rover.moveForward();
+			app.execute(new MoveForward(currentX, currentY, currentHeading));
 		}
 	}
 
 	@When("rover moves backward {int} times")
 	public void rover_moves_backward_times(final Integer times) {
 		for (int i = 0; i < times; i++) {
-			rover.moveBackward();
+			app.execute(new MoveBackward(currentX, currentY, currentHeading));
 		}
 	}
 
 	@When("rover turns right")
 	public void rover_turns_right() {
-		rover.turnRight();
+		app.execute(new TurnRight(currentX, currentY, currentHeading));
 	}
 
 	@When("rover turns left")
 	public void rover_turns_left() {
-		rover.turnLeft();
+		app.execute(new TurnLeft(currentX, currentY, currentHeading));
 	}
 
 	@Then("rover should be heading {string}")
 	public void rover_should_be_heading(final String expected) {
-		assertThat(rover.heading().toLowerCase()).isEqualTo(expected);
+		assertThat(currentHeading()).isEqualTo(expected);
 	}
 
 	@Then("rover should be heading {string} at {int}, {int}")
 	public void rover_should_be_heading_at(final String heading, final Integer x, final Integer y) {
-		assertThat(rover.x()).describedAs("expected x").isEqualTo(x);
-		assertThat(rover.y()).describedAs("expected y").isEqualTo(y);
-		assertThat(rover.heading().toLowerCase()).describedAs("expected heading").isEqualTo(heading.toLowerCase());
+		assertThat(currentX).describedAs("expected x").isEqualTo(x);
+		assertThat(currentY).describedAs("expected y").isEqualTo(y);
+		assertThat(currentHeading()).describedAs("expected heading").isEqualTo(heading.toLowerCase());
+	}
+
+	private String currentHeading() {
+		switch (currentHeading) {
+		case 'N':
+			return "north";
+		case 'E':
+			return "east";
+		case 'S':
+			return "south";
+		case 'W':
+			return "west";
+		default:
+			return null;
+		}
 	}
 
 }

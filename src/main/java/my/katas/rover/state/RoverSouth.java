@@ -1,4 +1,8 @@
-package my.katas.rover;
+package my.katas.rover.state;
+
+import my.katas.rover.Locatable;
+import my.katas.rover.Moveable;
+import my.katas.rover.Turnable;
 
 public class RoverSouth implements Locatable, Moveable, Turnable {
 

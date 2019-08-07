@@ -1,5 +1,10 @@
 package my.katas.rover;
 
+import my.katas.rover.state.RoverEast;
+import my.katas.rover.state.RoverNorth;
+import my.katas.rover.state.RoverSouth;
+import my.katas.rover.state.RoverWest;
+
 public interface Locatable {
 
 	int x();
