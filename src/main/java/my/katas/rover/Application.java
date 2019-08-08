@@ -1,42 +1,37 @@
 package my.katas.rover;
 
+import my.katas.rover.state.RoverStateChangedListener;
+
 public class Application {
 
 	private RoverStateChangedListener listener;
-	private Rover rover;
 
 	public void initialize(int x, int y, char heading) {
-		rover = new Rover(x, y, heading);
-		listener.notifyThat(roverHasChanged());
+		throw new UnsupportedOperationException("not yet implemented");
 	}
 
 	public void moveForward() {
-		rover.moveForward();
-		listener.notifyThat(roverHasChanged());
+		throw new UnsupportedOperationException("not yet implemented");
 	}
 
 	public void moveBackward() {
-		rover.moveBackward();
-		listener.notifyThat(roverHasChanged());
+		throw new UnsupportedOperationException("not yet implemented");
 	}
 
 	public void turnLeft() {
-		rover.turnLeft();
-		listener.notifyThat(roverHasChanged());
+		throw new UnsupportedOperationException("not yet implemented");
 	}
 
 	public void turnRight() {
-		rover.turnRight();
-		listener.notifyThat(roverHasChanged());
+		throw new UnsupportedOperationException("not yet implemented");
 	}
 
 	public void register(final RoverStateChangedListener handler) {
 		this.listener = handler;
 	}
 
-	private RoverStateChanged roverHasChanged() {
-		char heading = rover.heading().toUpperCase().charAt(0);
-		return new RoverStateChanged(rover.x(), rover.y(), heading);
+	public void unregister(final RoverStateChangedListener handler) {
+		this.listener = null;
 	}
 
 }

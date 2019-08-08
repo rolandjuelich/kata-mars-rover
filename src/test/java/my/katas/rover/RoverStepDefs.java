@@ -6,6 +6,8 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import my.katas.rover.state.RoverStateChanged;
+import my.katas.rover.state.RoverStateChangedListener;
 
 public class RoverStepDefs {
 

@@ -1,4 +1,4 @@
-package my.katas.rover;
+package my.katas.rover.state;
 
 public interface RoverStateChangedListener {
 
