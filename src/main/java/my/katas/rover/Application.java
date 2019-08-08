@@ -1,37 +1,31 @@
 package my.katas.rover;
 
-import my.katas.rover.command.Initialize;
-import my.katas.rover.command.MoveBackward;
-import my.katas.rover.command.MoveForward;
-import my.katas.rover.command.TurnLeft;
-import my.katas.rover.command.TurnRight;
-
 public class Application {
 
 	private RoverStateChangedListener listener;
 	private Rover rover;
 
-	public void execute(final Initialize command) {
-		rover = new Rover(command.getX(), command.getY(), command.getHeading());
+	public void initialize(int x, int y, char heading) {
+		rover = new Rover(x, y, heading);
 		listener.notifyThat(roverHasChanged());
 	}
 
-	public void execute(final MoveForward command) {
+	public void moveForward() {
 		rover.moveForward();
 		listener.notifyThat(roverHasChanged());
 	}
 
-	public void execute(final MoveBackward command) {
+	public void moveBackward() {
 		rover.moveBackward();
 		listener.notifyThat(roverHasChanged());
 	}
 
-	public void execute(final TurnLeft command) {
+	public void turnLeft() {
 		rover.turnLeft();
 		listener.notifyThat(roverHasChanged());
 	}
 
-	public void execute(final TurnRight command) {
+	public void turnRight() {
 		rover.turnRight();
 		listener.notifyThat(roverHasChanged());
 	}

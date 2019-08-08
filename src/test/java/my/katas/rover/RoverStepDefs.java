@@ -6,15 +6,10 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import my.katas.rover.command.Initialize;
-import my.katas.rover.command.MoveBackward;
-import my.katas.rover.command.MoveForward;
-import my.katas.rover.command.TurnLeft;
-import my.katas.rover.command.TurnRight;
 
 public class RoverStepDefs {
 
-	private Application app;
+	private Application rover;
 
 	private int currentX;
 	private int currentY;
@@ -22,8 +17,8 @@ public class RoverStepDefs {
 
 	@Before
 	public void beforeSceanrio() {
-		app = new Application();
-		app.register(new RoverStateChangedListener() {
+		rover = new Application();
+		rover.register(new RoverStateChangedListener() {
 
 			@Override
 			public void notifyThat(final RoverStateChanged event) {
@@ -36,36 +31,36 @@ public class RoverStepDefs {
 
 	@Given("rover is heading {string}")
 	public void rover_is_heading(final String heading) {
-		app.execute(new Initialize(0, 0, heading.toUpperCase().charAt(0)));
+		rover.initialize(0, 0, heading.toUpperCase().charAt(0));
 	}
 
 	@Given("rover is heading {string} at {int}, {int}")
 	public void rover_is_heading_at(final String heading, final Integer x, final Integer y) {
-		app.execute(new Initialize(x, y, heading.toUpperCase().charAt(0)));
+		rover.initialize(x, y, heading.toUpperCase().charAt(0));
 	}
 
 	@When("rover moves forward {int} times")
 	public void rover_moves_forward_times(final Integer times) {
 		for (int i = 0; i < times; i++) {
-			app.execute(new MoveForward(currentX, currentY, currentHeading));
+			rover.moveForward();
 		}
 	}
 
 	@When("rover moves backward {int} times")
 	public void rover_moves_backward_times(final Integer times) {
 		for (int i = 0; i < times; i++) {
-			app.execute(new MoveBackward(currentX, currentY, currentHeading));
+			rover.moveBackward();
 		}
 	}
 
 	@When("rover turns right")
 	public void rover_turns_right() {
-		app.execute(new TurnRight(currentX, currentY, currentHeading));
+		rover.turnRight();
 	}
 
 	@When("rover turns left")
 	public void rover_turns_left() {
-		app.execute(new TurnLeft(currentX, currentY, currentHeading));
+		rover.turnLeft();
 	}
 
 	@Then("rover should be heading {string}")
