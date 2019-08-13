@@ -1,50 +1,120 @@
 package my.katas.rover;
 
+import static my.katas.rover.functional.Functions.decrease;
+import static my.katas.rover.functional.Functions.increase;
+import static my.katas.rover.functional.Functions.resetTo;
+import static my.katas.rover.functional.Functions.with;
+import static my.katas.rover.functional.Predicates.greaterThan;
+import static my.katas.rover.functional.Predicates.smallerThan;
+
 public class Rover implements Turnable, Moveable, Locatable {
 
-	private Locatable state;
+	private int x;
+	private int y;
+	private char heading;
 
-	public Rover(final Integer x, final Integer y, final Character heading) {
-		this.state = Locatable.of(x, y, heading);
+	public Rover(int x, int y, char heading) {
+		this.x = x;
+		this.y = y;
+		this.heading = heading;
 	}
 
 	@Override
-	public Rover moveForward() {
-		state = ((Moveable) state).moveForward();
-		return this;
+	public void moveForward() {
+		switch (heading) {
+		case 'N':
+			y = with(y).apply(increase().andThen(resetTo(0).onlyIf(greaterThan(99))));
+			break;
+		case 'E':
+			x = with(x).apply(increase().andThen(resetTo(0).onlyIf(greaterThan(99))));
+			break;
+		case 'S':
+			y = with(y).apply(decrease().andThen(resetTo(99).onlyIf(smallerThan(0))));
+			break;
+		case 'W':
+			x = with(x).apply(decrease().andThen(resetTo(99).onlyIf(smallerThan(0))));
+			break;
+		}
 	}
 
 	@Override
-	public Rover moveBackward() {
-		state = ((Moveable) state).moveBackward();
-		return this;
+	public void moveBackward() {
+		switch (heading) {
+		case 'N':
+			y = with(y).apply(decrease().andThen(resetTo(99).onlyIf(smallerThan(0))));
+			break;
+		case 'E':
+			x = with(x).apply(decrease().andThen(resetTo(99).onlyIf(smallerThan(0))));
+			break;
+		case 'S':
+			y = with(y).apply(increase().andThen(resetTo(0).onlyIf(greaterThan(99))));
+			break;
+		case 'W':
+			x = with(x).apply(increase().andThen(resetTo(0).onlyIf(greaterThan(99))));
+			break;
+		}
 	}
 
 	@Override
-	public Rover turnRight() {
-		state = ((Turnable) state).turnRight();
-		return this;
+	public void turnRight() {
+		switch (heading) {
+		case 'N':
+			heading = 'E';
+			break;
+		case 'E':
+			heading = 'S';
+			break;
+		case 'S':
+			heading = 'W';
+			break;
+		case 'W':
+			heading = 'N';
+			break;
+		}
 	}
 
 	@Override
-	public Rover turnLeft() {
-		state = ((Turnable) state).turnLeft();
-		return this;
+	public void turnLeft() {
+		switch (heading) {
+		case 'N':
+			heading = 'W';
+			break;
+		case 'W':
+			heading = 'S';
+			break;
+		case 'S':
+			heading = 'E';
+			break;
+		case 'E':
+			heading = 'N';
+			break;
+		}
 	}
 
 	@Override
 	public int x() {
-		return state.x();
+		return x;
 	}
 
 	@Override
 	public int y() {
-		return state.y();
+		return y;
 	}
 
 	@Override
 	public String heading() {
-		return state.heading();
+		switch (heading) {
+		case 'N':
+			return "North";
+		case 'E':
+			return "East";
+		case 'S':
+			return "South";
+		case 'W':
+			return "West";
+		default:
+			return null;
+		}
 	}
 
 }

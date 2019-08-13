@@ -1,9 +1,9 @@
 package my.katas.rover;
 
-public interface Moveable extends Locatable {
+public interface Moveable {
 
-	Moveable moveForward();
+	void moveForward();
 
-	Moveable moveBackward();
+	void moveBackward();
 
 }

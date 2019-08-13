@@ -1,9 +1,9 @@
 package my.katas.rover;
 
-public interface Turnable extends Locatable {
+public interface Turnable {
 
-	Turnable turnRight();
+	void turnRight();
 
-	Turnable turnLeft();
+	void turnLeft();
 
 }
