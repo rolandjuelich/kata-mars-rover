@@ -13,7 +13,7 @@ public class RoverStepDefs {
 
 	private int currentX;
 	private int currentY;
-	private char currentHeading;
+	private String currentHeading;
 
 	@Before
 	public void beforeSceanrio() {
@@ -31,12 +31,12 @@ public class RoverStepDefs {
 
 	@Given("rover is heading {string}")
 	public void rover_is_heading(final String heading) {
-		rover.initialize(0, 0, heading.toUpperCase().charAt(0));
+		rover.initialize(0, 0, heading);
 	}
 
 	@Given("rover is heading {string} at {int}, {int}")
 	public void rover_is_heading_at(final String heading, final Integer x, final Integer y) {
-		rover.initialize(x, y, heading.toUpperCase().charAt(0));
+		rover.initialize(x, y, heading);
 	}
 
 	@When("rover moves forward {int} times")
@@ -65,29 +65,14 @@ public class RoverStepDefs {
 
 	@Then("rover should be heading {string}")
 	public void rover_should_be_heading(final String expected) {
-		assertThat(currentHeading()).isEqualTo(expected);
+		assertThat(currentHeading).isEqualToIgnoringCase(expected);
 	}
 
 	@Then("rover should be heading {string} at {int}, {int}")
 	public void rover_should_be_heading_at(final String heading, final Integer x, final Integer y) {
 		assertThat(currentX).describedAs("expected x").isEqualTo(x);
 		assertThat(currentY).describedAs("expected y").isEqualTo(y);
-		assertThat(currentHeading()).describedAs("expected heading").isEqualTo(heading.toLowerCase());
-	}
-
-	private String currentHeading() {
-		switch (currentHeading) {
-		case 'N':
-			return "north";
-		case 'E':
-			return "east";
-		case 'S':
-			return "south";
-		case 'W':
-			return "west";
-		default:
-			return null;
-		}
+		assertThat(currentHeading).describedAs("expected heading").isEqualToIgnoringCase(heading);
 	}
 
 }

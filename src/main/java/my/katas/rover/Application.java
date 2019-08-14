@@ -1,12 +1,21 @@
 package my.katas.rover;
 
+import static my.katas.rover.Heading.valueOf;
+import static my.katas.rover.Location.location;
+import static my.katas.rover.Rover.landingOn;
+
 public class Application {
 
 	private RoverStateChangedListener listener;
 	private Rover rover;
 
-	public void initialize(int x, int y, char heading) {
-		rover = new Rover(x, y, heading);
+	public void initialize(int x, int y, String heading) {
+		final Terrain terrain = new Terrain(0, 99, 0, 99);
+		final Heading direction = valueOf(heading.toUpperCase());
+		final Location initialPosition = location(x, y);
+
+		rover = landingOn(terrain).heading(direction).startFrom(initialPosition);
+
 		listener.notifyThat(roverHasChanged());
 	}
 
@@ -35,8 +44,7 @@ public class Application {
 	}
 
 	private RoverStateChanged roverHasChanged() {
-		char heading = rover.heading().toUpperCase().charAt(0);
-		return new RoverStateChanged(rover.x(), rover.y(), heading);
+		return new RoverStateChanged(rover.x(), rover.y(), rover.heading());
 	}
 
 }
