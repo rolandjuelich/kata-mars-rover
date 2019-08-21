@@ -4,8 +4,8 @@ import my.katas.rover.terrain.Terrain;
 
 public interface Moveable {
 
-	Location moveForwardOn(final Terrain terrain);
+	Location forwardOn(final Terrain terrain);
 
-	Location moveBackwardOn(final Terrain terrain);
+	Location backwardOn(final Terrain terrain);
 
 }

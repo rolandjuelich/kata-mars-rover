@@ -25,30 +25,28 @@ public class Application {
 	public void handle(final MoveForward command) {
 		final Terrain terrain = terrains.findByName(command.getTerrain());
 		final Heading heading = Heading.valueOf(command.getHeading().toUpperCase());
-		final Rover rover = new Rover(location(command.getX(), command.getY()), heading);
-		final Location newLocation = rover.moveForwardOn(terrain);
+		final Location location = location(command.getX(), command.getY());
+		final Location newLocation = Rover.moveFrom(location, heading).forwardOn(terrain);
 		eventBus.publish(roverMoved(newLocation.getX(), newLocation.getY()));
 	}
 
 	public void handle(final MoveBackward command) {
 		final Terrain terrain = terrains.findByName(command.getTerrain());
 		final Heading heading = Heading.valueOf(command.getHeading().toUpperCase());
-		final Rover rover = new Rover(location(command.getX(), command.getY()), heading);
-		final Location newLocation = rover.moveBackwardOn(terrain);
+		final Location location = location(command.getX(), command.getY());
+		final Location newLocation = Rover.moveFrom(location, heading).backwardOn(terrain);
 		eventBus.publish(roverMoved(newLocation.getX(), newLocation.getY()));
 	}
 
 	public void handle(final TurnLeft command) {
 		final Heading heading = Heading.valueOf(command.getHeading().toUpperCase());
-		final Rover rover = new Rover(heading);
-		final Heading newHeading = rover.turnLeft();
+		final Heading newHeading = Rover.turnFrom(heading).left();
 		eventBus.publish(roverTurned(newHeading.name()));
 	}
 
 	public void handle(final TurnRight command) {
 		final Heading heading = Heading.valueOf(command.getHeading().toUpperCase());
-		final Rover rover = new Rover(heading);
-		final Heading newHeading = rover.turnRight();
+		final Heading newHeading = Rover.turnFrom(heading).right();
 		eventBus.publish(roverTurned(newHeading.name()));
 	}
 

@@ -20,18 +20,21 @@ public class Rover implements Moveable, Turnable {
 	private final Location location;
 	private final Heading heading;
 
-	public Rover(final Location location, final Heading heading) {
+	private Rover(final Location location, final Heading heading) {
 		this.location = location;
 		this.heading = heading;
 	}
 
-	public Rover(final Heading heading) {
-		this.location = location(0, 0);
-		this.heading = heading;
+	public static Moveable moveFrom(final Location location, final Heading heading) {
+		return new Rover(location, heading);
+	}
+
+	public static Turnable turnFrom(final Heading heading) {
+		return new Rover(location(0, 0), heading);
 	}
 
 	@Override
-	public Location moveForwardOn(final Terrain terrain) {
+	public Location forwardOn(final Terrain terrain) {
 		switch (heading) {
 		case NORTH:
 			return location.y(increaseY(terrain));
@@ -47,7 +50,7 @@ public class Rover implements Moveable, Turnable {
 	}
 
 	@Override
-	public Location moveBackwardOn(final Terrain terrain) {
+	public Location backwardOn(final Terrain terrain) {
 		switch (heading) {
 		case NORTH:
 			return location.y(decreaseY(terrain));
@@ -63,7 +66,7 @@ public class Rover implements Moveable, Turnable {
 	}
 
 	@Override
-	public Heading turnRight() {
+	public Heading right() {
 		switch (heading) {
 		case NORTH:
 			return EAST;
@@ -79,7 +82,7 @@ public class Rover implements Moveable, Turnable {
 	}
 
 	@Override
-	public Heading turnLeft() {
+	public Heading left() {
 		switch (heading) {
 		case NORTH:
 			return WEST;
