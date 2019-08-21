@@ -12,10 +12,6 @@ public class Functions {
 		return ResetTo.resetTo(value);
 	}
 
-	public static ApplyTo with(final Integer value) {
-		return ApplyTo.applyTo(value);
-	}
-
 	public static Function<Integer, Integer> decrease() {
 		return t -> t - 1;
 	}

@@ -3,7 +3,6 @@ package my.katas.rover.functional;
 import static my.katas.rover.functional.Functions.decrease;
 import static my.katas.rover.functional.Functions.increase;
 import static my.katas.rover.functional.Functions.resetTo;
-import static my.katas.rover.functional.Functions.with;
 import static my.katas.rover.functional.Predicates.greaterThan;
 import static my.katas.rover.functional.Predicates.smallerThan;
 import static org.apache.commons.lang3.RandomUtils.nextInt;
@@ -77,7 +76,10 @@ public class FunctionsTest {
 		int givenValue = min;
 
 		// when
-		Integer actual = with(givenValue).times(times).apply(increase().andThen(resetTo(min).onlyIf(greaterThan(max))));
+		Integer actual = givenValue;
+		for (int i = 0; i < times; i++) {
+			actual = increase().andThen(resetTo(min).onlyIf(greaterThan(max))).apply(actual);
+		}
 
 		// then
 		assertThat(actual).isEqualTo(min);
@@ -92,7 +94,10 @@ public class FunctionsTest {
 		int givenValue = max;
 
 		// when
-		Integer actual = with(givenValue).times(times).apply(decrease().andThen(resetTo(max).onlyIf(smallerThan(min))));
+		Integer actual = givenValue;
+		for (int i = 0; i < times; i++) {
+			actual = decrease().andThen(resetTo(max).onlyIf(smallerThan(min))).apply(actual);
+		}
 
 		// then
 		assertThat(actual).isEqualTo(max);

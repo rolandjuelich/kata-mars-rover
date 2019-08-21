@@ -2,8 +2,8 @@ package my.katas.rover;
 
 public interface Turnable {
 
-	void turnRight();
+	Heading turnRight();
 
-	void turnLeft();
+	Heading turnLeft();
 
 }

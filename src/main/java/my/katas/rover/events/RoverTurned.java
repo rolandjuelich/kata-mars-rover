@@ -1,13 +1,12 @@
-package my.katas.rover;
+package my.katas.rover.events;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class RoverStateChanged {
+public class RoverTurned {
 
-	private int x;
-	private int y;
 	private String heading;
+	
 }

@@ -1,5 +1,7 @@
 package my.katas.rover;
 
+import java.util.function.Function;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +15,14 @@ public class Location {
 
 	public static Location location(final Integer x, final Integer y) {
 		return new Location(x, y);
+	}
+
+	public Location y(final Function<Integer, Integer> function) {
+		return new Location(x, function.apply(y));
+	}
+
+	public Location x(final Function<Integer, Integer> function) {
+		return new Location(function.apply(x), y);
 	}
 
 }

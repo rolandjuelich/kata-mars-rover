@@ -1,50 +1,55 @@
 package my.katas.rover;
 
-import static my.katas.rover.Heading.valueOf;
 import static my.katas.rover.Location.location;
-import static my.katas.rover.Rover.landingOn;
+import static my.katas.rover.events.Events.roverMoved;
+import static my.katas.rover.events.Events.roverTurned;
+
+import my.katas.rover.commands.MoveBackward;
+import my.katas.rover.commands.MoveForward;
+import my.katas.rover.commands.TurnLeft;
+import my.katas.rover.commands.TurnRight;
+import my.katas.rover.events.EventBus;
+import my.katas.rover.terrain.Terrain;
+import my.katas.rover.terrain.TerrainRepository;
 
 public class Application {
 
-	private RoverStateChangedListener listener;
-	private Rover rover;
+	private final EventBus eventBus;
+	private final TerrainRepository terrains;
 
-	public void initialize(int x, int y, String heading) {
-		final Terrain terrain = new Terrain(0, 99, 0, 99);
-		final Heading direction = valueOf(heading.toUpperCase());
-		final Location initialPosition = location(x, y);
-
-		rover = landingOn(terrain).heading(direction).startFrom(initialPosition);
-
-		listener.notifyThat(roverHasChanged());
+	public Application(final EventBus eventBus, final TerrainRepository terrains) {
+		this.eventBus = eventBus;
+		this.terrains = terrains;
 	}
 
-	public void moveForward() {
-		rover.moveForward();
-		listener.notifyThat(roverHasChanged());
+	public void handle(final MoveForward command) {
+		final Terrain terrain = terrains.findByName(command.getTerrain());
+		final Heading heading = Heading.valueOf(command.getHeading().toUpperCase());
+		final Rover rover = new Rover(location(command.getX(), command.getY()), heading);
+		final Location newLocation = rover.moveForwardOn(terrain);
+		eventBus.publish(roverMoved(newLocation.getX(), newLocation.getY()));
 	}
 
-	public void moveBackward() {
-		rover.moveBackward();
-		listener.notifyThat(roverHasChanged());
+	public void handle(final MoveBackward command) {
+		final Terrain terrain = terrains.findByName(command.getTerrain());
+		final Heading heading = Heading.valueOf(command.getHeading().toUpperCase());
+		final Rover rover = new Rover(location(command.getX(), command.getY()), heading);
+		final Location newLocation = rover.moveBackwardOn(terrain);
+		eventBus.publish(roverMoved(newLocation.getX(), newLocation.getY()));
 	}
 
-	public void turnLeft() {
-		rover.turnLeft();
-		listener.notifyThat(roverHasChanged());
+	public void handle(final TurnLeft command) {
+		final Heading heading = Heading.valueOf(command.getHeading().toUpperCase());
+		final Rover rover = new Rover(heading);
+		final Heading newHeading = rover.turnLeft();
+		eventBus.publish(roverTurned(newHeading.name()));
 	}
 
-	public void turnRight() {
-		rover.turnRight();
-		listener.notifyThat(roverHasChanged());
-	}
-
-	public void register(final RoverStateChangedListener handler) {
-		this.listener = handler;
-	}
-
-	private RoverStateChanged roverHasChanged() {
-		return new RoverStateChanged(rover.x(), rover.y(), rover.heading());
+	public void handle(final TurnRight command) {
+		final Heading heading = Heading.valueOf(command.getHeading().toUpperCase());
+		final Rover rover = new Rover(heading);
+		final Heading newHeading = rover.turnRight();
+		eventBus.publish(roverTurned(newHeading.name()));
 	}
 
 }

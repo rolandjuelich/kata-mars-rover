@@ -4,163 +4,109 @@ import static my.katas.rover.Heading.EAST;
 import static my.katas.rover.Heading.NORTH;
 import static my.katas.rover.Heading.SOUTH;
 import static my.katas.rover.Heading.WEST;
+import static my.katas.rover.Location.location;
 import static my.katas.rover.functional.Functions.decrease;
 import static my.katas.rover.functional.Functions.increase;
 import static my.katas.rover.functional.Functions.resetTo;
-import static my.katas.rover.functional.Functions.with;
 import static my.katas.rover.functional.Predicates.greaterThan;
 import static my.katas.rover.functional.Predicates.smallerThan;
 
-public class Rover implements Turnable, Moveable, Locatable {
+import java.util.function.Function;
 
-	private int minX;
-	private int maxX;
-	private int minY;
-	private int maxY;
-	private int x;
-	private int y;
-	private Heading heading;
+import my.katas.rover.terrain.Terrain;
 
-	private Rover(int minX, int maxX, int minY, int maxY, int x, int y, Heading heading) {
-		this.minX = minX;
-		this.maxX = maxX;
-		this.minY = minY;
-		this.maxY = maxY;
-		this.x = x;
-		this.y = y;
+public class Rover implements Moveable, Turnable {
+
+	private final Location location;
+	private final Heading heading;
+
+	public Rover(final Location location, final Heading heading) {
+		this.location = location;
+		this.heading = heading;
+	}
+
+	public Rover(final Heading heading) {
+		this.location = location(0, 0);
 		this.heading = heading;
 	}
 
 	@Override
-	public void moveForward() {
+	public Location moveForwardOn(final Terrain terrain) {
 		switch (heading) {
 		case NORTH:
-			y = increaseY();
-			break;
+			return location.y(increaseY(terrain));
 		case EAST:
-			x = increaseX();
-			break;
+			return location.x(increaseX(terrain));
 		case SOUTH:
-			y = decreaseY();
-			break;
+			return location.y(decreaseY(terrain));
 		case WEST:
-			x = decreaseX();
-			break;
+			return location.x(decreaseX(terrain));
+		default:
+			return location;
 		}
 	}
 
 	@Override
-	public void moveBackward() {
+	public Location moveBackwardOn(final Terrain terrain) {
 		switch (heading) {
 		case NORTH:
-			y = decreaseY();
-			break;
+			return location.y(decreaseY(terrain));
 		case EAST:
-			x = decreaseX();
-			break;
+			return location.x(decreaseX(terrain));
 		case SOUTH:
-			y = increaseY();
-			break;
+			return location.y(increaseY(terrain));
 		case WEST:
-			x = increaseX();
-			break;
+			return location.x(increaseX(terrain));
+		default:
+			return location;
 		}
 	}
 
 	@Override
-	public void turnRight() {
+	public Heading turnRight() {
 		switch (heading) {
 		case NORTH:
-			heading = EAST;
-			break;
+			return EAST;
 		case EAST:
-			heading = SOUTH;
-			break;
+			return SOUTH;
 		case SOUTH:
-			heading = WEST;
-			break;
+			return WEST;
 		case WEST:
-			heading = NORTH;
-			break;
+			return NORTH;
+		default:
+			return heading;
 		}
 	}
 
 	@Override
-	public void turnLeft() {
+	public Heading turnLeft() {
 		switch (heading) {
 		case NORTH:
-			heading = WEST;
-			break;
+			return WEST;
 		case WEST:
-			heading = SOUTH;
-			break;
+			return SOUTH;
 		case SOUTH:
-			heading = EAST;
-			break;
+			return EAST;
 		case EAST:
-			heading = NORTH;
-			break;
+			return NORTH;
+		default:
+			return heading;
 		}
 	}
 
-	@Override
-	public int x() {
-		return x;
+	private static Function<Integer, Integer> increaseX(final Terrain terrain) {
+		return increase().andThen(resetTo(terrain.getMinX()).onlyIf(greaterThan(terrain.getMaxX())));
 	}
 
-	@Override
-	public int y() {
-		return y;
+	private static Function<Integer, Integer> increaseY(final Terrain terrain) {
+		return increase().andThen(resetTo(terrain.getMinY()).onlyIf(greaterThan(terrain.getMaxY())));
 	}
 
-	@Override
-	public String heading() {
-		return heading.name();
+	private static Function<Integer, Integer> decreaseX(final Terrain terrain) {
+		return decrease().andThen(resetTo(terrain.getMaxX()).onlyIf(smallerThan(terrain.getMinX())));
 	}
 
-	private Integer increaseX() {
-		return with(x).apply(increase().andThen(resetTo(minX).onlyIf(greaterThan(maxX))));
-	}
-
-	private Integer increaseY() {
-		return with(y).apply(increase().andThen(resetTo(minY).onlyIf(greaterThan(maxY))));
-	}
-
-	private Integer decreaseX() {
-		return with(x).apply(decrease().andThen(resetTo(maxX).onlyIf(smallerThan(minX))));
-	}
-
-	private Integer decreaseY() {
-		return with(y).apply(decrease().andThen(resetTo(maxY).onlyIf(smallerThan(minY))));
-	}
-
-	public static Lander landingOn(final Terrain terrain) {
-		return new Lander(terrain);
-	}
-
-	static class Lander {
-
-		private final Terrain terrain;
-		private Heading heading = Heading.NORTH;
-
-		private Lander(final Terrain terrain) {
-			this.terrain = terrain;
-		}
-
-		public Lander heading(final Heading heading) {
-			this.heading = heading;
-			return this;
-		}
-
-		public Rover startFrom(final Location location) {
-			return new Rover(//
-					terrain.getMinX(), //
-					terrain.getMaxX(), //
-					terrain.getMinY(), //
-					terrain.getMaxY(), //
-					location.getX(), //
-					location.getY(), //
-					heading);
-		}
+	private static Function<Integer, Integer> decreaseY(final Terrain terrain) {
+		return decrease().andThen(resetTo(terrain.getMaxY()).onlyIf(smallerThan(terrain.getMinY())));
 	}
 }

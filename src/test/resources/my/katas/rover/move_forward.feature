@@ -4,6 +4,12 @@ Feature: Moving
   As a scientist
   I want to use a rover to check the terrain
 
+  Background: 
+    Given the terrain on "Mars" has following dimensions
+      | name | min | max |
+      | x    |   0 |  99 |
+      | y    |   0 |  99 |
+
   Scenario Outline: rover moves forward heading north
     Given rover is heading "north" at 0, <given>
     When rover moves forward <times> times

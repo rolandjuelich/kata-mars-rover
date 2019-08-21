@@ -4,8 +4,14 @@ Feature: Moving
   As a scientist
   I want to use a rover to check the terrain
 
+  Background: 
+    Given the terrain on "Mars" has following dimensions
+      | name | min | max |
+      | x    |   0 |  99 |
+      | y    |   0 |  99 |
+
   Scenario Outline: rover moves backward heading north
-    Given rover is heading "north" at 0, <given> 
+    Given rover is heading "north" at 0, <given>
     When rover moves backward <times> times
     Then rover should be heading "north" at 0, <expected>
 
@@ -22,7 +28,7 @@ Feature: Moving
       |    99 |   302 |       97 |
 
   Scenario Outline: rover moves backward heading east
-    Given rover is heading "east" at <given>, 0 
+    Given rover is heading "east" at <given>, 0
     When rover moves backward <times> times
     Then rover should be heading "east" at <expected>, 0
 
@@ -39,7 +45,7 @@ Feature: Moving
       |    99 |   302 |       97 |
 
   Scenario Outline: rover moves backward heading south
-    Given rover is heading "south" at 0, <given> 
+    Given rover is heading "south" at 0, <given>
     When rover moves backward <times> times
     Then rover should be heading "south" at 0, <expected>
 
@@ -55,7 +61,7 @@ Feature: Moving
       |    99 |   302 |        1 |
 
   Scenario Outline: rover moves backward heading west
-    Given rover is heading "west" at <given>, 0 
+    Given rover is heading "west" at <given>, 0
     When rover moves backward <times> times
     Then rover should be heading "west" at <expected>, 0
 

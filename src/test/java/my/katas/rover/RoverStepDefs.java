@@ -1,78 +1,133 @@
 package my.katas.rover;
 
+import static my.katas.rover.commands.Commands.moveBackward;
+import static my.katas.rover.commands.Commands.moveForward;
+import static my.katas.rover.commands.Commands.turnLeft;
+import static my.katas.rover.commands.Commands.turnRight;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import my.katas.rover.events.EventBus;
+import my.katas.rover.events.RoverMoved;
+import my.katas.rover.events.RoverTurned;
+import my.katas.rover.terrain.Terrain;
+import my.katas.rover.terrain.TerrainRepository;
 
 public class RoverStepDefs {
 
-	private Application rover;
+	private List<Object> events = new ArrayList<>();
 
-	private int currentX;
-	private int currentY;
-	private String currentHeading;
+	private EventBus eventBus;
+	private TerrainRepository terrains;
+	private Application application;
+
+	private int actualX;
+	private int actualY;
+	private String actualHeading;
+	private String terrain;
 
 	@Before
 	public void beforeSceanrio() {
-		rover = new Application();
-		rover.register(new RoverStateChangedListener() {
+		terrains = mock(TerrainRepository.class);
+		eventBus = new EventBus();
+		application = new Application(eventBus, terrains);
 
-			@Override
-			public void notifyThat(final RoverStateChanged event) {
-				currentX = event.getX();
-				currentY = event.getY();
-				currentHeading = event.getHeading();
-			}
-		});
+		eventBus.forEvery(RoverMoved.class)
+				.notify(event -> {
+					actualX = event.getX();
+					actualY = event.getY();
+				})
+				.notify(event -> {
+					events.add(event);
+				});
+
+		eventBus.forEvery(RoverTurned.class)
+				.notify(event -> {
+					actualHeading = event.getHeading();
+				})
+				.notify(event -> {
+					events.add(event);
+				});
+
+	}
+
+	@Given("the terrain on {string} has following dimensions")
+	public void the_terrain_on_has_following_dimensions(final String name, final DataTable table) {
+		this.terrain = name;
+
+		List<Map<String, String>> data = table.asMaps();
+		int minX = Integer.valueOf(data.get(0).get("min"));
+		int maxX = Integer.valueOf(data.get(0).get("max"));
+		int minY = Integer.valueOf(data.get(1).get("min"));
+		int maxY = Integer.valueOf(data.get(1).get("max"));
+
+		when(terrains.findByName(name)).thenReturn(new Terrain(name, minX, maxX, minY, maxY));
+
 	}
 
 	@Given("rover is heading {string}")
 	public void rover_is_heading(final String heading) {
-		rover.initialize(0, 0, heading);
+		this.actualX = 0;
+		this.actualY = 0;
+		this.actualHeading = heading;
 	}
 
 	@Given("rover is heading {string} at {int}, {int}")
 	public void rover_is_heading_at(final String heading, final Integer x, final Integer y) {
-		rover.initialize(x, y, heading);
+		this.actualX = x;
+		this.actualY = y;
+		this.actualHeading = heading;
+
 	}
 
 	@When("rover moves forward {int} times")
 	public void rover_moves_forward_times(final Integer times) {
 		for (int i = 0; i < times; i++) {
-			rover.moveForward();
+			application.handle(moveForward(terrain, actualX, actualY, actualHeading));
 		}
+		assertThat(events).filteredOn(o -> o.getClass().isAssignableFrom(RoverMoved.class)).hasSize(times);
+
 	}
 
 	@When("rover moves backward {int} times")
 	public void rover_moves_backward_times(final Integer times) {
 		for (int i = 0; i < times; i++) {
-			rover.moveBackward();
+			application.handle(moveBackward(terrain, actualX, actualY, actualHeading));
 		}
+		assertThat(events).filteredOn(o -> o.getClass().isAssignableFrom(RoverMoved.class)).hasSize(times);
 	}
 
 	@When("rover turns right")
 	public void rover_turns_right() {
-		rover.turnRight();
+		application.handle(turnRight(actualHeading));
 	}
 
 	@When("rover turns left")
 	public void rover_turns_left() {
-		rover.turnLeft();
+		application.handle(turnLeft(actualHeading));
 	}
 
 	@Then("rover should be heading {string}")
 	public void rover_should_be_heading(final String expected) {
-		assertThat(currentHeading).isEqualToIgnoringCase(expected);
+		assertThat(actualHeading).isEqualToIgnoringCase(expected);
 	}
 
 	@Then("rover should be heading {string} at {int}, {int}")
-	public void rover_should_be_heading_at(final String heading, final Integer x, final Integer y) {
-		assertThat(currentX).describedAs("expected x").isEqualTo(x);
-		assertThat(currentY).describedAs("expected y").isEqualTo(y);
-		assertThat(currentHeading).describedAs("expected heading").isEqualToIgnoringCase(heading);
+	public void rover_should_be_heading_at(final String expectedHeading, final Integer expectedX,
+			final Integer expectedY) {
+		assertThat(actualX).describedAs("x").isEqualTo(expectedX);
+		assertThat(actualY).describedAs("y").isEqualTo(expectedY);
+		assertThat(actualHeading).describedAs("heading").isEqualToIgnoringCase(expectedHeading);
 	}
 
 }
