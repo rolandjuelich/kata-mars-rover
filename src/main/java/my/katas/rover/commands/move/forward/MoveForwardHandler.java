@@ -1,4 +1,4 @@
-package my.katas.rover.commands.forward;
+package my.katas.rover.commands.move.forward;
 
 import static my.katas.rover.events.Events.roverMoved;
 import static my.katas.rover.model.Location.location;

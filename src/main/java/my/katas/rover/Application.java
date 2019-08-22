@@ -3,14 +3,14 @@ package my.katas.rover;
 import com.google.common.eventbus.EventBus;
 
 import lombok.AllArgsConstructor;
-import my.katas.rover.commands.backward.MoveBackward;
-import my.katas.rover.commands.backward.MoveBackwardHandler;
-import my.katas.rover.commands.forward.MoveForward;
-import my.katas.rover.commands.forward.MoveForwardHandler;
-import my.katas.rover.commands.turnleft.TurnLeft;
-import my.katas.rover.commands.turnleft.TurnLeftHandler;
-import my.katas.rover.commands.turnright.TurnRight;
-import my.katas.rover.commands.turnright.TurnRightHandler;
+import my.katas.rover.commands.move.backward.MoveBackward;
+import my.katas.rover.commands.move.backward.MoveBackwardHandler;
+import my.katas.rover.commands.move.forward.MoveForward;
+import my.katas.rover.commands.move.forward.MoveForwardHandler;
+import my.katas.rover.commands.turn.left.TurnLeft;
+import my.katas.rover.commands.turn.left.TurnLeftHandler;
+import my.katas.rover.commands.turn.right.TurnRight;
+import my.katas.rover.commands.turn.right.TurnRightHandler;
 import my.katas.rover.model.terrain.TerrainRepository;
 
 @AllArgsConstructor

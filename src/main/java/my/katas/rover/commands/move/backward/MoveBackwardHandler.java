@@ -1,4 +1,4 @@
-package my.katas.rover.commands.backward;
+package my.katas.rover.commands.move.backward;
 
 import static my.katas.rover.events.Events.roverMoved;
 import static my.katas.rover.model.Location.location;
@@ -26,6 +26,6 @@ public class MoveBackwardHandler implements CommandHandler<MoveBackward> {
 		final Location location = location(command.getX(), command.getY());
 		final Location newLocation = Rover.moveFrom(location, heading).backwardOn(terrain);
 		eventBus.post(roverMoved(newLocation.getX(), newLocation.getY()));
-
 	}
+	
 }

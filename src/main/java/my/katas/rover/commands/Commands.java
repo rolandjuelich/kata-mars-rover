@@ -1,9 +1,9 @@
 package my.katas.rover.commands;
 
-import my.katas.rover.commands.backward.MoveBackward;
-import my.katas.rover.commands.forward.MoveForward;
-import my.katas.rover.commands.turnleft.TurnLeft;
-import my.katas.rover.commands.turnright.TurnRight;
+import my.katas.rover.commands.move.backward.MoveBackward;
+import my.katas.rover.commands.move.forward.MoveForward;
+import my.katas.rover.commands.turn.left.TurnLeft;
+import my.katas.rover.commands.turn.right.TurnRight;
 
 public class Commands {
 
