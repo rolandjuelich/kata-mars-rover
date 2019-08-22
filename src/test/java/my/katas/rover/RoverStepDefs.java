@@ -29,6 +29,7 @@ public class RoverStepDefs {
 	private List<Object> events = new ArrayList<>();
 
 	private EventBus eventBus;
+	private com.google.common.eventbus.EventBus guava;
 	private TerrainRepository terrains;
 	private Application application;
 
@@ -45,21 +46,28 @@ public class RoverStepDefs {
 
 		eventBus.forEvery(RoverMoved.class)
 				.notify(event -> {
-					actualX = event.getX();
-					actualY = event.getY();
-				})
-				.notify(event -> {
-					events.add(event);
+					handle(event);
 				});
 
 		eventBus.forEvery(RoverTurned.class)
 				.notify(event -> {
-					actualHeading = event.getHeading();
-				})
-				.notify(event -> {
-					events.add(event);
+					handle(event);
 				});
 
+		guava = new com.google.common.eventbus.EventBus();
+		guava.register(this);
+
+	}
+
+	public void handle(final RoverTurned event) {
+		actualHeading = event.getHeading();
+		events.add(event);
+	}
+
+	public void handle(final RoverMoved event) {
+		actualX = event.getX();
+		actualY = event.getY();
+		events.add(event);
 	}
 
 	@Given("the terrain on {string} has following dimensions")
