@@ -1,4 +1,4 @@
-package my.katas.rover.commands.forward;
+package my.katas.rover.commands.move.forward;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

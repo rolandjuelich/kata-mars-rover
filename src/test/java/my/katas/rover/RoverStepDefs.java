@@ -13,12 +13,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import my.katas.rover.events.EventBus;
+import my.katas.rover.commands.CommandBus;
+import my.katas.rover.commands.move.backward.MoveBackwardHandler;
+import my.katas.rover.commands.move.forward.MoveForwardHandler;
+import my.katas.rover.commands.turn.left.TurnLeftHandler;
+import my.katas.rover.commands.turn.right.TurnRightHandler;
 import my.katas.rover.events.RoverMoved;
 import my.katas.rover.events.RoverTurned;
 import my.katas.rover.model.terrain.Terrain;
@@ -29,37 +36,41 @@ public class RoverStepDefs {
 	private List<Object> events = new ArrayList<>();
 
 	private EventBus eventBus;
+	private CommandBus commandBus;
 	private TerrainRepository terrains;
-	private Application application;
-
-	private int actualX;
-	private int actualY;
+	
+	private Integer actualX;
+	private Integer actualY;
 	private String actualHeading;
 	private String terrain;
 
 	@Before
 	public void beforeSceanrio() {
+
 		terrains = mock(TerrainRepository.class);
+
 		eventBus = new EventBus();
-		application = new Application(eventBus, terrains);
+		eventBus.register(this);
 
-		eventBus.forEvery(RoverMoved.class)
-				.notify(event -> {
-					actualX = event.getX();
-					actualY = event.getY();
-				})
-				.notify(event -> {
-					events.add(event);
-				});
+		commandBus = new CommandBus();
+		commandBus.register(new MoveForwardHandler(terrains, eventBus));
+		commandBus.register(new MoveBackwardHandler(terrains, eventBus));
+		commandBus.register(new TurnRightHandler(eventBus));
+		commandBus.register(new TurnLeftHandler(eventBus));
 
-		eventBus.forEvery(RoverTurned.class)
-				.notify(event -> {
-					actualHeading = event.getHeading();
-				})
-				.notify(event -> {
-					events.add(event);
-				});
+	}
 
+	@Subscribe
+	public void handle(final RoverTurned event) {
+		this.actualHeading = event.getHeading();
+		this.events.add(event);
+	}
+
+	@Subscribe
+	public void handle(final RoverMoved event) {
+		this.actualX = event.getX();
+		this.actualY = event.getY();
+		this.events.add(event);
 	}
 
 	@Given("the terrain on {string} has following dimensions")
@@ -94,7 +105,7 @@ public class RoverStepDefs {
 	@When("rover moves forward {int} times")
 	public void rover_moves_forward_times(final Integer times) {
 		for (int i = 0; i < times; i++) {
-			application.handle(moveForward(terrain, actualX, actualY, actualHeading));
+			commandBus.post(moveForward(terrain, actualX, actualY, actualHeading));
 		}
 		assertThat(events).filteredOn(type(RoverMoved.class)).hasSize(times);
 
@@ -103,19 +114,19 @@ public class RoverStepDefs {
 	@When("rover moves backward {int} times")
 	public void rover_moves_backward_times(final Integer times) {
 		for (int i = 0; i < times; i++) {
-			application.handle(moveBackward(terrain, actualX, actualY, actualHeading));
+			commandBus.post(moveBackward(terrain, actualX, actualY, actualHeading));
 		}
 		assertThat(events).filteredOn(type(RoverMoved.class)).hasSize(times);
 	}
 
 	@When("rover turns right")
 	public void rover_turns_right() {
-		application.handle(turnRight(actualHeading));
+		commandBus.post(turnRight(actualHeading));
 	}
 
 	@When("rover turns left")
 	public void rover_turns_left() {
-		application.handle(turnLeft(actualHeading));
+		commandBus.post(turnLeft(actualHeading));
 	}
 
 	@Then("rover should be heading {string}")
