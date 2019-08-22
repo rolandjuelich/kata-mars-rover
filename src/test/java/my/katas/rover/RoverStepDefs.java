@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
 import io.cucumber.datatable.DataTable;
@@ -20,7 +21,6 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import my.katas.rover.events.EventBus;
 import my.katas.rover.events.RoverMoved;
 import my.katas.rover.events.RoverTurned;
 import my.katas.rover.model.terrain.Terrain;
@@ -31,35 +31,23 @@ public class RoverStepDefs {
 	private List<Object> events = new ArrayList<>();
 
 	private EventBus eventBus;
-	private com.google.common.eventbus.EventBus guava;
 	private TerrainRepository terrains;
 	private Application application;
 
-	private int actualX;
-	private int actualY;
+	private Integer actualX;
+	private Integer actualY;
 	private String actualHeading;
 	private String terrain;
 
 	@Before
 	public void beforeSceanrio() {
-		
+
 		terrains = mock(TerrainRepository.class);
 
 		eventBus = new EventBus();
-		eventBus.forEvery(RoverMoved.class)
-				.notify(event -> {
-					handle(event);
-				});
+		eventBus.register(this);
 
-		eventBus.forEvery(RoverTurned.class)
-				.notify(event -> {
-					handle(event);
-				});
-
-		guava = new com.google.common.eventbus.EventBus();
-		guava.register(this);
-
-		application = new Application(eventBus, terrains, guava);
+		application = new Application(terrains, eventBus);
 
 	}
 
