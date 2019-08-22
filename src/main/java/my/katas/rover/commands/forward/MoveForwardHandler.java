@@ -17,6 +17,7 @@ public class MoveForwardHandler implements CommandHandler<MoveForward> {
 
 	private final EventBus eventBus;
 	private final TerrainRepository terrains;
+	private final com.google.common.eventbus.EventBus guava;
 
 	@Override
 	public void handle(final MoveForward command) {
@@ -24,6 +25,6 @@ public class MoveForwardHandler implements CommandHandler<MoveForward> {
 		final Heading heading = Heading.valueOf(command.getHeading().toUpperCase());
 		final Location location = location(command.getX(), command.getY());
 		final Location newLocation = Rover.moveFrom(location, heading).forwardOn(terrain);
-		eventBus.publish(roverMoved(newLocation.getX(), newLocation.getY()));
+		guava.post(roverMoved(newLocation.getX(), newLocation.getY()));
 	}
 }

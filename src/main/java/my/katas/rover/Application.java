@@ -15,14 +15,16 @@ public class Application {
 
 	private final EventBus eventBus;
 	private final TerrainRepository terrains;
+	private com.google.common.eventbus.EventBus guava;
 
-	public Application(final EventBus eventBus, final TerrainRepository terrains) {
+	public Application(final EventBus eventBus, final TerrainRepository terrains, com.google.common.eventbus.EventBus guava) {
 		this.eventBus = eventBus;
 		this.terrains = terrains;
+		this.guava = guava;
 	}
 
 	public void handle(final MoveForward command) {
-		new MoveForwardHandler(eventBus, terrains).handle(command);
+		new MoveForwardHandler(eventBus, terrains, guava).handle(command);
 	}
 
 	public void handle(final MoveBackward command) {

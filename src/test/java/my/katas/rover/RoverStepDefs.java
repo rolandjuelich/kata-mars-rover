@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import com.google.common.eventbus.Subscribe;
+
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
@@ -40,10 +42,10 @@ public class RoverStepDefs {
 
 	@Before
 	public void beforeSceanrio() {
+		
 		terrains = mock(TerrainRepository.class);
-		eventBus = new EventBus();
-		application = new Application(eventBus, terrains);
 
+		eventBus = new EventBus();
 		eventBus.forEvery(RoverMoved.class)
 				.notify(event -> {
 					handle(event);
@@ -57,17 +59,21 @@ public class RoverStepDefs {
 		guava = new com.google.common.eventbus.EventBus();
 		guava.register(this);
 
+		application = new Application(eventBus, terrains, guava);
+
 	}
 
+	@Subscribe
 	public void handle(final RoverTurned event) {
-		actualHeading = event.getHeading();
-		events.add(event);
+		this.actualHeading = event.getHeading();
+		this.events.add(event);
 	}
 
+	@Subscribe
 	public void handle(final RoverMoved event) {
-		actualX = event.getX();
-		actualY = event.getY();
-		events.add(event);
+		this.actualX = event.getX();
+		this.actualY = event.getY();
+		this.events.add(event);
 	}
 
 	@Given("the terrain on {string} has following dimensions")
