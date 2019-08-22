@@ -1,16 +1,15 @@
 package my.katas.rover;
 
-import static my.katas.rover.Location.location;
-import static my.katas.rover.events.Events.roverMoved;
-import static my.katas.rover.events.Events.roverTurned;
-
-import my.katas.rover.commands.MoveBackward;
-import my.katas.rover.commands.MoveForward;
-import my.katas.rover.commands.TurnLeft;
-import my.katas.rover.commands.TurnRight;
+import my.katas.rover.commands.backward.MoveBackward;
+import my.katas.rover.commands.backward.MoveBackwardHandler;
+import my.katas.rover.commands.forward.MoveForward;
+import my.katas.rover.commands.forward.MoveForwardHandler;
+import my.katas.rover.commands.turnleft.TurnLeft;
+import my.katas.rover.commands.turnleft.TurnLeftHandler;
+import my.katas.rover.commands.turnright.TurnRight;
+import my.katas.rover.commands.turnright.TurnRightHandler;
 import my.katas.rover.events.EventBus;
-import my.katas.rover.terrain.Terrain;
-import my.katas.rover.terrain.TerrainRepository;
+import my.katas.rover.model.terrain.TerrainRepository;
 
 public class Application {
 
@@ -23,31 +22,19 @@ public class Application {
 	}
 
 	public void handle(final MoveForward command) {
-		final Terrain terrain = terrains.findByName(command.getTerrain());
-		final Heading heading = Heading.valueOf(command.getHeading().toUpperCase());
-		final Location location = location(command.getX(), command.getY());
-		final Location newLocation = Rover.moveFrom(location, heading).forwardOn(terrain);
-		eventBus.publish(roverMoved(newLocation.getX(), newLocation.getY()));
+		new MoveForwardHandler(eventBus, terrains).handle(command);
 	}
 
 	public void handle(final MoveBackward command) {
-		final Terrain terrain = terrains.findByName(command.getTerrain());
-		final Heading heading = Heading.valueOf(command.getHeading().toUpperCase());
-		final Location location = location(command.getX(), command.getY());
-		final Location newLocation = Rover.moveFrom(location, heading).backwardOn(terrain);
-		eventBus.publish(roverMoved(newLocation.getX(), newLocation.getY()));
+		new MoveBackwardHandler(eventBus, terrains).handle(command);
 	}
 
 	public void handle(final TurnLeft command) {
-		final Heading heading = Heading.valueOf(command.getHeading().toUpperCase());
-		final Heading newHeading = Rover.turnFrom(heading).left();
-		eventBus.publish(roverTurned(newHeading.name()));
+		new TurnLeftHandler(eventBus).handle(command);
 	}
 
 	public void handle(final TurnRight command) {
-		final Heading heading = Heading.valueOf(command.getHeading().toUpperCase());
-		final Heading newHeading = Rover.turnFrom(heading).right();
-		eventBus.publish(roverTurned(newHeading.name()));
+		new TurnRightHandler(eventBus).handle(command);
 	}
 
 }

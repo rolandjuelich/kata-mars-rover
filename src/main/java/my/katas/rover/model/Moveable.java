@@ -1,6 +1,6 @@
-package my.katas.rover;
+package my.katas.rover.model;
 
-import my.katas.rover.terrain.Terrain;
+import my.katas.rover.model.terrain.Terrain;
 
 public interface Moveable {
 

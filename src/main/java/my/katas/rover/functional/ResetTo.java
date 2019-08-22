@@ -5,12 +5,12 @@ import java.util.function.Predicate;
 
 public class ResetTo implements Function<Integer, Integer> {
 
-	private final Integer resetTo;
+	private final Integer reset;
 
 	private final Predicate<Integer> condition;
 
 	private ResetTo(final Integer value, final Predicate<Integer> predicate) {
-		this.resetTo = value;
+		this.reset = value;
 		this.condition = predicate;
 	}
 
@@ -23,16 +23,12 @@ public class ResetTo implements Function<Integer, Integer> {
 	}
 
 	public ResetTo onlyIf(final Predicate<Integer> predicate) {
-		return new ResetTo(resetTo, predicate);
+		return new ResetTo(reset, predicate);
 	}
 
 	@Override
-	public Integer apply(final Integer value) {
-		if (condition.test(value)) {
-			return resetTo;
-		} else {
-			return value;
-		}
+	public Integer apply(final Integer actual) {
+		return condition.test(actual) ? reset : actual;
 	}
 
 }

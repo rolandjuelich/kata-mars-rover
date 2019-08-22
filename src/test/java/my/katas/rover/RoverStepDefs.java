@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
@@ -20,8 +21,8 @@ import io.cucumber.java.en.When;
 import my.katas.rover.events.EventBus;
 import my.katas.rover.events.RoverMoved;
 import my.katas.rover.events.RoverTurned;
-import my.katas.rover.terrain.Terrain;
-import my.katas.rover.terrain.TerrainRepository;
+import my.katas.rover.model.terrain.Terrain;
+import my.katas.rover.model.terrain.TerrainRepository;
 
 public class RoverStepDefs {
 
@@ -95,7 +96,7 @@ public class RoverStepDefs {
 		for (int i = 0; i < times; i++) {
 			application.handle(moveForward(terrain, actualX, actualY, actualHeading));
 		}
-		assertThat(events).filteredOn(o -> o.getClass().isAssignableFrom(RoverMoved.class)).hasSize(times);
+		assertThat(events).filteredOn(type(RoverMoved.class)).hasSize(times);
 
 	}
 
@@ -104,7 +105,7 @@ public class RoverStepDefs {
 		for (int i = 0; i < times; i++) {
 			application.handle(moveBackward(terrain, actualX, actualY, actualHeading));
 		}
-		assertThat(events).filteredOn(o -> o.getClass().isAssignableFrom(RoverMoved.class)).hasSize(times);
+		assertThat(events).filteredOn(type(RoverMoved.class)).hasSize(times);
 	}
 
 	@When("rover turns right")
@@ -130,4 +131,7 @@ public class RoverStepDefs {
 		assertThat(actualHeading).describedAs("heading").isEqualToIgnoringCase(expectedHeading);
 	}
 
+	private static Predicate<? super Object> type(final Class<RoverMoved> type) {
+		return o -> o.getClass().isAssignableFrom(type);
+	}
 }

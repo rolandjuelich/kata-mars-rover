@@ -1,19 +1,19 @@
-package my.katas.rover;
+package my.katas.rover.model;
 
-import static my.katas.rover.Heading.EAST;
-import static my.katas.rover.Heading.NORTH;
-import static my.katas.rover.Heading.SOUTH;
-import static my.katas.rover.Heading.WEST;
-import static my.katas.rover.Location.location;
 import static my.katas.rover.functional.Functions.decrease;
 import static my.katas.rover.functional.Functions.increase;
 import static my.katas.rover.functional.Functions.resetTo;
 import static my.katas.rover.functional.Predicates.greaterThan;
 import static my.katas.rover.functional.Predicates.smallerThan;
+import static my.katas.rover.model.Heading.EAST;
+import static my.katas.rover.model.Heading.NORTH;
+import static my.katas.rover.model.Heading.SOUTH;
+import static my.katas.rover.model.Heading.WEST;
+import static my.katas.rover.model.Location.location;
 
 import java.util.function.Function;
 
-import my.katas.rover.terrain.Terrain;
+import my.katas.rover.model.terrain.Terrain;
 
 public class Rover implements Moveable, Turnable {
 

@@ -8,11 +8,12 @@ public class Functions {
 		return value -> value + 1;
 	}
 
+	public static Function<Integer, Integer> decrease() {
+		return t -> t - 1;
+	}
+
 	public static ResetTo resetTo(final Integer value) {
 		return ResetTo.resetTo(value);
 	}
 
-	public static Function<Integer, Integer> decrease() {
-		return t -> t - 1;
-	}
 }

@@ -1,4 +1,4 @@
-package my.katas.rover.terrain;
+package my.katas.rover.model.terrain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
