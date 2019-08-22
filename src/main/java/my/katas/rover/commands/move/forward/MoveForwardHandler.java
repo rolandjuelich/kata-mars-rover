@@ -4,6 +4,7 @@ import static my.katas.rover.events.Events.roverMoved;
 import static my.katas.rover.model.Location.location;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 
 import lombok.AllArgsConstructor;
 import my.katas.rover.commands.CommandHandler;
@@ -20,6 +21,7 @@ public class MoveForwardHandler implements CommandHandler<MoveForward> {
 	private final EventBus eventBus;
 
 	@Override
+	@Subscribe
 	public void handle(final MoveForward command) {
 		final Terrain terrain = terrains.findByName(command.getTerrain());
 		final Heading heading = Heading.valueOf(command.getHeading().toUpperCase());
