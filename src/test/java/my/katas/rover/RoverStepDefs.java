@@ -1,5 +1,9 @@
 package my.katas.rover;
 
+import static my.katas.rover.commands.CommandHandler.handleMoveBackward;
+import static my.katas.rover.commands.CommandHandler.handleMoveForward;
+import static my.katas.rover.commands.CommandHandler.handleTurnLeft;
+import static my.katas.rover.commands.CommandHandler.handleTurnRight;
 import static my.katas.rover.commands.Commands.moveBackward;
 import static my.katas.rover.commands.Commands.moveForward;
 import static my.katas.rover.commands.Commands.turnLeft;
@@ -8,10 +12,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -22,10 +24,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import my.katas.rover.commands.CommandBus;
-import my.katas.rover.commands.move.backward.MoveBackwardHandler;
-import my.katas.rover.commands.move.forward.MoveForwardHandler;
-import my.katas.rover.commands.turn.left.TurnLeftHandler;
-import my.katas.rover.commands.turn.right.TurnRightHandler;
+import my.katas.rover.events.EventStore;
 import my.katas.rover.events.RoverMoved;
 import my.katas.rover.events.RoverTurned;
 import my.katas.rover.model.terrain.Terrain;
@@ -33,12 +32,13 @@ import my.katas.rover.model.terrain.TerrainRepository;
 
 public class RoverStepDefs {
 
-	private List<Object> events = new ArrayList<>();
-
 	private EventBus eventBus;
+	private EventStore store;
+
 	private CommandBus commandBus;
+
 	private TerrainRepository terrains;
-	
+
 	private Integer actualX;
 	private Integer actualY;
 	private String actualHeading;
@@ -52,25 +52,26 @@ public class RoverStepDefs {
 		eventBus = new EventBus();
 		eventBus.register(this);
 
+		store = new EventStore();
+		eventBus.register(store);
+
 		commandBus = new CommandBus();
-		commandBus.register(new MoveForwardHandler(terrains, eventBus));
-		commandBus.register(new MoveBackwardHandler(terrains, eventBus));
-		commandBus.register(new TurnRightHandler(eventBus));
-		commandBus.register(new TurnLeftHandler(eventBus));
+		commandBus.register(handleMoveForward(terrains, eventBus));
+		commandBus.register(handleMoveBackward(terrains, eventBus));
+		commandBus.register(handleTurnRight(eventBus));
+		commandBus.register(handleTurnLeft(eventBus));
 
 	}
 
 	@Subscribe
 	public void handle(final RoverTurned event) {
 		this.actualHeading = event.getHeading();
-		this.events.add(event);
 	}
 
 	@Subscribe
 	public void handle(final RoverMoved event) {
 		this.actualX = event.getX();
 		this.actualY = event.getY();
-		this.events.add(event);
 	}
 
 	@Given("the terrain on {string} has following dimensions")
@@ -107,8 +108,7 @@ public class RoverStepDefs {
 		for (int i = 0; i < times; i++) {
 			commandBus.post(moveForward(terrain, actualX, actualY, actualHeading));
 		}
-		assertThat(events).filteredOn(type(RoverMoved.class)).hasSize(times);
-
+		assertThat(store.allOf(RoverMoved.class)).hasSize(times);
 	}
 
 	@When("rover moves backward {int} times")
@@ -116,7 +116,7 @@ public class RoverStepDefs {
 		for (int i = 0; i < times; i++) {
 			commandBus.post(moveBackward(terrain, actualX, actualY, actualHeading));
 		}
-		assertThat(events).filteredOn(type(RoverMoved.class)).hasSize(times);
+		assertThat(store.allOf(RoverMoved.class)).hasSize(times);
 	}
 
 	@When("rover turns right")
@@ -140,9 +140,5 @@ public class RoverStepDefs {
 		assertThat(actualX).describedAs("x").isEqualTo(expectedX);
 		assertThat(actualY).describedAs("y").isEqualTo(expectedY);
 		assertThat(actualHeading).describedAs("heading").isEqualToIgnoringCase(expectedHeading);
-	}
-
-	private static Predicate<? super Object> type(final Class<RoverMoved> type) {
-		return o -> o.getClass().isAssignableFrom(type);
 	}
 }

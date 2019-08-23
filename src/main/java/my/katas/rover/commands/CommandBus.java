@@ -10,11 +10,11 @@ public class CommandBus {
 		this.bus.post(command);
 	}
 
-	public void register(final Object handler) {
+	public void register(final CommandHandler<?> handler) {
 		this.bus.register(handler);
 	}
 
-	public void unregister(final Object handler) {
+	public void unregister(final CommandHandler<?> handler) {
 		this.bus.unregister(handler);
 	}
 
