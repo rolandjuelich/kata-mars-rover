@@ -47,7 +47,6 @@ public class RoverStepDefs {
 	private String actualHeading;
 	private String terrain;
 
-	
 	@Before
 	public void beforeSceanrio() {
 

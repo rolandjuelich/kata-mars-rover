@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import com.google.common.eventbus.Subscribe;
 
+@Component
 public class EventStore {
 
 	private final List<Object> events = new ArrayList<>();
