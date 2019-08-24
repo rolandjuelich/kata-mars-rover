@@ -1,22 +1,19 @@
 package my.katas.rover;
 
-import static my.katas.rover.commands.CommandHandler.handleMoveBackward;
-import static my.katas.rover.commands.CommandHandler.handleMoveForward;
-import static my.katas.rover.commands.CommandHandler.handleTurnLeft;
-import static my.katas.rover.commands.CommandHandler.handleTurnRight;
 import static my.katas.rover.commands.Commands.moveBackward;
 import static my.katas.rover.commands.Commands.moveForward;
 import static my.katas.rover.commands.Commands.turnLeft;
 import static my.katas.rover.commands.Commands.turnRight;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -27,20 +24,25 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import my.katas.rover.commands.CommandBus;
-import my.katas.rover.events.EventStore;
+import my.katas.rover.configuration.MockedRepositoryConfiguration;
 import my.katas.rover.events.RoverMoved;
 import my.katas.rover.events.RoverTurned;
 import my.katas.rover.model.terrain.Terrain;
 import my.katas.rover.model.terrain.TerrainRepository;
 
+@ContextConfiguration(classes = { ApplicationConfiguration.class, MockedRepositoryConfiguration.class })
 public class RoverStepDefs {
 
+	@Autowired
 	private EventBus eventBus;
-	private EventStore store;
 
+	@Autowired
 	private CommandBus commandBus;
 
+	@Autowired
 	private TerrainRepository terrains;
+
+	private EventStore store;
 
 	private Integer actualX;
 	private Integer actualY;
@@ -49,24 +51,8 @@ public class RoverStepDefs {
 
 	@Before
 	public void beforeSceanrio() {
-
-		ApplicationContext context = new ClassPathXmlApplicationContext(new String[] { "beans.xml" });
-		assertThat(context).isNotNull();
-
-		terrains = mock(TerrainRepository.class);
-
-		eventBus = context.getBean(EventBus.class);
+		store = new EventStore(eventBus);
 		eventBus.register(this);
-
-		store = context.getBean(EventStore.class);
-		eventBus.register(store);
-
-		commandBus = context.getBean(CommandBus.class);
-		commandBus.register(handleMoveForward(terrains, eventBus));
-		commandBus.register(handleMoveBackward(terrains, eventBus));
-		commandBus.register(handleTurnRight(eventBus));
-		commandBus.register(handleTurnLeft(eventBus));
-
 	}
 
 	@Subscribe
@@ -146,5 +132,29 @@ public class RoverStepDefs {
 		assertThat(actualX).describedAs("x").isEqualTo(expectedX);
 		assertThat(actualY).describedAs("y").isEqualTo(expectedY);
 		assertThat(actualHeading).describedAs("heading").isEqualToIgnoringCase(expectedHeading);
+	}
+
+	private class EventStore {
+
+		private final List<Object> events = new ArrayList<>();
+
+		private EventStore(final EventBus bus) {
+			bus.register(this);
+		}
+
+		@Subscribe
+		public void handle(final RoverTurned event) {
+			this.events.add(event);
+		}
+
+		@Subscribe
+		public void handle(final RoverMoved event) {
+			this.events.add(event);
+		}
+
+		public List<?> allOf(final Class<?> type) {
+			return events.stream().filter(o -> o.getClass().isAssignableFrom(type)).collect(Collectors.toList());
+		}
+
 	}
 }
