@@ -50,9 +50,8 @@ public class RoverStepDefs {
 	@Before
 	public void beforeSceanrio() {
 
-		ApplicationContext context =
-				new ClassPathXmlApplicationContext();
-		
+		ApplicationContext context = new ClassPathXmlApplicationContext(new String[] { "beans.xml" });
+
 		assertThat(context).isNotNull();
 
 		terrains = mock(TerrainRepository.class);
@@ -68,7 +67,6 @@ public class RoverStepDefs {
 		commandBus.register(handleMoveBackward(terrains, eventBus));
 		commandBus.register(handleTurnRight(eventBus));
 		commandBus.register(handleTurnLeft(eventBus));
-		
 
 	}
 
