@@ -15,6 +15,9 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
@@ -47,6 +50,11 @@ public class RoverStepDefs {
 	@Before
 	public void beforeSceanrio() {
 
+		ApplicationContext context =
+				new ClassPathXmlApplicationContext();
+		
+		assertThat(context).isNotNull();
+
 		terrains = mock(TerrainRepository.class);
 
 		eventBus = new EventBus();
@@ -60,6 +68,7 @@ public class RoverStepDefs {
 		commandBus.register(handleMoveBackward(terrains, eventBus));
 		commandBus.register(handleTurnRight(eventBus));
 		commandBus.register(handleTurnLeft(eventBus));
+		
 
 	}
 
