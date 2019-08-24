@@ -47,22 +47,22 @@ public class RoverStepDefs {
 	private String actualHeading;
 	private String terrain;
 
+	
 	@Before
 	public void beforeSceanrio() {
 
 		ApplicationContext context = new ClassPathXmlApplicationContext(new String[] { "beans.xml" });
-
 		assertThat(context).isNotNull();
 
 		terrains = mock(TerrainRepository.class);
 
-		eventBus = new EventBus();
+		eventBus = context.getBean(EventBus.class);
 		eventBus.register(this);
 
-		store = new EventStore();
+		store = context.getBean(EventStore.class);
 		eventBus.register(store);
 
-		commandBus = new CommandBus();
+		commandBus = context.getBean(CommandBus.class);
 		commandBus.register(handleMoveForward(terrains, eventBus));
 		commandBus.register(handleMoveBackward(terrains, eventBus));
 		commandBus.register(handleTurnRight(eventBus));
