@@ -9,4 +9,5 @@ import io.cucumber.junit.CucumberOptions;
 @CucumberOptions(strict = true, tags = "not @Ignore", plugin = { "pretty", "summary",
 		"json:target/report/json/cucumber.json" })
 public class RoverAcceptanceTest {
+
 }

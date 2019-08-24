@@ -1,7 +1,10 @@
 package my.katas.rover.commands;
 
+import org.springframework.stereotype.Component;
+
 import com.google.common.eventbus.EventBus;
 
+@Component
 public class CommandBus {
 
 	private final EventBus bus = new EventBus();
