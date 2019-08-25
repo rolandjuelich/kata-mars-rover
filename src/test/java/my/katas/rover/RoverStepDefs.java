@@ -1,9 +1,5 @@
 package my.katas.rover;
 
-import static my.katas.rover.command.Command.moveBackward;
-import static my.katas.rover.command.Command.moveForward;
-import static my.katas.rover.command.Command.turnLeft;
-import static my.katas.rover.command.Command.turnRight;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -22,16 +18,16 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import my.katas.rover.command.CommandBus;
-import my.katas.rover.configuration.MockedRepositoryConfiguration;
-import my.katas.rover.event.EventBus;
-import my.katas.rover.event.EventListener;
-import my.katas.rover.event.RoverMoved;
-import my.katas.rover.event.RoverTurned;
-import my.katas.rover.model.terrain.Terrain;
-import my.katas.rover.model.terrain.TerrainRepository;
+import my.katas.hexagonal.command.CommandBus;
+import my.katas.hexagonal.event.EventBus;
+import my.katas.hexagonal.event.EventListener;
+import my.katas.rover.command.RoverCommand;
+import my.katas.rover.move.RoverMoved;
+import my.katas.rover.terrain.Terrain;
+import my.katas.rover.terrain.TerrainRepository;
+import my.katas.rover.turn.RoverTurned;
 
-@ContextConfiguration(classes = { ApplicationConfiguration.class, MockedRepositoryConfiguration.class })
+@ContextConfiguration(classes = { RoverConfiguration.class, MockedRepositoryConfiguration.class })
 public class RoverStepDefs {
 
 	@Autowired
@@ -108,7 +104,7 @@ public class RoverStepDefs {
 	@When("rover moves forward {int} times")
 	public void rover_moves_forward_times(final Integer times) {
 		for (int i = 0; i < times; i++) {
-			commandBus.post(moveForward(terrain, actualX, actualY, actualHeading));
+			commandBus.post(RoverCommand.moveForward(terrain, actualX, actualY, actualHeading));
 		}
 		assertThat(store.allOf(RoverMoved.class)).hasSize(times);
 	}
@@ -116,19 +112,19 @@ public class RoverStepDefs {
 	@When("rover moves backward {int} times")
 	public void rover_moves_backward_times(final Integer times) {
 		for (int i = 0; i < times; i++) {
-			commandBus.post(moveBackward(terrain, actualX, actualY, actualHeading));
+			commandBus.post(RoverCommand.moveBackward(terrain, actualX, actualY, actualHeading));
 		}
 		assertThat(store.allOf(RoverMoved.class)).hasSize(times);
 	}
 
 	@When("rover turns right")
 	public void rover_turns_right() {
-		commandBus.post(turnRight(actualHeading));
+		commandBus.post(RoverCommand.turnRight(actualHeading));
 	}
 
 	@When("rover turns left")
 	public void rover_turns_left() {
-		commandBus.post(turnLeft(actualHeading));
+		commandBus.post(RoverCommand.turnLeft(actualHeading));
 	}
 
 	@Then("rover should be heading {string}")
