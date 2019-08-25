@@ -1,4 +1,4 @@
-package my.katas.rover.commands.turn.right;
+package my.katas.rover.command.turn.left;
 
 import static my.katas.rover.events.Events.roverTurned;
 
@@ -11,15 +11,15 @@ import my.katas.rover.model.Heading;
 import my.katas.rover.model.Rover;
 
 @AllArgsConstructor
-public class TurnRightHandler implements CommandHandler<TurnRight> {
+public class TurnLeftHandler implements CommandHandler<TurnLeft> {
 
 	private final EventBus eventBus;
 
 	@Override
 	@Subscribe
-	public void handle(final TurnRight command) {
+	public void handle(final TurnLeft command) {
 		final Heading heading = Heading.valueOf(command.getHeading().toUpperCase());
-		final Heading newHeading = Rover.turnFrom(heading).right();
+		final Heading newHeading = Rover.turnFrom(heading).left();
 		eventBus.post(roverTurned(newHeading.name()));
 	}
 }

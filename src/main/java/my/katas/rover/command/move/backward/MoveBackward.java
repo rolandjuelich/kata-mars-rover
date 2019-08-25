@@ -1,4 +1,4 @@
-package my.katas.rover.commands.move.backward;
+package my.katas.rover.command.move.backward;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

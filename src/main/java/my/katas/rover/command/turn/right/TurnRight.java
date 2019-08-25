@@ -1,4 +1,4 @@
-package my.katas.rover.commands.turn.left;
+package my.katas.rover.command.turn.right;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,8 +6,9 @@ import my.katas.rover.command.Command;
 
 @Getter
 @AllArgsConstructor
-public class TurnLeft implements Command {
+public class TurnRight implements Command {
 
 	private final String heading;
+
 
 }
