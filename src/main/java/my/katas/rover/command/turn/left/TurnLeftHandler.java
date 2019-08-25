@@ -1,6 +1,6 @@
 package my.katas.rover.command.turn.left;
 
-import static my.katas.rover.events.Events.roverTurned;
+import static my.katas.rover.event.Event.roverTurned;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;

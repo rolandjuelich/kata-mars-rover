@@ -25,8 +25,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import my.katas.rover.command.CommandBus;
 import my.katas.rover.configuration.MockedRepositoryConfiguration;
-import my.katas.rover.events.RoverMoved;
-import my.katas.rover.events.RoverTurned;
+import my.katas.rover.event.RoverMoved;
+import my.katas.rover.event.RoverTurned;
 import my.katas.rover.model.terrain.Terrain;
 import my.katas.rover.model.terrain.TerrainRepository;
 

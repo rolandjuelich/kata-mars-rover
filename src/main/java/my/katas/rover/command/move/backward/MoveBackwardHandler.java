@@ -1,6 +1,6 @@
 package my.katas.rover.command.move.backward;
 
-import static my.katas.rover.events.Events.roverMoved;
+import static my.katas.rover.event.Event.roverMoved;
 import static my.katas.rover.model.Location.location;
 
 import com.google.common.eventbus.EventBus;
