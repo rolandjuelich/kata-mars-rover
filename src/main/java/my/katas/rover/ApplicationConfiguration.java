@@ -9,19 +9,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import com.google.common.eventbus.EventBus;
-
 import my.katas.rover.command.CommandBus;
+import my.katas.rover.event.EventBus;
 import my.katas.rover.model.terrain.TerrainRepository;
 
 @Configuration
 @ComponentScan(basePackages = { "my.katas.rover.*" })
 public class ApplicationConfiguration {
 
-	@Bean
-	public EventBus eventBus() {
-		return new EventBus();
-	}
 
 	@Bean
 	public CommandBus commandBus(final EventBus eventBus, final TerrainRepository terrains) {

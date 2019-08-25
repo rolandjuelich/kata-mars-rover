@@ -2,11 +2,11 @@ package my.katas.rover.command.turn.left;
 
 import static my.katas.rover.event.Event.roverTurned;
 
-import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
 import lombok.AllArgsConstructor;
 import my.katas.rover.command.CommandHandler;
+import my.katas.rover.event.EventBus;
 import my.katas.rover.model.Heading;
 import my.katas.rover.model.Rover;
 

@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
 import io.cucumber.datatable.DataTable;
@@ -25,6 +24,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import my.katas.rover.command.CommandBus;
 import my.katas.rover.configuration.MockedRepositoryConfiguration;
+import my.katas.rover.event.EventBus;
+import my.katas.rover.event.EventListener;
 import my.katas.rover.event.RoverMoved;
 import my.katas.rover.event.RoverTurned;
 import my.katas.rover.model.terrain.Terrain;
@@ -49,21 +50,30 @@ public class RoverStepDefs {
 	private String actualHeading;
 	private String terrain;
 
+	private final EventListener<RoverTurned> updateHeading = new EventListener<RoverTurned>() {
+
+		@Override
+		@Subscribe
+		public void listenFor(RoverTurned event) {
+			actualHeading = event.getHeading();
+		}
+	};
+
+	private final EventListener<RoverMoved> updateLocation = new EventListener<RoverMoved>() {
+
+		@Override
+		@Subscribe
+		public void listenFor(RoverMoved event) {
+			actualX = event.getX();
+			actualY = event.getY();
+		}
+	};
+
 	@Before
 	public void beforeSceanrio() {
 		store = new EventStore(eventBus);
-		eventBus.register(this);
-	}
-
-	@Subscribe
-	public void handle(final RoverTurned event) {
-		this.actualHeading = event.getHeading();
-	}
-
-	@Subscribe
-	public void handle(final RoverMoved event) {
-		this.actualX = event.getX();
-		this.actualY = event.getY();
+		eventBus.register(updateHeading);
+		eventBus.register(updateLocation);
 	}
 
 	@Given("the terrain on {string} has following dimensions")
@@ -138,18 +148,27 @@ public class RoverStepDefs {
 
 		private final List<Object> events = new ArrayList<>();
 
+		private final EventListener<RoverTurned> storeRoverTurned = new EventListener<RoverTurned>() {
+
+			@Override
+			@Subscribe
+			public void listenFor(RoverTurned event) {
+				events.add(event);
+			}
+		};
+
+		private final EventListener<RoverMoved> storeRoverMoved = new EventListener<RoverMoved>() {
+
+			@Override
+			@Subscribe
+			public void listenFor(RoverMoved event) {
+				events.add(event);
+			}
+		};
+
 		private EventStore(final EventBus bus) {
-			bus.register(this);
-		}
-
-		@Subscribe
-		public void handle(final RoverTurned event) {
-			this.events.add(event);
-		}
-
-		@Subscribe
-		public void handle(final RoverMoved event) {
-			this.events.add(event);
+			bus.register(storeRoverTurned);
+			bus.register(storeRoverMoved);
 		}
 
 		public List<?> allOf(final Class<?> type) {

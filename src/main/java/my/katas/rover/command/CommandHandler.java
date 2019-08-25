@@ -1,6 +1,5 @@
 package my.katas.rover.command;
 
-import com.google.common.eventbus.EventBus;
 
 import my.katas.rover.command.move.backward.MoveBackward;
 import my.katas.rover.command.move.backward.MoveBackwardHandler;
@@ -10,6 +9,7 @@ import my.katas.rover.command.turn.left.TurnLeft;
 import my.katas.rover.command.turn.left.TurnLeftHandler;
 import my.katas.rover.command.turn.right.TurnRight;
 import my.katas.rover.command.turn.right.TurnRightHandler;
+import my.katas.rover.event.EventBus;
 import my.katas.rover.model.terrain.TerrainRepository;
 
 public interface CommandHandler<C> {

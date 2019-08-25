@@ -3,11 +3,11 @@ package my.katas.rover.command.move.forward;
 import static my.katas.rover.event.Event.roverMoved;
 import static my.katas.rover.model.Location.location;
 
-import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
 import lombok.AllArgsConstructor;
 import my.katas.rover.command.CommandHandler;
+import my.katas.rover.event.EventBus;
 import my.katas.rover.model.Heading;
 import my.katas.rover.model.Location;
 import my.katas.rover.model.Rover;
