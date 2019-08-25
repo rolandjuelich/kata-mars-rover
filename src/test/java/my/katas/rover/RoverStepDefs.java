@@ -1,9 +1,9 @@
 package my.katas.rover;
 
-import static my.katas.rover.commands.Commands.moveBackward;
-import static my.katas.rover.commands.Commands.moveForward;
-import static my.katas.rover.commands.Commands.turnLeft;
-import static my.katas.rover.commands.Commands.turnRight;
+import static my.katas.rover.command.Command.moveBackward;
+import static my.katas.rover.command.Command.moveForward;
+import static my.katas.rover.command.Command.turnLeft;
+import static my.katas.rover.command.Command.turnRight;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -23,7 +23,7 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import my.katas.rover.commands.CommandBus;
+import my.katas.rover.command.CommandBus;
 import my.katas.rover.configuration.MockedRepositoryConfiguration;
 import my.katas.rover.events.RoverMoved;
 import my.katas.rover.events.RoverTurned;

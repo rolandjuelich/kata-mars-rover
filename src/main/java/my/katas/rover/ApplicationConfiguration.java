@@ -1,9 +1,9 @@
 package my.katas.rover;
 
-import static my.katas.rover.commands.CommandHandler.handleMoveBackward;
-import static my.katas.rover.commands.CommandHandler.handleMoveForward;
-import static my.katas.rover.commands.CommandHandler.handleTurnLeft;
-import static my.katas.rover.commands.CommandHandler.handleTurnRight;
+import static my.katas.rover.command.CommandHandler.handleMoveBackward;
+import static my.katas.rover.command.CommandHandler.handleMoveForward;
+import static my.katas.rover.command.CommandHandler.handleTurnLeft;
+import static my.katas.rover.command.CommandHandler.handleTurnRight;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.google.common.eventbus.EventBus;
 
-import my.katas.rover.commands.CommandBus;
+import my.katas.rover.command.CommandBus;
 import my.katas.rover.model.terrain.TerrainRepository;
 
 @Configuration

@@ -1,4 +1,4 @@
-package my.katas.rover.commands;
+package my.katas.rover.command;
 
 import com.google.common.eventbus.EventBus;
 

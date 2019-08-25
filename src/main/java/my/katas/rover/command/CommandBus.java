@@ -1,4 +1,4 @@
-package my.katas.rover.commands;
+package my.katas.rover.command;
 
 import org.springframework.stereotype.Component;
 
