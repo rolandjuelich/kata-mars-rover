@@ -1,16 +1,16 @@
 package my.katas.rover.terrain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class Terrain {
 
-	private String name;
-	private int minX;
-	private int maxX;
-	private int minY;
-	private int maxY;
+	private final String name;
+	private final int minX;
+	private final int maxX;
+	private final int minY;
+	private final int maxY;
 
 }

@@ -1,13 +1,12 @@
 package my.katas.rover.turn;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import my.katas.rover.event.RoverEvent;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-public class RoverTurned implements RoverEvent {
+@RequiredArgsConstructor
+public class RoverTurned {
 
-	private String heading;
+	private final String heading;
 	
 }

@@ -1,10 +1,9 @@
-package my.katas.rover.event;
+package my.katas.rover;
 
-import my.katas.hexagonal.event.Event;
 import my.katas.rover.move.RoverMoved;
 import my.katas.rover.turn.RoverTurned;
 
-public interface RoverEvent extends Event {
+public interface Events {
 
 	static RoverMoved roverMoved(final Integer x, final Integer y) {
 		return new RoverMoved(x, y);

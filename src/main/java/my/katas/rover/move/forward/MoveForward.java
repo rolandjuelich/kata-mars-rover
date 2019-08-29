@@ -1,16 +1,15 @@
 package my.katas.rover.move.forward;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import my.katas.rover.command.RoverCommand;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-public class MoveForward implements RoverCommand {
+@RequiredArgsConstructor
+public class MoveForward {
 
-	private String terrain;
-	private Integer x;
-	private Integer y;
-	private String heading;
+	private final String terrain;
+	private final Integer x;
+	private final Integer y;
+	private final String heading;
 
 }

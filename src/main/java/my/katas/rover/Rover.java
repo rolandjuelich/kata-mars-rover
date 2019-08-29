@@ -1,10 +1,10 @@
 package my.katas.rover;
 
-import static my.katas.functional.Functions.decrease;
-import static my.katas.functional.Functions.increase;
-import static my.katas.functional.Functions.resetTo;
-import static my.katas.functional.Predicates.greaterThan;
-import static my.katas.functional.Predicates.smallerThan;
+import static my.katas.rover.functional.Functions.decrease;
+import static my.katas.rover.functional.Functions.increase;
+import static my.katas.rover.functional.Functions.resetTo;
+import static my.katas.rover.functional.Predicates.greaterThan;
+import static my.katas.rover.functional.Predicates.smallerThan;
 import static my.katas.rover.move.Location.location;
 import static my.katas.rover.turn.Heading.EAST;
 import static my.katas.rover.turn.Heading.NORTH;
@@ -13,12 +13,14 @@ import static my.katas.rover.turn.Heading.WEST;
 
 import java.util.function.Function;
 
+import lombok.Getter;
 import my.katas.rover.move.Location;
 import my.katas.rover.move.Moveable;
 import my.katas.rover.terrain.Terrain;
 import my.katas.rover.turn.Heading;
 import my.katas.rover.turn.Turnable;
 
+@Getter
 public class Rover implements Moveable, Turnable {
 
 	private final Location location;
@@ -30,6 +32,10 @@ public class Rover implements Moveable, Turnable {
 	}
 
 	public static Moveable moveFrom(final Location location, final Heading heading) {
+		return new Rover(location, heading);
+	}
+
+	public static Rover initialize(final Location location, final Heading heading) {
 		return new Rover(location, heading);
 	}
 
@@ -115,5 +121,9 @@ public class Rover implements Moveable, Turnable {
 
 	private static Function<Integer, Integer> decreaseY(final Terrain terrain) {
 		return decrease().andThen(resetTo(terrain.getMaxY()).onlyIf(smallerThan(terrain.getMinY())));
+	}
+
+	public static Rover initialize(int x, int y, String heading) {
+		return new Rover(Location.location(x, y), Heading.valueOf(heading.toUpperCase()));
 	}
 }

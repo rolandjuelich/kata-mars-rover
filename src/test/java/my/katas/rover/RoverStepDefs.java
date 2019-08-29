@@ -1,5 +1,9 @@
 package my.katas.rover;
 
+import static my.katas.rover.Commands.moveBackwardFrom;
+import static my.katas.rover.Commands.moveForwardFrom;
+import static my.katas.rover.Commands.turnLeftFrom;
+import static my.katas.rover.Commands.turnRightFrom;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -11,6 +15,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
 import io.cucumber.datatable.DataTable;
@@ -18,10 +23,8 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import my.katas.hexagonal.command.CommandBus;
-import my.katas.hexagonal.event.EventBus;
-import my.katas.hexagonal.event.EventListener;
-import my.katas.rover.command.RoverCommand;
+import my.katas.rover.initialize.InitializeRover;
+import my.katas.rover.initialize.RoverInitialized;
 import my.katas.rover.move.RoverMoved;
 import my.katas.rover.terrain.Terrain;
 import my.katas.rover.terrain.TerrainRepository;
@@ -34,7 +37,7 @@ public class RoverStepDefs {
 	private EventBus eventBus;
 
 	@Autowired
-	private CommandBus commandBus;
+	private Commands commands;
 
 	@Autowired
 	private TerrainRepository terrains;
@@ -46,41 +49,39 @@ public class RoverStepDefs {
 	private String actualHeading;
 	private String terrain;
 
-	private final EventListener<RoverTurned> updateHeading = new EventListener<RoverTurned>() {
+	@Subscribe
+	public void listenFor(final RoverTurned event) {
+		actualHeading = event.getHeading();
+	}
 
-		@Override
-		@Subscribe
-		public void listenFor(RoverTurned event) {
-			actualHeading = event.getHeading();
-		}
-	};
+	@Subscribe
+	public void listenFor(final RoverMoved event) {
+		actualX = event.getX();
+		actualY = event.getY();
+	}
 
-	private final EventListener<RoverMoved> updateLocation = new EventListener<RoverMoved>() {
-
-		@Override
-		@Subscribe
-		public void listenFor(RoverMoved event) {
-			actualX = event.getX();
-			actualY = event.getY();
-		}
-	};
+	@Subscribe
+	public void listenFor(final RoverInitialized event) {
+		actualX = event.getX();
+		actualY = event.getY();
+		actualHeading = event.getHeading();
+	}
 
 	@Before
 	public void beforeSceanrio() {
 		store = new EventStore(eventBus);
-		eventBus.register(updateHeading);
-		eventBus.register(updateLocation);
+		eventBus.register(this);
 	}
 
 	@Given("the terrain on {string} has following dimensions")
 	public void the_terrain_on_has_following_dimensions(final String name, final DataTable table) {
 		this.terrain = name;
 
-		List<Map<String, String>> data = table.asMaps();
-		int minX = Integer.valueOf(data.get(0).get("min"));
-		int maxX = Integer.valueOf(data.get(0).get("max"));
-		int minY = Integer.valueOf(data.get(1).get("min"));
-		int maxY = Integer.valueOf(data.get(1).get("max"));
+		final List<Map<String, String>> data = table.asMaps();
+		final int minX = Integer.valueOf(data.get(0).get("min"));
+		final int maxX = Integer.valueOf(data.get(0).get("max"));
+		final int minY = Integer.valueOf(data.get(1).get("min"));
+		final int maxY = Integer.valueOf(data.get(1).get("max"));
 
 		when(terrains.findByName(name)).thenReturn(new Terrain(name, minX, maxX, minY, maxY));
 
@@ -88,23 +89,18 @@ public class RoverStepDefs {
 
 	@Given("rover is heading {string}")
 	public void rover_is_heading(final String heading) {
-		this.actualX = 0;
-		this.actualY = 0;
-		this.actualHeading = heading;
+		commands.execute(new InitializeRover(0, 0, heading));
 	}
 
 	@Given("rover is heading {string} at {int}, {int}")
 	public void rover_is_heading_at(final String heading, final Integer x, final Integer y) {
-		this.actualX = x;
-		this.actualY = y;
-		this.actualHeading = heading;
-
+		commands.execute(new InitializeRover(x, y, heading));
 	}
 
 	@When("rover moves forward {int} times")
 	public void rover_moves_forward_times(final Integer times) {
 		for (int i = 0; i < times; i++) {
-			commandBus.post(RoverCommand.moveForward(terrain, actualX, actualY, actualHeading));
+			commands.execute(moveForwardFrom(actualX, actualY, actualHeading, terrain));
 		}
 		assertThat(store.allOf(RoverMoved.class)).hasSize(times);
 	}
@@ -112,19 +108,19 @@ public class RoverStepDefs {
 	@When("rover moves backward {int} times")
 	public void rover_moves_backward_times(final Integer times) {
 		for (int i = 0; i < times; i++) {
-			commandBus.post(RoverCommand.moveBackward(terrain, actualX, actualY, actualHeading));
+			commands.execute(moveBackwardFrom(actualX, actualY, actualHeading, terrain));
 		}
 		assertThat(store.allOf(RoverMoved.class)).hasSize(times);
 	}
 
 	@When("rover turns right")
 	public void rover_turns_right() {
-		commandBus.post(RoverCommand.turnRight(actualHeading));
+		commands.execute(turnRightFrom(actualHeading));
 	}
 
 	@When("rover turns left")
 	public void rover_turns_left() {
-		commandBus.post(RoverCommand.turnLeft(actualHeading));
+		commands.execute(turnLeftFrom(actualHeading));
 	}
 
 	@Then("rover should be heading {string}")
@@ -144,27 +140,18 @@ public class RoverStepDefs {
 
 		private final List<Object> events = new ArrayList<>();
 
-		private final EventListener<RoverTurned> storeRoverTurned = new EventListener<RoverTurned>() {
+		@Subscribe
+		public void listenFor(final RoverTurned event) {
+			events.add(event);
+		}
 
-			@Override
-			@Subscribe
-			public void listenFor(RoverTurned event) {
-				events.add(event);
-			}
-		};
-
-		private final EventListener<RoverMoved> storeRoverMoved = new EventListener<RoverMoved>() {
-
-			@Override
-			@Subscribe
-			public void listenFor(RoverMoved event) {
-				events.add(event);
-			}
-		};
+		@Subscribe
+		public void listenFor(final RoverMoved event) {
+			events.add(event);
+		}
 
 		private EventStore(final EventBus bus) {
-			bus.register(storeRoverTurned);
-			bus.register(storeRoverMoved);
+			bus.register(this);
 		}
 
 		public List<?> allOf(final Class<?> type) {

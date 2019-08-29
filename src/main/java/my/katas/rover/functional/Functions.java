@@ -1,8 +1,6 @@
-package my.katas.functional;
+package my.katas.rover.functional;
 
 import java.util.function.Function;
-
-import my.katas.rover.functional.ResetTo;
 
 public class Functions {
 

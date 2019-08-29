@@ -1,10 +1,10 @@
 package my.katas.rover.functional;
 
-import static my.katas.functional.Functions.decrease;
-import static my.katas.functional.Functions.increase;
-import static my.katas.functional.Functions.resetTo;
-import static my.katas.functional.Predicates.greaterThan;
-import static my.katas.functional.Predicates.smallerThan;
+import static my.katas.rover.functional.Functions.decrease;
+import static my.katas.rover.functional.Functions.increase;
+import static my.katas.rover.functional.Functions.resetTo;
+import static my.katas.rover.functional.Predicates.greaterThan;
+import static my.katas.rover.functional.Predicates.smallerThan;
 import static org.apache.commons.lang3.RandomUtils.nextInt;
 import static org.assertj.core.api.Assertions.assertThat;
 

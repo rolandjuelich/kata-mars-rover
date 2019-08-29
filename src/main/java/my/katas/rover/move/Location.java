@@ -3,15 +3,15 @@ package my.katas.rover.move;
 import java.util.function.Function;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Location {
 
-	private int x;
-	private int y;
+	private final int x;
+	private final int y;
 
 	public static Location location(final Integer x, final Integer y) {
 		return new Location(x, y);

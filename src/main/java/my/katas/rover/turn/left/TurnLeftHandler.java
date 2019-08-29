@@ -1,24 +1,25 @@
 package my.katas.rover.turn.left;
 
+import org.springframework.stereotype.Component;
+
+import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
-import lombok.AllArgsConstructor;
-import my.katas.hexagonal.event.EventBus;
+import lombok.RequiredArgsConstructor;
+import my.katas.rover.Events;
 import my.katas.rover.Rover;
-import my.katas.rover.command.RoverCommandHandler;
-import my.katas.rover.event.RoverEvent;
 import my.katas.rover.turn.Heading;
 
-@AllArgsConstructor
-public class TurnLeftHandler implements RoverCommandHandler<TurnLeft> {
+@Component
+@RequiredArgsConstructor
+public class TurnLeftHandler {
 
 	private final EventBus eventBus;
 
-	@Override
 	@Subscribe
 	public void handle(final TurnLeft command) {
 		final Heading heading = Heading.valueOf(command.getHeading().toUpperCase());
 		final Heading newHeading = Rover.turnFrom(heading).left();
-		eventBus.post(RoverEvent.roverTurned(newHeading.name()));
+		eventBus.post(Events.roverTurned(newHeading.name()));
 	}
 }

@@ -1,4 +1,4 @@
-package my.katas.functional;
+package my.katas.rover.functional;
 
 import java.util.function.Predicate;
 

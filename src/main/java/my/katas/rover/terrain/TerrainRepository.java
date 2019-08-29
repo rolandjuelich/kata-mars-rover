@@ -1,7 +1,12 @@
 package my.katas.rover.terrain;
 
-public interface TerrainRepository {
+import org.springframework.stereotype.Component;
 
-	Terrain findByName(final String name);
+@Component
+public class TerrainRepository {
+
+	public Terrain findByName(final String name) {
+		return new Terrain("Mars", 0, 99, 0, 99);
+	}
 
 }

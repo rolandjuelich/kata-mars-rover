@@ -1,12 +1,11 @@
 package my.katas.rover.move;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import my.katas.rover.event.RoverEvent;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-public class RoverMoved implements RoverEvent {
+@RequiredArgsConstructor
+public class RoverMoved {
 
 	private final Integer x;
 	private final Integer y;

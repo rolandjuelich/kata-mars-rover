@@ -1,12 +1,11 @@
 package my.katas.rover.turn.right;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import my.katas.rover.command.RoverCommand;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-public class TurnRight implements RoverCommand {
+@RequiredArgsConstructor
+public class TurnRight {
 
 	private final String heading;
 
