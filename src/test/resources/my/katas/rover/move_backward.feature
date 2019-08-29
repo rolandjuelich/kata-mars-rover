@@ -5,7 +5,8 @@ Feature: Moving
   I want to use a rover to check the terrain
 
   Background: 
-    Given the terrain on "Mars" has following dimensions
+    Given the terrain is "Mars"
+    And "Mars" has following dimensions
       | name | min | max |
       | x    |   0 |  99 |
       | y    |   0 |  99 |

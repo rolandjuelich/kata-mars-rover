@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class RoverInitialized {
-	private final int x;
-	private final int y;
+	private final Integer x;
+	private final Integer y;
 	private final String heading;
 }

@@ -23,19 +23,26 @@ import my.katas.rover.turn.Turnable;
 @Getter
 public class Rover implements Moveable, Turnable {
 
-	private final Location location;
-	private final Heading heading;
+	private Location location;
+	private Heading heading;
+	private String terrain;
 
 	private Rover(final Location location, final Heading heading) {
 		this.location = location;
 		this.heading = heading;
 	}
 
-	public static Moveable moveFrom(final Location location, final Heading heading) {
-		return new Rover(location, heading);
+	public Rover(final String terrain, final Location location, final Heading heading) {
+		this.terrain = terrain;
+		this.location = location;
+		this.heading = heading;
 	}
 
-	public static Rover initialize(final Location location, final Heading heading) {
+	public static Rover initialize(final Terrain terrain, final Location location, final Heading heading) {
+		return new Rover(terrain.getName(), location, heading);
+	}
+
+	public static Moveable moveFrom(final Location location, final Heading heading) {
 		return new Rover(location, heading);
 	}
 
@@ -47,64 +54,76 @@ public class Rover implements Moveable, Turnable {
 	public Location forwardOn(final Terrain terrain) {
 		switch (heading) {
 		case NORTH:
-			return location.y(increaseY(terrain));
+			location = location.y(increaseY(terrain));
+			break;
 		case EAST:
-			return location.x(increaseX(terrain));
+			location = location.x(increaseX(terrain));
+			break;
 		case SOUTH:
-			return location.y(decreaseY(terrain));
+			location = location.y(decreaseY(terrain));
+			break;
 		case WEST:
-			return location.x(decreaseX(terrain));
-		default:
-			return location;
+			location = location.x(decreaseX(terrain));
+			break;
 		}
+		return location;
 	}
 
 	@Override
 	public Location backwardOn(final Terrain terrain) {
 		switch (heading) {
 		case NORTH:
-			return location.y(decreaseY(terrain));
+			location = location.y(decreaseY(terrain));
+			break;
 		case EAST:
-			return location.x(decreaseX(terrain));
+			location = location.x(decreaseX(terrain));
+			break;
 		case SOUTH:
-			return location.y(increaseY(terrain));
+			location = location.y(increaseY(terrain));
+			break;
 		case WEST:
-			return location.x(increaseX(terrain));
-		default:
-			return location;
+			location = location.x(increaseX(terrain));
+			break;
 		}
+		return location;
 	}
 
 	@Override
 	public Heading right() {
 		switch (heading) {
 		case NORTH:
-			return EAST;
+			heading = EAST;
+			break;
 		case EAST:
-			return SOUTH;
+			heading = SOUTH;
+			break;
 		case SOUTH:
-			return WEST;
+			heading = WEST;
+			break;
 		case WEST:
-			return NORTH;
-		default:
-			return heading;
+			heading = NORTH;
+			break;
 		}
+		return heading;
 	}
 
 	@Override
 	public Heading left() {
 		switch (heading) {
 		case NORTH:
-			return WEST;
+			heading = WEST;
+			break;
 		case WEST:
-			return SOUTH;
+			heading = SOUTH;
+			break;
 		case SOUTH:
-			return EAST;
+			heading = EAST;
+			break;
 		case EAST:
-			return NORTH;
-		default:
-			return heading;
+			heading = NORTH;
+			break;
 		}
+		return heading;
 	}
 
 	private static Function<Integer, Integer> increaseX(final Terrain terrain) {
@@ -121,9 +140,5 @@ public class Rover implements Moveable, Turnable {
 
 	private static Function<Integer, Integer> decreaseY(final Terrain terrain) {
 		return decrease().andThen(resetTo(terrain.getMaxY()).onlyIf(smallerThan(terrain.getMinY())));
-	}
-
-	public static Rover initialize(int x, int y, String heading) {
-		return new Rover(Location.location(x, y), Heading.valueOf(heading.toUpperCase()));
 	}
 }

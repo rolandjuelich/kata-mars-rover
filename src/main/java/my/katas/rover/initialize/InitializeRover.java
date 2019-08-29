@@ -7,8 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class InitializeRover {
 
-	private final int x;
-	private final int y;
+	private final String terrain;
+	private final Integer x;
+	private final Integer y;
 	private final String heading;
 
 
