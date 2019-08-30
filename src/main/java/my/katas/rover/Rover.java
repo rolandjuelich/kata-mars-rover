@@ -5,7 +5,6 @@ import static my.katas.rover.functional.Functions.increase;
 import static my.katas.rover.functional.Functions.resetTo;
 import static my.katas.rover.functional.Predicates.greaterThan;
 import static my.katas.rover.functional.Predicates.smallerThan;
-import static my.katas.rover.move.Location.location;
 import static my.katas.rover.turn.Heading.EAST;
 import static my.katas.rover.turn.Heading.NORTH;
 import static my.katas.rover.turn.Heading.SOUTH;
@@ -27,12 +26,7 @@ public class Rover implements Moveable, Turnable {
 	private Heading heading;
 	private String terrain;
 
-	private Rover(final Location location, final Heading heading) {
-		this.location = location;
-		this.heading = heading;
-	}
-
-	public Rover(final String terrain, final Location location, final Heading heading) {
+	private Rover(final String terrain, final Location location, final Heading heading) {
 		this.terrain = terrain;
 		this.location = location;
 		this.heading = heading;
@@ -40,14 +34,6 @@ public class Rover implements Moveable, Turnable {
 
 	public static Rover initialize(final Terrain terrain, final Location location, final Heading heading) {
 		return new Rover(terrain.getName(), location, heading);
-	}
-
-	public static Moveable moveFrom(final Location location, final Heading heading) {
-		return new Rover(location, heading);
-	}
-
-	public static Turnable turnFrom(final Heading heading) {
-		return new Rover(location(0, 0), heading);
 	}
 
 	@Override
