@@ -1,21 +1,17 @@
 package my.katas.rover;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.IntStream.range;
 import static my.katas.rover.Commands.moveBackward;
 import static my.katas.rover.Commands.moveForward;
 import static my.katas.rover.Commands.turnLeft;
 import static my.katas.rover.Commands.turnRight;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Map;
 
-import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -75,7 +71,6 @@ public class RoverStepDefs {
 		when(terrains.findByName(any())).thenReturn(new Terrain("NoWorld", 0, 0, 0, 0));
 	}
 
-
 	@Given("the terrain is {string}")
 	public void the_terrain_is(final String name) {
 		this.terrain = name;
@@ -106,16 +101,12 @@ public class RoverStepDefs {
 
 	@When("rover moves forward {int} times")
 	public void rover_moves_forward_times(final Integer times) {
-		for (int i = 0; i < times; i++) {
-			commands.execute(moveForward());
-		}
+		range(0, times).forEach(c -> commands.execute(moveForward()));
 	}
 
 	@When("rover moves backward {int} times")
 	public void rover_moves_backward_times(final Integer times) {
-		for (int i = 0; i < times; i++) {
-			commands.execute(moveBackward());
-		}
+		range(0, times).forEach(c -> commands.execute(moveBackward()));
 	}
 
 	@When("rover turns right")
@@ -139,12 +130,5 @@ public class RoverStepDefs {
 		assertThat(actualX).describedAs("x").isEqualTo(expectedX);
 		assertThat(actualY).describedAs("y").isEqualTo(expectedY);
 		assertThat(actualHeading).describedAs("heading").isEqualToIgnoringCase(expectedHeading);
-	}
-
-	private List<Object> allPublished(final Class<?> clazz) {
-		final ArgumentCaptor<Object> captor = forClass(Object.class);
-		verify(eventBus, atLeastOnce()).post(captor.capture());
-		return captor.getAllValues().stream().filter(e -> e.getClass().isAssignableFrom(clazz))
-				.collect(toList());
 	}
 }
