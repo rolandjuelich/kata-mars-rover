@@ -3,6 +3,7 @@ package my.katas.rover.initialize;
 import static my.katas.rover.Events.initializedAt;
 import static my.katas.rover.move.Location.location;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.eventbus.EventBus;
@@ -20,11 +21,14 @@ import my.katas.rover.turn.Heading;
 @RequiredArgsConstructor
 public class InitializeRoverHandler {
 
-	private final TerrainRepository terrains;
+	@Autowired
+	private TerrainRepository terrains;
 
-	private final RoverRepository rovers;
+	@Autowired
+	private RoverRepository rovers;
 
-	private final EventBus eventBus;
+	@Autowired
+	private EventBus eventBus;
 
 	@Subscribe
 	public void handle(final InitializeRover command) {

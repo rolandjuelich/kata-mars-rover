@@ -39,10 +39,15 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
 			<version>${spring.boot.version}</version>
-        </dependency>
+		</dependency>
+		<dependency>
+			<groupId>org.awaitility</groupId>
+			<artifactId>awaitility</artifactId>
+			<version>3.1.6</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -155,7 +160,9 @@
 							<testFailureIgnore>true</testFailureIgnore>
 							<argLine>
 								<!-- following command must be a one liner (take care when formatting!) -->
-								-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar" -Dcucumber.options="--plugin io.qameta.allure.cucumber4jvm.AllureCucumber4Jvm"
+								-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+								-Dcucumber.options="--plugin
+								io.qameta.allure.cucumber4jvm.AllureCucumber4Jvm"
 							</argLine>
 							<systemPropertyVariables>
 								<allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>

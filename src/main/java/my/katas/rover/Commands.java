@@ -5,11 +5,13 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.eventbus.EventBus;
 
+import my.katas.rover.initialize.InitializeRover;
 import my.katas.rover.initialize.InitializeRoverHandler;
 import my.katas.rover.move.backward.MoveBackward;
 import my.katas.rover.move.backward.MoveBackwardHandler;
 import my.katas.rover.move.forward.MoveForward;
 import my.katas.rover.move.forward.MoveForwardHandler;
+import my.katas.rover.turn.Heading;
 import my.katas.rover.turn.left.TurnLeft;
 import my.katas.rover.turn.left.TurnLeftHandler;
 import my.katas.rover.turn.right.TurnRight;
@@ -34,6 +36,10 @@ public class Commands {
 
 	public void execute(final Object command) {
 		this.commandBus.post(command);
+	}
+
+	public static InitializeRover initialize(final String terrain, final Integer x, final Integer y) {
+		return new InitializeRover(terrain, x, y, Heading.NORTH.name());
 	}
 
 	public static TurnLeft turnLeft() {
