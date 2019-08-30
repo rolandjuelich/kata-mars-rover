@@ -10,6 +10,8 @@ import static my.katas.rover.turn.Heading.WEST;
 
 import java.util.function.Function;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import my.katas.rover.functional.Functions;
 import my.katas.rover.move.Location;
@@ -19,17 +21,12 @@ import my.katas.rover.turn.Heading;
 import my.katas.rover.turn.Turnable;
 
 @Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Rover implements Moveable, Turnable {
 
+	private String terrain;
 	private Location location;
 	private Heading heading;
-	private String terrain;
-
-	private Rover(final String terrain, final Location location, final Heading heading) {
-		this.terrain = terrain;
-		this.location = location;
-		this.heading = heading;
-	}
 
 	public static Rover initialize(final Terrain terrain, final Location location, final Heading heading) {
 		return new Rover(terrain.getName(), location, heading);
