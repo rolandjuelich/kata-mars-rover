@@ -42,7 +42,7 @@ public class RoverController {
 				String.format(template, name));
 	}
 
-	@RequestMapping("/hello")
+	@RequestMapping("/initialize")
 	public String hello() {
 
 		Assert.isNull(initialized, "should be null");
