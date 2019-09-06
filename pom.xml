@@ -160,9 +160,7 @@
 							<testFailureIgnore>true</testFailureIgnore>
 							<argLine>
 								<!-- following command must be a one liner (take care when formatting!) -->
-								-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
-								-Dcucumber.options="--plugin
-								io.qameta.allure.cucumber4jvm.AllureCucumber4Jvm"
+								-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar" -Dcucumber.options="--plugin io.qameta.allure.cucumber4jvm.AllureCucumber4Jvm"
 							</argLine>
 							<systemPropertyVariables>
 								<allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
