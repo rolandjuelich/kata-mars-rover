@@ -84,6 +84,26 @@ public class RoverController {
 		return out;
 	}
 
+	@RequestMapping("/backward")
+	public String backward() {
+		
+		Assert.isNull(moved, "should be null");
+		
+		events.register(this);
+		
+		String out = "no answer";
+		
+		try {
+			commands.execute(Commands.moveBackward());
+			await().atMost(FIVE_SECONDS).until(() -> moved != null);
+			out = moved.toString();
+		} finally {
+			events.unregister(this);
+		}
+		
+		return out;
+	}
+
 	@Subscribe
 	private void listenFor(final RoverInitialized event) {
 		this.initialized = event;

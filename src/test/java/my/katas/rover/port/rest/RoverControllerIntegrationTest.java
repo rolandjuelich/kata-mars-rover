@@ -51,4 +51,17 @@ public class RoverControllerIntegrationTest {
 		assertThat(response.getContentAsString()).startsWith("RoverMoved");
 	}
 
+	@Test
+	public void shouldMoveBackward() throws Exception {
+		//given
+		final MockHttpServletRequestBuilder request = get("/backward");
+		
+		// when
+		final MockHttpServletResponse response = mvc.perform(request).andReturn().getResponse();
+		
+		// then
+		assertThat(response.getStatus()).isEqualTo(OK.value());
+		assertThat(response.getContentAsString()).startsWith("RoverMoved");
+	}
+
 }
