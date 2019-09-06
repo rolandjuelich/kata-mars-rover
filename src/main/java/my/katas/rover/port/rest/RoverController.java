@@ -22,7 +22,6 @@ import my.katas.rover.move.RoverMoved;
 @Scope(SCOPE_REQUEST)
 public class RoverController {
 
-
 	@Autowired
 	private Commands commands;
 
@@ -30,7 +29,7 @@ public class RoverController {
 	private EventBus events;
 
 	private RoverInitialized initialized;
-	
+
 	private RoverMoved moved;
 
 	@RequestMapping("/initialize")
@@ -55,13 +54,13 @@ public class RoverController {
 
 	@RequestMapping("/forward")
 	public String forward() {
-		
+
 		Assert.isNull(moved, "should be null");
-		
+
 		events.register(this);
-		
+
 		String out = "no answer";
-		
+
 		try {
 			commands.execute(Commands.moveForward());
 			await().atMost(FIVE_SECONDS).until(() -> moved != null);
@@ -69,19 +68,19 @@ public class RoverController {
 		} finally {
 			events.unregister(this);
 		}
-		
+
 		return out;
 	}
 
 	@RequestMapping("/backward")
 	public String backward() {
-		
+
 		Assert.isNull(moved, "should be null");
-		
+
 		events.register(this);
-		
+
 		String out = "no answer";
-		
+
 		try {
 			commands.execute(Commands.moveBackward());
 			await().atMost(FIVE_SECONDS).until(() -> moved != null);
@@ -89,7 +88,7 @@ public class RoverController {
 		} finally {
 			events.unregister(this);
 		}
-		
+
 		return out;
 	}
 
