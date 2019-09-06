@@ -1,6 +1,5 @@
 package my.katas.rover.port.rest;
 
-import static my.katas.rover.Commands.initialize;
 import static org.apache.commons.lang3.RandomUtils.nextInt;
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Duration.FIVE_SECONDS;
@@ -20,6 +19,7 @@ import com.google.common.eventbus.Subscribe;
 
 import my.katas.rover.Commands;
 import my.katas.rover.initialize.RoverInitialized;
+import my.katas.rover.move.RoverMoved;
 
 @RestController
 @Scope(SCOPE_REQUEST)
@@ -35,6 +35,8 @@ public class RoverController {
 	private EventBus events;
 
 	private RoverInitialized initialized;
+	
+	private RoverMoved moved;
 
 	@RequestMapping("/greeting")
 	public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
@@ -43,7 +45,7 @@ public class RoverController {
 	}
 
 	@RequestMapping("/initialize")
-	public String hello() {
+	public String initialize() {
 
 		Assert.isNull(initialized, "should be null");
 
@@ -52,7 +54,7 @@ public class RoverController {
 		String out = "no answer";
 
 		try {
-			commands.execute(initialize("Mars", nextInt(), nextInt()));
+			commands.execute(Commands.initialize("Mars", nextInt(), nextInt()));
 			await().atMost(FIVE_SECONDS).until(() -> initialized != null);
 			out = initialized.toString();
 		} finally {
@@ -62,8 +64,33 @@ public class RoverController {
 		return out;
 	}
 
+	@RequestMapping("/forward")
+	public String forward() {
+		
+		Assert.isNull(moved, "should be null");
+		
+		events.register(this);
+		
+		String out = "no answer";
+		
+		try {
+			commands.execute(Commands.moveForward());
+			await().atMost(FIVE_SECONDS).until(() -> moved != null);
+			out = moved.toString();
+		} finally {
+			events.unregister(this);
+		}
+		
+		return out;
+	}
+
 	@Subscribe
-	void listenFor(final RoverInitialized event) {
+	private void listenFor(final RoverInitialized event) {
 		this.initialized = event;
+	};
+
+	@Subscribe
+	private void listenFor(final RoverMoved event) {
+		this.moved = event;
 	};
 }

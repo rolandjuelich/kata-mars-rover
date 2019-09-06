@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,6 @@ public class RoverControllerIntegrationTest {
 
 	
 	@Test
-	@Ignore
 	public void shouldMoveForward() throws Exception {
 		//given
 		final MockHttpServletRequestBuilder request = get("/forward");
