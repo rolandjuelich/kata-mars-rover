@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -31,7 +31,8 @@ import my.katas.rover.terrain.Terrain;
 import my.katas.rover.terrain.TerrainRepository;
 import my.katas.rover.turn.RoverTurned;
 
-@ContextConfiguration(classes = { RoverConfiguration.class, MockedRepositoryConfiguration.class })
+@SpringBootTest
+@ActiveProfiles("test")
 public class RoverStepDefs {
 
 	@Autowired

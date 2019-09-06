@@ -1,6 +1,7 @@
 package my.katas.rover;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.google.common.eventbus.EventBus;
@@ -18,12 +19,15 @@ import my.katas.rover.turn.right.TurnRight;
 import my.katas.rover.turn.right.TurnRightHandler;
 
 @Component
+@Profile("production")
 public class Commands {
 
 	private final EventBus commandBus = new EventBus();
 
 	@Autowired
-	public Commands(final InitializeRoverHandler initialize, final MoveForwardHandler forward,
+	public Commands(
+			final InitializeRoverHandler initialize, 
+			final MoveForwardHandler forward,
 			final MoveBackwardHandler backward,
 			final TurnRightHandler turnRight,
 			final TurnLeftHandler turnLeft) {
