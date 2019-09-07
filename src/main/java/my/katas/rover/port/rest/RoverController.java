@@ -5,8 +5,6 @@ import static org.awaitility.Awaitility.await;
 import static org.awaitility.Duration.FIVE_SECONDS;
 import static org.springframework.web.context.WebApplicationContext.SCOPE_REQUEST;
 
-import java.util.concurrent.Callable;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.util.Assert;
@@ -31,32 +29,25 @@ public class RoverController {
 	@Autowired
 	private EventBus events;
 
-	private RoverInitialized initialized;
-
 	private RoverMoved moved;
 
 	@RequestMapping("/initialize")
 	public String initialize() {
 
 		EventStore eventStore = new EventStore(events);
-
 		Assert.isTrue(eventStore.isEmpty(), "should be null");
-
-		events.register(this);
 
 		String out = "no answer";
 
 		try {
 			commands.execute(Commands.initialize("Mars", nextInt(), nextInt()));
-			final EventStore store = eventStore;
-			await().atMost(FIVE_SECONDS).until(() -> store.contains(RoverInitialized.class));
-			out = initialized.toString();
+			//.within(FIVE_SECONDS); //.orElse
+			out = eventStore.await(RoverInitialized.class).iterator().next().toString();
 		} finally {
-			events.unregister(this);
 			events.unregister(eventStore);
 		}
-
 		return out;
+
 	}
 
 	@RequestMapping("/forward")
@@ -98,11 +89,6 @@ public class RoverController {
 
 		return out;
 	}
-
-	@Subscribe
-	private void listenFor(final RoverInitialized event) {
-		this.initialized = event;
-	};
 
 	@Subscribe
 	private void listenFor(final RoverMoved event) {

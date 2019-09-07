@@ -1,7 +1,11 @@
 package my.katas.event;
 
+import static org.awaitility.Duration.FIVE_SECONDS;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import org.awaitility.Awaitility;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -33,5 +37,15 @@ public class EventStore {
 
 	public <T> long count(final Class<T> type) {
 		return events.stream().filter(o -> o.getClass().isAssignableFrom(type)).count();
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> List<T> await(final Class<T> type) {
+		final List<Object> elements = new ArrayList<Object>();
+		Awaitility.await().atMost(FIVE_SECONDS).until(() -> {
+			events.stream().filter(o1 -> o1.getClass().isAssignableFrom(type)).forEach(o2 -> elements.add(o2));
+			return !elements.isEmpty();
+		});
+		return (List<T>) elements;
 	}
 }
