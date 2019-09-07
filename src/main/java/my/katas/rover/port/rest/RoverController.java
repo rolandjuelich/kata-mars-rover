@@ -1,10 +1,16 @@
 package my.katas.rover.port.rest;
 
 import static org.apache.commons.lang3.RandomUtils.nextInt;
+import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Duration.FIVE_SECONDS;
 import static org.springframework.web.context.WebApplicationContext.SCOPE_REQUEST;
 
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.util.Assert;
@@ -14,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
-import my.katas.event.EventStore;
 import my.katas.rover.Commands;
 import my.katas.rover.initialize.InitializeRover;
 import my.katas.rover.initialize.RoverInitialized;
@@ -35,26 +40,15 @@ public class RoverController {
 	@RequestMapping("/initialize")
 	public String initialize() {
 
-		InitializeRover command = Commands.initialize("Mars", nextInt(), nextInt());
-		Class<RoverInitialized> event = RoverInitialized.class;
-		RoverInitialized foo = foo(command, event);
-		if (foo != null) {
-			return foo.toString();
-		} else {
-			return "no answer";
-		}
+		final InitializeRover command = Commands.initialize("Mars", nextInt(), nextInt());
+		final Class<RoverInitialized> event = RoverInitialized.class;
 
-	}
+		final Interaction<InitializeRover, RoverInitialized> interaction = Interaction.of(command, event);
+		final InteractionProcessor<InitializeRover, RoverInitialized> processor = new InteractionProcessor<InitializeRover, RoverInitialized>(
+				commands, events);
+		final RoverInitialized result = processor.process(interaction);
+		return defaultString(result.toString(), "no answer");
 
-	public <C, E> E foo(final C command, final Class<E> event) {
-		final EventStore eventStore = new EventStore(events);
-		try {
-			eventStore.open();
-			commands.execute(command); // .within(FIVE_SECONDS); //.orElse
-			return eventStore.await(event).iterator().next();
-		} finally {
-			eventStore.close();
-		}
 	}
 
 	@RequestMapping("/forward")
