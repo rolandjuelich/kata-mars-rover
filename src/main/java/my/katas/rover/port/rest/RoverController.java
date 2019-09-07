@@ -6,11 +6,6 @@ import static org.awaitility.Awaitility.await;
 import static org.awaitility.Duration.FIVE_SECONDS;
 import static org.springframework.web.context.WebApplicationContext.SCOPE_REQUEST;
 
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.util.Assert;
@@ -35,20 +30,14 @@ public class RoverController {
 	@Autowired
 	private EventBus events;
 
+	@Autowired
+	private InteractionProcessorFactory processorFactory;
+
 	private RoverMoved moved;
 
 	@RequestMapping("/initialize")
 	public String initialize() {
-
-		final InitializeRover command = Commands.initialize("Mars", nextInt(), nextInt());
-		final Class<RoverInitialized> event = RoverInitialized.class;
-
-		final Interaction<InitializeRover, RoverInitialized> interaction = Interaction.of(command, event);
-		final InteractionProcessor<InitializeRover, RoverInitialized> processor = new InteractionProcessor<InitializeRover, RoverInitialized>(
-				commands, events);
-		final RoverInitialized result = processor.process(interaction);
-		return defaultString(result.toString(), "no answer");
-
+		return process(Commands.initialize("Mars", nextInt(), nextInt()), RoverInitialized.class);
 	}
 
 	@RequestMapping("/forward")
@@ -89,6 +78,11 @@ public class RoverController {
 		}
 
 		return out;
+	}
+
+	private String process(final InitializeRover command, final Class<RoverInitialized> event) {
+		final RoverInitialized result = processorFactory.createFor(Interaction.of(command, event)).process();
+		return defaultString(result.toString(), "no answer");
 	}
 
 	@Subscribe
