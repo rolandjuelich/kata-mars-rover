@@ -19,7 +19,19 @@ public class EventStore {
 	}
 
 	@Subscribe
-	private void doHandle(Object event) {
+	private void doHandle(final Object event) {
 		events.add(event);
+	}
+
+	public boolean isEmpty() {
+		return events.isEmpty();
+	}
+
+	public <T> boolean contains(final Class<T> type) {
+		return count(type) > 0;
+	}
+
+	public <T> long count(final Class<T> type) {
+		return events.stream().filter(o -> o.getClass().isAssignableFrom(type)).count();
 	}
 }

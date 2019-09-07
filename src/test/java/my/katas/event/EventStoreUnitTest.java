@@ -26,11 +26,11 @@ public class EventStoreUnitTest {
 		assertThat(store.events()).containsExactly(someEvent, anotherEvent);
 	}
 
-	class SomeEvent {
+	private class SomeEvent {
 
 	}
 
-	class AnotherEvent {
+	private class AnotherEvent {
 
 	}
 }

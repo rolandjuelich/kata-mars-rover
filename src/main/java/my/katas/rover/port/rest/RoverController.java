@@ -5,6 +5,8 @@ import static org.awaitility.Awaitility.await;
 import static org.awaitility.Duration.FIVE_SECONDS;
 import static org.springframework.web.context.WebApplicationContext.SCOPE_REQUEST;
 
+import java.util.concurrent.Callable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.util.Assert;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
+import my.katas.event.EventStore;
 import my.katas.rover.Commands;
 import my.katas.rover.initialize.RoverInitialized;
 import my.katas.rover.move.RoverMoved;
@@ -35,7 +38,9 @@ public class RoverController {
 	@RequestMapping("/initialize")
 	public String initialize() {
 
-		Assert.isNull(initialized, "should be null");
+		EventStore eventStore = new EventStore(events);
+
+		Assert.isTrue(eventStore.isEmpty(), "should be null");
 
 		events.register(this);
 
@@ -43,10 +48,12 @@ public class RoverController {
 
 		try {
 			commands.execute(Commands.initialize("Mars", nextInt(), nextInt()));
-			await().atMost(FIVE_SECONDS).until(() -> initialized != null);
+			final EventStore store = eventStore;
+			await().atMost(FIVE_SECONDS).until(() -> store.contains(RoverInitialized.class));
 			out = initialized.toString();
 		} finally {
 			events.unregister(this);
+			events.unregister(eventStore);
 		}
 
 		return out;
