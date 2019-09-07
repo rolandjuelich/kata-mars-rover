@@ -1,4 +1,4 @@
-package my.katas.rover.port.rest;
+package my.katas.interaction;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

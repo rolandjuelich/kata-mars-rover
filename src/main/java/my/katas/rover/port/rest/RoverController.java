@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
+import my.katas.interaction.Interaction;
+import my.katas.interaction.InteractionProcessorFactory;
 import my.katas.rover.Commands;
 import my.katas.rover.initialize.InitializeRover;
 import my.katas.rover.initialize.RoverInitialized;

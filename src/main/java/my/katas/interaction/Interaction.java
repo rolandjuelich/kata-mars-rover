@@ -1,4 +1,4 @@
-package my.katas.rover.port.rest;
+package my.katas.interaction;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
