@@ -13,9 +13,10 @@ import com.google.common.eventbus.Subscribe;
 public class EventStore {
 
 	private final List<Object> events = new ArrayList<>();
+	private final EventBus bus;
 
 	public EventStore(final EventBus bus) {
-		bus.register(this);
+		this.bus = bus;
 	}
 
 	public List<Object> events() {
@@ -47,5 +48,13 @@ public class EventStore {
 			return !elements.isEmpty();
 		});
 		return (List<T>) elements;
+	}
+
+	public void open() {
+		this.bus.register(this);
+	}
+
+	public void close() {
+		this.bus.unregister(this);
 	}
 }

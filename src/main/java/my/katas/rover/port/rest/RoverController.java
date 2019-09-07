@@ -35,16 +35,16 @@ public class RoverController {
 	public String initialize() {
 
 		EventStore eventStore = new EventStore(events);
-		Assert.isTrue(eventStore.isEmpty(), "should be null");
 
 		String out = "no answer";
 
 		try {
+			eventStore.open();
 			commands.execute(Commands.initialize("Mars", nextInt(), nextInt()));
 			//.within(FIVE_SECONDS); //.orElse
 			out = eventStore.await(RoverInitialized.class).iterator().next().toString();
 		} finally {
-			events.unregister(eventStore);
+			eventStore.close();
 		}
 		return out;
 
