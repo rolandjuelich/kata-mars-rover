@@ -21,6 +21,7 @@ import my.katas.rover.Commands;
 import my.katas.rover.initialize.InitializeRover;
 import my.katas.rover.initialize.RoverInitialized;
 import my.katas.rover.move.RoverMoved;
+import my.katas.rover.move.forward.MoveForward;
 
 @RestController
 @Scope(SCOPE_REQUEST)
@@ -39,27 +40,16 @@ public class RoverController {
 
 	@RequestMapping("/initialize")
 	public String initialize() {
-		return process(Commands.initialize("Mars", nextInt(), nextInt()), RoverInitialized.class);
+		final InitializeRover command = Commands.initialize("Mars", nextInt(), nextInt());
+		final Class<RoverInitialized> event = RoverInitialized.class;
+		return process(command, event);
 	}
 
 	@RequestMapping("/forward")
 	public String forward() {
-
-		Assert.isNull(moved, "should be null");
-
-		events.register(this);
-
-		String out = "no answer";
-
-		try {
-			commands.execute(Commands.moveForward());
-			await().atMost(FIVE_SECONDS).until(() -> moved != null);
-			out = moved.toString();
-		} finally {
-			events.unregister(this);
-		}
-
-		return out;
+		final MoveForward command = Commands.moveForward();
+		final Class<RoverMoved> event = RoverMoved.class;
+		return process(command, event);
 	}
 
 	@RequestMapping("/backward")
@@ -82,8 +72,8 @@ public class RoverController {
 		return out;
 	}
 
-	private String process(final InitializeRover command, final Class<RoverInitialized> event) {
-		final RoverInitialized result = processorFactory.createFor(Interaction.of(command, event)).process();
+	private <C, E> String process(final C command, final Class<E> event) {
+		final E result = processorFactory.createFor(Interaction.of(command, event)).process();
 		return defaultString(result.toString(), "no answer");
 	}
 
