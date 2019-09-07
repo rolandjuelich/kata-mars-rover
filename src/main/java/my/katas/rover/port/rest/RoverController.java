@@ -16,6 +16,7 @@ import com.google.common.eventbus.Subscribe;
 
 import my.katas.event.EventStore;
 import my.katas.rover.Commands;
+import my.katas.rover.initialize.InitializeRover;
 import my.katas.rover.initialize.RoverInitialized;
 import my.katas.rover.move.RoverMoved;
 
@@ -34,20 +35,26 @@ public class RoverController {
 	@RequestMapping("/initialize")
 	public String initialize() {
 
-		EventStore eventStore = new EventStore(events);
+		InitializeRover command = Commands.initialize("Mars", nextInt(), nextInt());
+		Class<RoverInitialized> event = RoverInitialized.class;
+		RoverInitialized foo = foo(command, event);
+		if (foo != null) {
+			return foo.toString();
+		} else {
+			return "no answer";
+		}
 
-		String out = "no answer";
+	}
 
+	public <C, E> E foo(final C command, final Class<E> event) {
+		final EventStore eventStore = new EventStore(events);
 		try {
 			eventStore.open();
-			commands.execute(Commands.initialize("Mars", nextInt(), nextInt()));
-			//.within(FIVE_SECONDS); //.orElse
-			out = eventStore.await(RoverInitialized.class).iterator().next().toString();
+			commands.execute(command); // .within(FIVE_SECONDS); //.orElse
+			return eventStore.await(event).iterator().next();
 		} finally {
 			eventStore.close();
 		}
-		return out;
-
 	}
 
 	@RequestMapping("/forward")
