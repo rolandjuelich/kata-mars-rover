@@ -2,8 +2,10 @@ package my.katas.rover.initialize;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @Getter
+@ToString
 @RequiredArgsConstructor
 public class RoverInitialized {
 	private final Integer x;

@@ -1,27 +1,33 @@
 package my.katas.rover;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.google.common.eventbus.EventBus;
 
+import my.katas.rover.initialize.InitializeRover;
 import my.katas.rover.initialize.InitializeRoverHandler;
 import my.katas.rover.move.backward.MoveBackward;
 import my.katas.rover.move.backward.MoveBackwardHandler;
 import my.katas.rover.move.forward.MoveForward;
 import my.katas.rover.move.forward.MoveForwardHandler;
+import my.katas.rover.turn.Heading;
 import my.katas.rover.turn.left.TurnLeft;
 import my.katas.rover.turn.left.TurnLeftHandler;
 import my.katas.rover.turn.right.TurnRight;
 import my.katas.rover.turn.right.TurnRightHandler;
 
 @Component
+@Profile("production")
 public class Commands {
 
 	private final EventBus commandBus = new EventBus();
 
 	@Autowired
-	public Commands(final InitializeRoverHandler initialize, final MoveForwardHandler forward,
+	public Commands(
+			final InitializeRoverHandler initialize,
+			final MoveForwardHandler forward,
 			final MoveBackwardHandler backward,
 			final TurnRightHandler turnRight,
 			final TurnLeftHandler turnLeft) {
@@ -32,8 +38,17 @@ public class Commands {
 		commandBus.register(turnLeft);
 	}
 
-	public void execute(final Object command) {
+	public <C> void execute(final C command) {
 		this.commandBus.post(command);
+	}
+
+	public static InitializeRover initialize(final String terrain, final Integer x, final Integer y) {
+		return new InitializeRover(terrain, x, y, Heading.NORTH.name());
+	}
+
+	public static InitializeRover initialize(final String terrain, final Integer x, final Integer y,
+			final String heading) {
+		return new InitializeRover(terrain, x, y, heading);
 	}
 
 	public static TurnLeft turnLeft() {

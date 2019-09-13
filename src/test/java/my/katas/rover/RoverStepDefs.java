@@ -1,10 +1,6 @@
 package my.katas.rover;
 
 import static java.util.stream.IntStream.range;
-import static my.katas.rover.Commands.moveBackward;
-import static my.katas.rover.Commands.moveForward;
-import static my.katas.rover.Commands.turnLeft;
-import static my.katas.rover.Commands.turnRight;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -13,31 +9,32 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-
-import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import my.katas.command.CommandProcessor;
 import my.katas.rover.initialize.InitializeRover;
 import my.katas.rover.initialize.RoverInitialized;
 import my.katas.rover.move.RoverMoved;
+import my.katas.rover.move.backward.MoveBackward;
+import my.katas.rover.move.forward.MoveForward;
 import my.katas.rover.terrain.Terrain;
 import my.katas.rover.terrain.TerrainRepository;
 import my.katas.rover.turn.RoverTurned;
+import my.katas.rover.turn.left.TurnLeft;
+import my.katas.rover.turn.right.TurnRight;
 
-@ContextConfiguration(classes = { RoverConfiguration.class, MockedRepositoryConfiguration.class })
+@SpringBootTest
+@ActiveProfiles("test")
 public class RoverStepDefs {
 
 	@Autowired
-	private EventBus eventBus;
-
-	@Autowired
-	private Commands commands;
+	private CommandProcessor commands;
 
 	@Autowired
 	private TerrainRepository terrains;
@@ -47,27 +44,8 @@ public class RoverStepDefs {
 	private String actualHeading;
 	private String terrain;
 
-	@Subscribe
-	public void listenFor(final RoverTurned event) {
-		actualHeading = event.getHeading();
-	}
-
-	@Subscribe
-	public void listenFor(final RoverMoved event) {
-		actualX = event.getX();
-		actualY = event.getY();
-	}
-
-	@Subscribe
-	public void listenFor(final RoverInitialized event) {
-		actualX = event.getX();
-		actualY = event.getY();
-		actualHeading = event.getHeading();
-	}
-
 	@Before
 	public void beforeSceanrio() {
-		eventBus.register(this);
 		when(terrains.findByName(any())).thenReturn(new Terrain("NoWorld", 0, 0, 0, 0));
 	}
 
@@ -91,32 +69,48 @@ public class RoverStepDefs {
 
 	@Given("rover is heading {string}")
 	public void rover_is_heading(final String heading) {
-		commands.execute(new InitializeRover(terrain, 0, 0, heading));
+		final InitializeRover command = Commands.initialize(terrain, 0, 0, heading);
+		final Class<RoverInitialized> event = RoverInitialized.class;
+		updateFrom(commands.process(command, event).recent(event));
 	}
 
 	@Given("rover is heading {string} at {int}, {int}")
 	public void rover_is_heading_at(final String heading, final Integer x, final Integer y) {
-		commands.execute(new InitializeRover(terrain, x, y, heading));
+		final InitializeRover command = Commands.initialize(terrain, x, y, heading);
+		final Class<RoverInitialized> event = RoverInitialized.class;
+		updateFrom(commands.process(command).recent(event));
 	}
 
 	@When("rover moves forward {int} times")
 	public void rover_moves_forward_times(final Integer times) {
-		range(0, times).forEach(c -> commands.execute(moveForward()));
+		final MoveForward command = Commands.moveForward();
+		final Class<RoverMoved> event = RoverMoved.class;
+		range(0, times).forEach(c -> {
+			updateFrom(commands.process(command).recent(event));
+		});
 	}
 
 	@When("rover moves backward {int} times")
 	public void rover_moves_backward_times(final Integer times) {
-		range(0, times).forEach(c -> commands.execute(moveBackward()));
+		final MoveBackward command = Commands.moveBackward();
+		final Class<RoverMoved> event = RoverMoved.class;
+		range(0, times).forEach(c -> {
+			updateFrom(commands.process(command).recent(event));
+		});
 	}
 
 	@When("rover turns right")
 	public void rover_turns_right() {
-		commands.execute(turnRight());
+		final Class<RoverTurned> event = RoverTurned.class;
+		final TurnRight command = Commands.turnRight();
+		updateFrom(commands.process(command).recent(event));
 	}
 
 	@When("rover turns left")
 	public void rover_turns_left() {
-		commands.execute(turnLeft());
+		final Class<RoverTurned> event = RoverTurned.class;
+		final TurnLeft command = Commands.turnLeft();
+		updateFrom(commands.process(command, event).recent(event));
 	}
 
 	@Then("rover should be heading {string}")
@@ -131,4 +125,20 @@ public class RoverStepDefs {
 		assertThat(actualY).describedAs("y").isEqualTo(expectedY);
 		assertThat(actualHeading).describedAs("heading").isEqualToIgnoringCase(expectedHeading);
 	}
+
+	private void updateFrom(final RoverInitialized event) {
+		actualX = event.getX();
+		actualY = event.getY();
+		actualHeading = event.getHeading();
+	}
+
+	private void updateFrom(final RoverMoved event) {
+		actualX = event.getX();
+		actualY = event.getY();
+	}
+
+	private void updateFrom(final RoverTurned event) {
+		actualHeading = event.getHeading();
+	}
+
 }
