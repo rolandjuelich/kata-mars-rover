@@ -5,9 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -49,22 +46,28 @@ public class RoverStepDefs {
 		when(terrains.findByName(any())).thenReturn(new Terrain("NoWorld", 0, 0, 0, 0));
 	}
 
-	@Given("the terrain is {string}")
-	public void the_terrain_is(final String name) {
+	@Given("target terrain is {string}")
+	public void the_target_terrain_is(final String name) {
 		this.terrain = name;
 	}
 
-	@Given("{string} has following dimensions")
-	public void the_terrain_on_has_following_dimensions(final String name, final DataTable table) {
+	@Given("following terrains")
+	public void following_terrains(final DataTable table) {
 
-		final List<Map<String, String>> data = table.asMaps();
-		final int minX = Integer.valueOf(data.get(0).get("min"));
-		final int maxX = Integer.valueOf(data.get(0).get("max"));
-		final int minY = Integer.valueOf(data.get(1).get("min"));
-		final int maxY = Integer.valueOf(data.get(1).get("max"));
+		final int fromRow = 1;
 
-		when(terrains.findByName(name)).thenReturn(new Terrain(name, minX, maxX, minY, maxY));
+		table.rows(fromRow).asLists().forEach(row -> {
 
+			final String name = row.get(0);
+			final Integer minX = Integer.valueOf(row.get(1));
+			final Integer maxX = Integer.valueOf(row.get(2));
+			final Integer minY = Integer.valueOf(row.get(3));
+			final Integer maxY = Integer.valueOf(row.get(4));
+
+			final Terrain terrain = new Terrain(name, minX, maxX, minY, maxY);
+			when(terrains.findByName(name)).thenReturn(terrain);
+
+		});
 	}
 
 	@Given("rover is heading {string}")

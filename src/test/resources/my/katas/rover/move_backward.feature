@@ -5,11 +5,11 @@ Feature: Moving
   I want to use a rover to check the terrain
 
   Background: 
-    Given the terrain is "Mars"
-    And "Mars" has following dimensions
-      | name | min | max |
-      | x    |   0 |  99 |
-      | y    |   0 |  99 |
+    Given following terrains
+      | name  | minX | maxX | minY | maxY |
+      | Mars  |    0 |   99 |    0 |   99 |
+      | Earth |    0 |   99 |    0 |   99 |
+    And target terrain is "Mars"
 
   Scenario Outline: rover moves backward heading north
     Given rover is heading "north" at 0, <given>
