@@ -1,6 +1,5 @@
 package my.katas.rover.turn.right;
 
-import static my.katas.rover.Commands.turnRight;
 import static my.katas.rover.TestModel.randomRoverOn;
 import static my.katas.rover.TestModel.randomTerrain;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,6 +19,7 @@ import org.mockito.junit.MockitoRule;
 import com.google.common.eventbus.EventBus;
 
 import my.katas.rover.Rover;
+import my.katas.rover.RoverCommands;
 import my.katas.rover.RoverRepository;
 
 public class TurnRightHandlerUnitTest {
@@ -42,7 +42,7 @@ public class TurnRightHandlerUnitTest {
 		given(rovers.load()).willReturn(randomRoverOn(randomTerrain()));
 
 		// when
-		handler.handle(turnRight());
+		handler.handle(RoverCommands.turnRight());
 
 		// then
 		verify(rovers).load();
@@ -55,7 +55,7 @@ public class TurnRightHandlerUnitTest {
 		given(rovers.load()).willReturn(rover);
 
 		// when
-		handler.handle(turnRight());
+		handler.handle(RoverCommands.turnRight());
 
 		// then
 		verify(rovers).save(rover);

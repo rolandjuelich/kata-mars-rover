@@ -31,7 +31,7 @@ import my.katas.rover.turn.right.TurnRight;
 public class RoverStepDefs {
 
 	@Autowired
-	private CommandProcessor commands;
+	private CommandProcessor applicaton;
 
 	@Autowired
 	private TerrainRepository terrains;
@@ -72,48 +72,48 @@ public class RoverStepDefs {
 
 	@Given("rover is heading {string}")
 	public void rover_is_heading(final String heading) {
-		final InitializeRover command = Commands.initialize(terrain, 0, 0, heading);
+		final InitializeRover command = RoverCommands.initialize(terrain, 0, 0, heading);
 		final Class<RoverInitialized> event = RoverInitialized.class;
-		updateFrom(commands.process(command, event).recent(event));
+		updateFrom(applicaton.process(command, event));
 	}
 
 	@Given("rover is heading {string} at {int}, {int}")
 	public void rover_is_heading_at(final String heading, final Integer x, final Integer y) {
-		final InitializeRover command = Commands.initialize(terrain, x, y, heading);
+		final InitializeRover command = RoverCommands.initialize(terrain, x, y, heading);
 		final Class<RoverInitialized> event = RoverInitialized.class;
-		updateFrom(commands.process(command).recent(event));
+		updateFrom(applicaton.process(command, event));
 	}
 
 	@When("rover moves forward {int} times")
 	public void rover_moves_forward_times(final Integer times) {
-		final MoveForward command = Commands.moveForward();
+		final MoveForward command = RoverCommands.moveForward();
 		final Class<RoverMoved> event = RoverMoved.class;
 		range(0, times).forEach(c -> {
-			updateFrom(commands.process(command).recent(event));
+			updateFrom(applicaton.process(command, event));
 		});
 	}
 
 	@When("rover moves backward {int} times")
 	public void rover_moves_backward_times(final Integer times) {
-		final MoveBackward command = Commands.moveBackward();
+		final MoveBackward command = RoverCommands.moveBackward();
 		final Class<RoverMoved> event = RoverMoved.class;
 		range(0, times).forEach(c -> {
-			updateFrom(commands.process(command).recent(event));
+			updateFrom(applicaton.process(command, event));
 		});
 	}
 
 	@When("rover turns right")
 	public void rover_turns_right() {
 		final Class<RoverTurned> event = RoverTurned.class;
-		final TurnRight command = Commands.turnRight();
-		updateFrom(commands.process(command).recent(event));
+		final TurnRight command = RoverCommands.turnRight();
+		updateFrom(applicaton.process(command, event));
 	}
 
 	@When("rover turns left")
 	public void rover_turns_left() {
 		final Class<RoverTurned> event = RoverTurned.class;
-		final TurnLeft command = Commands.turnLeft();
-		updateFrom(commands.process(command, event).recent(event));
+		final TurnLeft command = RoverCommands.turnLeft();
+		updateFrom(applicaton.process(command, event));
 	}
 
 	@Then("rover should be heading {string}")

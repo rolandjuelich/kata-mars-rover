@@ -1,6 +1,5 @@
 package my.katas.rover.move.forward;
 
-import static my.katas.rover.Commands.moveForward;
 import static my.katas.rover.TestModel.randomRoverOn;
 import static my.katas.rover.TestModel.randomTerrain;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,6 +19,7 @@ import org.mockito.junit.MockitoRule;
 import com.google.common.eventbus.EventBus;
 
 import my.katas.rover.Rover;
+import my.katas.rover.RoverCommands;
 import my.katas.rover.RoverRepository;
 import my.katas.rover.terrain.Terrain;
 import my.katas.rover.terrain.TerrainRepository;
@@ -51,7 +51,7 @@ public class MoveForwardHandlerUnitTest {
 		given(terrains.findByName(terrain.getName())).willReturn(terrain);
 
 		// when
-		handler.handle(moveForward());
+		handler.handle(RoverCommands.moveForward());
 
 		// then
 		verify(rovers).load();
@@ -67,7 +67,7 @@ public class MoveForwardHandlerUnitTest {
 		given(terrains.findByName(terrain.getName())).willReturn(terrain);
 
 		// when
-		handler.handle(moveForward());
+		handler.handle(RoverCommands.moveForward());
 
 		// then
 		verify(rovers).save(rover);
@@ -83,7 +83,7 @@ public class MoveForwardHandlerUnitTest {
 		given(terrains.findByName(terrain.getName())).willReturn(terrain);
 
 		// when
-		handler.handle(moveForward());
+		handler.handle(RoverCommands.moveForward());
 
 		// then
 		verify(terrains).findByName(rover.getTerrain());

@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 
 import com.google.common.eventbus.EventBus;
 
+import my.katas.command.CommandBus;
 import my.katas.rover.initialize.InitializeRoverHandler;
 import my.katas.rover.move.backward.MoveBackwardHandler;
 import my.katas.rover.move.forward.MoveForwardHandler;
@@ -30,17 +31,17 @@ public class RoverTestConfiguration {
 	}
 
 	@Bean
-	public Commands commands(final InitializeRoverHandler initialize,
+	public CommandBus commandBus(final InitializeRoverHandler initialize,
 			final MoveForwardHandler forward,
 			final MoveBackwardHandler backward,
 			final TurnRightHandler turnRight,
 			final TurnLeftHandler turnLeft) {
-		return spy(new Commands(
-				initialize,
-				forward,
-				backward,
-				turnRight,
-				turnLeft));
+		return spy(new CommandBus() //
+				.register(initialize) //
+				.register(forward) //
+				.register(backward) //
+				.register(turnRight) //
+				.register(turnLeft));
 	}
 
 	@Bean

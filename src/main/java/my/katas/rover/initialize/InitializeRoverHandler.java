@@ -1,6 +1,6 @@
 package my.katas.rover.initialize;
 
-import static my.katas.rover.Events.initializedAt;
+import static my.katas.rover.RoverEvents.initializedAt;
 import static my.katas.rover.move.Location.location;
 
 import org.springframework.beans.factory.annotation.Autowired;

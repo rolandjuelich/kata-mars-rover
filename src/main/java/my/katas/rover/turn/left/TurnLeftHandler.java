@@ -1,6 +1,6 @@
 package my.katas.rover.turn.left;
 
-import static my.katas.rover.Events.turnedTo;
+import static my.katas.rover.RoverEvents.turnedTo;
 
 import org.springframework.stereotype.Component;
 

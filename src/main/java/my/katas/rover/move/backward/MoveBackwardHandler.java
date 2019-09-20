@@ -1,6 +1,6 @@
 package my.katas.rover.move.backward;
 
-import static my.katas.rover.Events.movedTo;
+import static my.katas.rover.RoverEvents.movedTo;
 
 import org.springframework.stereotype.Component;
 

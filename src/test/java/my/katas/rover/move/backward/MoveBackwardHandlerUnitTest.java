@@ -1,6 +1,5 @@
 package my.katas.rover.move.backward;
 
-import static my.katas.rover.Commands.moveBackward;
 import static my.katas.rover.TestModel.randomRoverOn;
 import static my.katas.rover.TestModel.randomTerrain;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,6 +19,7 @@ import org.mockito.junit.MockitoRule;
 import com.google.common.eventbus.EventBus;
 
 import my.katas.rover.Rover;
+import my.katas.rover.RoverCommands;
 import my.katas.rover.RoverRepository;
 import my.katas.rover.terrain.Terrain;
 import my.katas.rover.terrain.TerrainRepository;
@@ -50,7 +50,7 @@ public class MoveBackwardHandlerUnitTest {
 		given(terrains.findByName(terrain.getName())).willReturn(terrain);
 
 		// when
-		handler.handle(moveBackward());
+		handler.handle(RoverCommands.moveBackward());
 
 		// then
 		verify(rovers).load();
@@ -66,7 +66,7 @@ public class MoveBackwardHandlerUnitTest {
 		given(terrains.findByName(terrain.getName())).willReturn(terrain);
 
 		// when
-		handler.handle(moveBackward());
+		handler.handle(RoverCommands.moveBackward());
 
 		// then
 		verify(rovers).save(rover);
@@ -82,7 +82,7 @@ public class MoveBackwardHandlerUnitTest {
 		given(terrains.findByName(terrain.getName())).willReturn(terrain);
 
 		// when
-		handler.handle(moveBackward());
+		handler.handle(RoverCommands.moveBackward());
 
 		// then
 		verify(terrains).findByName(rover.getTerrain());

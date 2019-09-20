@@ -1,9 +1,6 @@
 package my.katas.command;
 
-import static java.util.Arrays.asList;
 import static org.apache.commons.logging.LogFactory.getLog;
-
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,54 +8,51 @@ import org.springframework.stereotype.Component;
 import com.google.common.eventbus.EventBus;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import my.katas.event.EventCaptor;
-import my.katas.rover.Commands;
+import my.katas.event.Events;
 
 @Component
 @AllArgsConstructor
 public class CommandProcessor {
 
 	@Autowired
-	private Commands commandBus;
+	private final CommandBus commandBus;
 
 	@Autowired
-	private EventBus eventBus;
+	private final EventBus eventBus;
 
-	@Getter
-	@RequiredArgsConstructor
-	public class ProcessResult {
-
-		private final EventCaptor allCaptured;
-
-		public <E> E recent(final Class<E> type) {
-			final List<E> events = allCaptured.filterOn(type);
-			return events.isEmpty() ? null : events.get(events.size() - 1);
-		}
-
+	public void process(final Object command) {
+		log("execute " + command);
+		commandBus.execute(command);
 	}
 
-	public ProcessResult process(final Object command, final Class<?>... expectedEvents) {
-
-		final EventCaptor captor = new EventCaptor(eventBus);
-
-		try {
-			captor.open();
-			log("execute " + command);
-			commandBus.execute(command);
-			if (expectedEvents != null)
-				asList(expectedEvents).forEach(expectedEvent -> captor.await(expectedEvent));
-
-			return new ProcessResult(captor);
-
-		} finally {
-			captor.close();
-		}
+	public <E> E process(final Object command, final Class<E> expectedEvent) {
+		return new EventCapturingCommandProcessor(commandBus, new EventCaptor(eventBus)).process(command,
+				expectedEvent);
 	}
 
 	private void log(final String msg) {
 		getLog(getClass()).debug(" ### " + msg);
+	}
+
+	@AllArgsConstructor
+	static class EventCapturingCommandProcessor {
+
+		private final CommandBus commandBus;
+		private final EventCaptor captor;
+
+		public <E> E process(final Object command, final Class<E> expectedEvent) {
+			log("execute " + command);
+			captor.start();
+			commandBus.execute(command);
+			final Events<E> events = captor.waitFor(expectedEvent);
+			captor.stop();
+			return events.isNotEmpty() ? events.mostRecent() : null;
+		}
+
+		private void log(final String msg) {
+			getLog(getClass()).debug(" ### " + msg);
+		}
 	}
 
 }
