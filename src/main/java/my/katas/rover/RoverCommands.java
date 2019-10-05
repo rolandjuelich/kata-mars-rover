@@ -9,29 +9,33 @@ import my.katas.rover.turn.right.TurnRight;
 
 public class RoverCommands {
 
-	public static InitializeRover initialize(final String terrain, final Integer x, final Integer y) {
-		return new InitializeRover(terrain, x, y, Heading.NORTH.name());
-	}
-
-	public static InitializeRover initialize(final String terrain, final Integer x, final Integer y,
+	public static InitializeRover initialize(final String terrainId, final Integer x, final Integer y,
 			final String heading) {
-		return new InitializeRover(terrain, x, y, heading);
+		return new InitializeRover(terrainId, x, y, heading);
 	}
 
-	public static TurnLeft turnLeft() {
-		return new TurnLeft();
+	public static InitializeRover initialize(final String terrainId, final String heading) {
+		return new InitializeRover(terrainId, 0, 0, heading);
 	}
 
-	public static TurnRight turnRight() {
-		return new TurnRight();
+	public static InitializeRover initialize(final String terrainId) {
+		return new InitializeRover(terrainId, 0, 0, Heading.NORTH.name());
 	}
 
-	public static MoveBackward moveBackward() {
-		return new MoveBackward();
+	public static TurnLeft turnLeft(final String roverId) {
+		return new TurnLeft(roverId);
 	}
 
-	public static MoveForward moveForward() {
-		return new MoveForward();
+	public static TurnRight turnRight(final String roverId) {
+		return new TurnRight(roverId);
+	}
+
+	public static MoveBackward moveBackward(final String roverId) {
+		return new MoveBackward(roverId);
+	}
+
+	public static MoveForward moveForward(final String roverId) {
+		return new MoveForward(roverId);
 	}
 
 }

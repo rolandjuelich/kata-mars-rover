@@ -1,16 +1,40 @@
 package my.katas.rover.terrain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @Getter
-@RequiredArgsConstructor
+@ToString
+@AllArgsConstructor
 public class Terrain {
 
+	private final TerrainId id;
 	private final String name;
-	private final int minX;
-	private final int maxX;
-	private final int minY;
-	private final int maxY;
+	private final Dimension x;
+	private final Dimension y;
+
+	public Terrain(final TerrainId id, final String name, final Dimension dimension) {
+		this.id = id;
+		this.name = name;
+		this.x = dimension;
+		this.y = dimension;
+	}
+
+	public int getMinX() {
+		return x.getMin();
+	}
+
+	public int getMaxX() {
+		return x.getMax();
+	}
+
+	public int getMinY() {
+		return y.getMin();
+	}
+
+	public int getMaxY() {
+		return y.getMax();
+	}
 
 }

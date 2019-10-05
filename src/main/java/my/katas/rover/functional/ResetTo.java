@@ -22,7 +22,7 @@ public class ResetTo implements Function<Integer, Integer> {
 		return new ResetTo(value, t -> true);
 	}
 
-	public ResetTo onlyIf(final Predicate<Integer> predicate) {
+	public ResetTo when(final Predicate<Integer> predicate) {
 		return new ResetTo(reset, predicate);
 	}
 

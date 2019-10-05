@@ -52,7 +52,7 @@ public class CommandProcessorUnitTest {
 		// then
 		final InOrder orders = inOrder(captor, commandBus);
 		orders.verify(captor).start();
-		orders.verify(commandBus).execute(command);
+		orders.verify(commandBus).dispatch(command);
 		orders.verify(captor).waitFor(expectedEvent);
 		orders.verify(captor).stop();
 	}
@@ -91,7 +91,7 @@ public class CommandProcessorUnitTest {
 		application.process(command);
 
 		// then
-		verify(commandBus).execute(command);
+		verify(commandBus).dispatch(command);
 	}
 
 	@Subscribe

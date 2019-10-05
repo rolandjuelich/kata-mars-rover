@@ -1,6 +1,5 @@
 package my.katas.rover;
 
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.spy;
 
 import org.mockito.Mockito;
@@ -12,10 +11,10 @@ import org.springframework.context.annotation.Profile;
 import com.google.common.eventbus.EventBus;
 
 import my.katas.command.CommandBus;
+import my.katas.command.CommandProcessor;
 import my.katas.rover.initialize.InitializeRoverHandler;
 import my.katas.rover.move.backward.MoveBackwardHandler;
 import my.katas.rover.move.forward.MoveForwardHandler;
-import my.katas.rover.terrain.Terrain;
 import my.katas.rover.terrain.TerrainRepository;
 import my.katas.rover.turn.left.TurnLeftHandler;
 import my.katas.rover.turn.right.TurnRightHandler;
@@ -45,10 +44,13 @@ public class RoverTestConfiguration {
 	}
 
 	@Bean
+	public CommandProcessor commandProcessor(final CommandBus commandBus, final EventBus eventBus) {
+		return new CommandProcessor(commandBus, eventBus);
+	}
+	
+	@Bean
 	public TerrainRepository terrains() {
-		TerrainRepository terrains = Mockito.mock(TerrainRepository.class);
-		given(terrains.findByName("Mars")).willReturn(new Terrain("Mars", 0, 99, 0, 99));
-		return terrains;
+		return Mockito.mock(TerrainRepository.class);
 	}
 
 	@Bean

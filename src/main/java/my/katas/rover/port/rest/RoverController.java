@@ -1,11 +1,10 @@
 package my.katas.rover.port.rest;
 
-import static org.apache.commons.lang3.RandomUtils.nextInt;
-import static org.apache.commons.lang3.StringUtils.defaultString;
-
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -26,29 +25,29 @@ public class RoverController {
 	private CommandProcessor application;
 
 	@RequestMapping("/initialize")
-	public String initialize() {
-		final InitializeRover command = RoverCommands.initialize("Mars", nextInt(), nextInt(), Heading.NORTH.name());
+	public String initialize(@RequestParam("terrain") final String terrainId) {
+		final InitializeRover command = RoverCommands.initialize(terrainId, 0, 0, Heading.NORTH.name());
 		final Class<RoverInitialized> event = RoverInitialized.class;
 		return process(command, event);
 	}
 
 	@RequestMapping("/forward")
-	public String forward() {
-		final MoveForward command = RoverCommands.moveForward();
+	public String forward(@RequestParam("rover") final String roverId) {
+		final MoveForward command = RoverCommands.moveForward(roverId);
 		final Class<RoverMoved> event = RoverMoved.class;
 		return process(command, event);
 	}
 
 	@RequestMapping("/backward")
-	public String backward() {
-		final MoveBackward command = RoverCommands.moveBackward();
+	public String backward(@RequestParam("rover") final String roverId) {
+		final MoveBackward command = RoverCommands.moveBackward(roverId);
 		final Class<RoverMoved> event = RoverMoved.class;
 		return process(command, event);
 	}
 
 	private <C, E> String process(final C command, final Class<E> event) {
 		final E result = application.process(command, event);
-		return defaultString(result.toString(), "no answer");
+		return ObjectUtils.defaultIfNull(result, "NO_EVENTS_PUBLISHED").toString();
 	}
 
 }

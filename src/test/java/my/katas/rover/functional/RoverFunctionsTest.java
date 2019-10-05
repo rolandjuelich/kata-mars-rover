@@ -1,7 +1,5 @@
 package my.katas.rover.functional;
 
-import static my.katas.rover.functional.Functions.decrease;
-import static my.katas.rover.functional.Functions.increase;
 import static my.katas.rover.functional.Functions.resetTo;
 import static my.katas.rover.functional.Predicates.greaterThan;
 import static my.katas.rover.functional.Predicates.smallerThan;
@@ -25,7 +23,7 @@ public class RoverFunctionsTest {
 		int result = expected;
 
 		// when
-		int actual = increase().apply(value);
+		int actual = Functions.increaseByOne().apply(value);
 
 		// then
 		assertThat(actual).isEqualTo(result);
@@ -39,7 +37,7 @@ public class RoverFunctionsTest {
 		int result = expected;
 
 		// when
-		int actual = decrease().apply(value);
+		int actual = Functions.decreaseByOne().apply(value);
 
 		// then
 		assertThat(actual).isEqualTo(result);
@@ -51,7 +49,7 @@ public class RoverFunctionsTest {
 		int max = 1;
 		int value = 2;
 
-		int actual = resetTo(min).onlyIf(greaterThan(max)).apply(value);
+		int actual = resetTo(min).when(greaterThan(max)).apply(value);
 
 		assertThat(actual).isEqualTo(min);
 	}
@@ -62,7 +60,7 @@ public class RoverFunctionsTest {
 		int max = 1;
 		int value = -1;
 
-		int actual = resetTo(max).onlyIf(smallerThan(min)).apply(value);
+		int actual = resetTo(max).when(smallerThan(min)).apply(value);
 
 		assertThat(actual).isEqualTo(max);
 	}
@@ -78,7 +76,7 @@ public class RoverFunctionsTest {
 		// when
 		Integer actual = givenValue;
 		for (int i = 0; i < times; i++) {
-			actual = increase().andThen(resetTo(min).onlyIf(greaterThan(max))).apply(actual);
+			actual = Functions.increaseByOne().andThen(resetTo(min).when(greaterThan(max))).apply(actual);
 		}
 
 		// then
@@ -96,7 +94,7 @@ public class RoverFunctionsTest {
 		// when
 		Integer actual = givenValue;
 		for (int i = 0; i < times; i++) {
-			actual = decrease().andThen(resetTo(max).onlyIf(smallerThan(min))).apply(actual);
+			actual = Functions.decreaseByOne().andThen(resetTo(max).when(smallerThan(min))).apply(actual);
 		}
 
 		// then

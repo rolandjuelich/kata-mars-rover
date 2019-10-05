@@ -1,7 +1,5 @@
 package my.katas.rover.move.backward;
 
-import static my.katas.rover.RoverEvents.movedTo;
-
 import org.springframework.stereotype.Component;
 
 import com.google.common.eventbus.EventBus;
@@ -9,7 +7,11 @@ import com.google.common.eventbus.Subscribe;
 
 import lombok.RequiredArgsConstructor;
 import my.katas.rover.Rover;
+import my.katas.rover.RoverEvents;
+import my.katas.rover.RoverId;
 import my.katas.rover.RoverRepository;
+import my.katas.rover.move.Location;
+import my.katas.rover.move.RoverMoved;
 import my.katas.rover.terrain.Terrain;
 import my.katas.rover.terrain.TerrainRepository;
 
@@ -25,13 +27,19 @@ public class MoveBackwardHandler {
 
 	@Subscribe
 	public void handle(final MoveBackward command) {
-		final Rover rover = rovers.load();
-		if (rover != null) {
-			final Terrain terrain = terrains.findByName(rover.getTerrain());
-			rover.backwardOn(terrain);
-			rovers.save(rover);
-			eventBus.post(movedTo(rover.getLocation().getX(), rover.getLocation().getY()));
+		final Rover rover = rovers.findBy(new RoverId(command.getRoverId()));
+		if (rover == null) {
+			throw new IllegalStateException("no rover found for id: " + command.getRoverId());
 		}
+
+		final Terrain terrain = terrains.findById(rover.getTerrainId());
+
+		rover.backwardOn(terrain);
+		rovers.save(rover);
+
+		final Location location = rover.getLocation();
+		final RoverMoved roverMoved = RoverEvents.movedTo(location.getX(), location.getY());
+		eventBus.post(roverMoved);
 	}
 
 }

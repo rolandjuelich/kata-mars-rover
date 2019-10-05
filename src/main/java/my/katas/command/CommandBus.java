@@ -16,7 +16,7 @@ public class CommandBus {
 		return this;
 	}
 
-	public <C> void execute(final C command) {
+	public <C> void dispatch(final C command) {
 		this.commandBus.post(command);
 	}
 

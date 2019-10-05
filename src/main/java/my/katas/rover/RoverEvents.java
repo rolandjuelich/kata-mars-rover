@@ -10,12 +10,17 @@ public class RoverEvents {
 		return new RoverMoved(x, y);
 	}
 
-	public static RoverTurned turnedTo(final String name) {
-		return new RoverTurned(name);
+	public static RoverTurned turnedTo(final String heading) {
+		return new RoverTurned(heading);
 	}
 
-	public static RoverInitialized initializedAt(final Integer x, final Integer y, final String name) {
-		return new RoverInitialized(x, y, name);
+	public static RoverInitialized initializedAt(final Integer x, final Integer y, final String heading) {
+		return new RoverInitialized(x, y, heading, "willi");
+	}
+
+	public static RoverInitialized initialized(final String roverId, final Integer x, final Integer y,
+			final String heading) {
+		return new RoverInitialized(x, y, heading, roverId);
 	}
 
 }

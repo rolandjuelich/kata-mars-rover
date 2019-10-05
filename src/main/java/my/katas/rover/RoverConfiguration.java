@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Profile;
 import com.google.common.eventbus.EventBus;
 
 import my.katas.command.CommandBus;
+import my.katas.command.CommandProcessor;
 import my.katas.rover.initialize.InitializeRoverHandler;
 import my.katas.rover.move.backward.MoveBackwardHandler;
 import my.katas.rover.move.forward.MoveForwardHandler;
@@ -36,6 +37,11 @@ public class RoverConfiguration {
 				.register(backward) //
 				.register(turnRight) //
 				.register(turnLeft);
+	}
+
+	@Bean
+	public CommandProcessor commandProcessor(final CommandBus commandBus, final EventBus eventBus) {
+		return new CommandProcessor(commandBus, eventBus);
 	}
 
 }

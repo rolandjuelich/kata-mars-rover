@@ -1,6 +1,7 @@
 package my.katas.rover.initialize;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -16,6 +17,8 @@ import org.mockito.junit.MockitoRule;
 import com.google.common.eventbus.EventBus;
 
 import my.katas.rover.Rover;
+import my.katas.rover.RoverCommands;
+import my.katas.rover.RoverId;
 import my.katas.rover.RoverRepository;
 import my.katas.rover.TestModel;
 import my.katas.rover.move.Location;
@@ -41,37 +44,43 @@ public class InitializeRoverHandlerUnitTest {
 	private InitializeRoverHandler handler;
 
 	@Test
-	public void shouldLoadTerrain() {
-		// given
-		final Terrain terrain = TestModel.randomTerrain();
-		given(terrains.findByName(terrain.getName())).willReturn(terrain);
-
-		// when
-		handler.handle(new InitializeRover(terrain.getName(), 0, 0, "north"));
-
-		// then
-		verify(terrains).findByName(terrain.getName());
-	}
-
-	@Test
 	public void shouldSaveRover() {
 		// given
+		final RoverId roverId = TestModel.randomRoverId();
 		final Terrain terrain = TestModel.randomTerrain();
 		final Location location = TestModel.randomLocation();
 		final Heading heading = TestModel.randomHeading();
-		final Rover expected = Rover.initialize(terrain, location, heading);
-
-		given(terrains.findByName(terrain.getName())).willReturn(terrain);
-
+		
+		given(terrains.findById(terrain.getId())).willReturn(terrain);
+		given(rovers.nextId()).willReturn(roverId);
+		
 		// when
-		handler.handle(new InitializeRover(terrain.getName(), location.getX(), location.getY(), heading.name()));
-		final Rover actual = savedTo(rovers);
+		handler.handle(
+				new InitializeRover(terrain.getId().getValue(), location.getX(), location.getY(), heading.name()));
+		final Rover actual = passedTo(rovers);
 
 		// then
-		assertThat(actual).isEqualToComparingFieldByFieldRecursively(expected);
+		assertThat(actual.getId()).isEqualTo(roverId);
+		assertThat(actual.getTerrainId()).isEqualTo(terrain.getId());
+		assertThat(actual.getHeading()).isEqualTo(heading);
+		assertThat(actual.getLocation()).isEqualTo(location);
 	}
 
-	private static Rover savedTo(final RoverRepository rovers) {
+	@Test
+	public void shouldFailIfTerrainNotFound() {
+		// given
+		final String terrainId = TestModel.randomTerrain().getId().getValue();
+		final InitializeRover initializeWithUnknownTerrain = RoverCommands.initialize(terrainId);
+
+		// when
+		final Throwable throwable = catchThrowable(() -> handler.handle(initializeWithUnknownTerrain));
+
+		// then
+		assertThat(throwable).isInstanceOf(IllegalStateException.class)
+				.hasMessage("no terrain found for id: " + terrainId);
+	}
+
+	private static Rover passedTo(final RoverRepository rovers) {
 		final ArgumentCaptor<Rover> captor = forClass(Rover.class);
 		verify(rovers).save(captor.capture());
 		return captor.getValue();

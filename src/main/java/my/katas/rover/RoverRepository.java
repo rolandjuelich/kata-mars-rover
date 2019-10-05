@@ -1,5 +1,9 @@
 package my.katas.rover;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -7,14 +11,18 @@ import org.springframework.stereotype.Component;
 @Profile("!test")
 public class RoverRepository {
 
-	private Rover rover;
+	private final Map<RoverId, Rover> storage = new HashMap<RoverId, Rover>();
 
-	public void save(final Rover rover) {
-		this.rover = rover;
+	public RoverId nextId() {
+		return new RoverId(UUID.randomUUID().toString().toUpperCase());
 	}
 
-	public Rover load() {
-		return rover;
+	public void save(final Rover rover) {
+		this.storage.put(rover.getId(), rover);
+	}
+
+	public Rover findBy(final RoverId id) {
+		return this.storage.get(id);
 	}
 
 }

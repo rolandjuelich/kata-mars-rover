@@ -2,17 +2,17 @@ package my.katas.rover.move.forward;
 
 import static my.katas.rover.TestModel.randomRoverOn;
 import static my.katas.rover.TestModel.randomTerrain;
-import static org.mockito.ArgumentMatchers.any;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
@@ -21,6 +21,7 @@ import com.google.common.eventbus.EventBus;
 import my.katas.rover.Rover;
 import my.katas.rover.RoverCommands;
 import my.katas.rover.RoverRepository;
+import my.katas.rover.TestModel;
 import my.katas.rover.terrain.Terrain;
 import my.katas.rover.terrain.TerrainRepository;
 
@@ -47,14 +48,14 @@ public class MoveForwardHandlerUnitTest {
 		final Terrain terrain = randomTerrain();
 		final Rover rover = randomRoverOn(terrain);
 
-		given(rovers.load()).willReturn(rover);
-		given(terrains.findByName(terrain.getName())).willReturn(terrain);
+		given(rovers.findBy(rover.getId())).willReturn(rover);
+		given(terrains.findById(terrain.getId())).willReturn(terrain);
 
 		// when
-		handler.handle(RoverCommands.moveForward());
+		handler.handle(RoverCommands.moveForward(rover.getId().getValue()));
 
 		// then
-		verify(rovers).load();
+		verify(rovers).findBy(rover.getId());
 	}
 
 	@Test
@@ -63,11 +64,11 @@ public class MoveForwardHandlerUnitTest {
 		final Terrain terrain = randomTerrain();
 		final Rover rover = randomRoverOn(terrain);
 
-		given(rovers.load()).willReturn(rover);
-		given(terrains.findByName(terrain.getName())).willReturn(terrain);
+		given(rovers.findBy(rover.getId())).willReturn(rover);
+		given(terrains.findById(terrain.getId())).willReturn(terrain);
 
 		// when
-		handler.handle(RoverCommands.moveForward());
+		handler.handle(RoverCommands.moveForward(rover.getId().getValue()));
 
 		// then
 		verify(rovers).save(rover);
@@ -79,27 +80,29 @@ public class MoveForwardHandlerUnitTest {
 		final Terrain terrain = randomTerrain();
 		final Rover rover = randomRoverOn(terrain);
 
-		given(rovers.load()).willReturn(rover);
-		given(terrains.findByName(terrain.getName())).willReturn(terrain);
+		given(rovers.findBy(rover.getId())).willReturn(rover);
+		given(terrains.findById(terrain.getId())).willReturn(terrain);
 
 		// when
-		handler.handle(RoverCommands.moveForward());
+		handler.handle(RoverCommands.moveForward(rover.getId().getValue()));
 
 		// then
-		verify(terrains).findByName(rover.getTerrain());
+		verify(terrains).findById(rover.getTerrainId());
 	}
 
 	@Test
-	public void shouldDoNothingIfRoverIsNotLoaded() {
+	public void shouldFailIfRoverIsNotLoaded() {
 		// given
-		given(rovers.load()).willReturn(null);
+		final String roverId = TestModel.randomRoverId().getValue();
+		final MoveForward moveForward = RoverCommands.moveForward(roverId);
 
 		// when
-		handler.handle(mock(MoveForward.class));
+		final Throwable throwable = catchThrowable(() -> handler.handle(moveForward));
 
 		// then
-		verify(rovers, never()).save(any());
-		verifyZeroInteractions(terrains, eventBus);
+		assertThat(throwable).isInstanceOf(IllegalStateException.class).hasMessage("no rover found with id: " + roverId);
+		verify(rovers, never()).save(Mockito.any());
+		verify(eventBus, never()).post(Mockito.any());
 	}
 
 }

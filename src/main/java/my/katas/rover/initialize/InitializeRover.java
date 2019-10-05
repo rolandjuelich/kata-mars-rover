@@ -9,7 +9,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public class InitializeRover {
 
-	private final String terrain;
+	private final String terrainId;
 	private final Integer x;
 	private final Integer y;
 	private final String heading;

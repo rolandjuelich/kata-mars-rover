@@ -2,17 +2,17 @@ package my.katas.rover.turn.right;
 
 import static my.katas.rover.TestModel.randomRoverOn;
 import static my.katas.rover.TestModel.randomTerrain;
-import static org.mockito.ArgumentMatchers.any;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
@@ -21,9 +21,10 @@ import com.google.common.eventbus.EventBus;
 import my.katas.rover.Rover;
 import my.katas.rover.RoverCommands;
 import my.katas.rover.RoverRepository;
+import my.katas.rover.TestModel;
 
 public class TurnRightHandlerUnitTest {
-	
+
 	@Rule
 	public MockitoRule mockito = MockitoJUnit.rule();
 
@@ -37,41 +38,48 @@ public class TurnRightHandlerUnitTest {
 	private TurnRightHandler handler;
 
 	@Test
-	public void shouldLoadRover() {
+	public void shouldFindRoverById() {
 		// given
-		given(rovers.load()).willReturn(randomRoverOn(randomTerrain()));
+		final Rover rover = randomRoverOn(randomTerrain());
+		final TurnRight turnRight = RoverCommands.turnRight(rover.getId().getValue());
+
+		given(rovers.findBy(rover.getId())).willReturn(rover);
 
 		// when
-		handler.handle(RoverCommands.turnRight());
+		handler.handle(turnRight);
 
 		// then
-		verify(rovers).load();
+		verify(rovers).findBy(rover.getId());
 	}
 
 	@Test
 	public void shouldSaveRover() {
 		// given
 		final Rover rover = randomRoverOn(randomTerrain());
-		given(rovers.load()).willReturn(rover);
+		final TurnRight turnRight = RoverCommands.turnRight(rover.getId().getValue());
+
+		given(rovers.findBy(rover.getId())).willReturn(rover);
 
 		// when
-		handler.handle(RoverCommands.turnRight());
+		handler.handle(turnRight);
 
 		// then
 		verify(rovers).save(rover);
 	}
 
 	@Test
-	public void shouldDoNothingIfRoverIsNotLoaded() {
+	public void shouldFailIfRoverIsNotLoaded() {
 		// given
-		given(rovers.load()).willReturn(null);
+		final String roverId = TestModel.randomRoverId().getValue();
+		final TurnRight turnRight = RoverCommands.turnRight(roverId);
 
 		// when
-		handler.handle(mock(TurnRight.class));
+		final Throwable throwable = catchThrowable(() -> handler.handle(turnRight));
 
 		// then
-		verify(rovers, never()).save(any());
-		verifyZeroInteractions(eventBus);
+		assertThat(throwable).isInstanceOf(IllegalStateException.class).hasMessage("no rover found for id: " + roverId);
+		verify(rovers, never()).save(Mockito.any());
+		verify(eventBus, never()).post(Mockito.any());
 	}
 
 }
